@@ -35,20 +35,20 @@ class Faculty(models.Model):
     email_id = models.EmailField(max_length=100)
     password = models.CharField(max_length=128)
     department = models.CharField(max_length=100)
-    phone = models.CharField(max_length=15)
-    date_of_joining = models.DateField()
-    experience = models.IntegerField()
-    date_of_birth = models.DateField()
-    gender = models.CharField(max_length=1, choices=GenderChoices.choices)
+    phone = models.BigIntegerField(null=True, blank=True)
+    date_of_joining = models.DateField(null=True, blank=True)
+    experience = models.IntegerField(null=True, blank=True)
+    date_of_birth = models.DateField(null=True, blank=True)
+    gender = models.CharField(max_length=1, choices=GenderChoices.choices, null=True, blank=True)
     marital_status = models.CharField(
-        max_length=50, choices=MartialStatusChoices.choices)
-    address = models.TextField()
-    teacher_picture = models.ImageField()
-    designation = models.CharField(max_length=100)
+        max_length=50, choices=MartialStatusChoices.choices, null=True, blank=True)
+    address = models.TextField(null=True, blank=True)
+    teacher_picture = models.ImageField(null=True, blank=True)
+    designation = models.CharField(max_length=100, null=True, blank=True)
     association_with_institution = models.CharField(
-        max_length=20, choices=AssociationChoices.choices)
+        max_length=20, choices=AssociationChoices.choices, null=True, blank=True)
     faculty_type = models.ManyToManyField(Type)
-    deleted = models.BooleanField(default=False)
+    deleted = models.BooleanField(default=False, null=True, blank=True)
     approved = models.BooleanField(default=False)
     first_login = models.BooleanField(default=True)
 
@@ -116,14 +116,14 @@ class AcademicRole(models.Model):
 
 class Class(models.Model):
     class SemChoices(models.IntegerChoices):
-        FIRST = 1
-        SECOND = 2
-        THIRD = 3
-        FOURTH = 4
-        FIFTH = 5
-        SIXTH = 6
-        SEVENTH = 7
-        EIGTH = 8
+        FIRST = 1, _('First')
+        SECOND = 2, _('Second')
+        THIRD = 3, _('Third')
+        FOURTH = 4, _('Fourth')
+        FIFTH = 5, _('Fifth')
+        SIXTH = 6, _('Sixth')
+        SEVENTH = 7, _('Seventh')
+        EIGTH = 8, _('Eigth')
     class_id = models.AutoField(primary_key=True)
     sem = models.IntegerField(max_length=1, choices=SemChoices.choices)
     sec = models.CharField(max_length=1)
