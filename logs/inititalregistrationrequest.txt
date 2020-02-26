@@ -1,0 +1,7 @@
+{
+    "name": "adi",
+    "email_id": "adithya111326@gmail.com",
+    "password": "adi",
+    "department": "ISE",
+    "faculty_type": [{"type_description":"P"}]
+}
