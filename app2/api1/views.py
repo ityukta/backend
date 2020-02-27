@@ -9,6 +9,7 @@ from rest_framework import status
 from .models import Faculty
 from .serializers import InitialRequestSerializer
 
+
 class InitialRegistrationView(APIView):
     def post(self, request):
         serilalizer = InitialRequestSerializer(data=request.data)

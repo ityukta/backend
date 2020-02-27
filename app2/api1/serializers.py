@@ -5,7 +5,6 @@ from .models import Faculty, Type
 class TypeSerializer(serializers.Serializer):
     type_description = serializers.CharField(max_length=1)
 
-
 class InitialRequestSerializer(serializers.Serializer):
     name = serializers.CharField(max_length=100)
     email_id = serializers.EmailField(max_length=100)
