@@ -22,3 +22,9 @@ class InitialRequestSerializer(serializers.Serializer):
         faculty.faculty_type.add(Type.objects.get(
             type_description=validated_data['faculty_type'][0]['type_description']))
         return faculty
+
+
+class InitialRequestSerializer(serializers.Serializer):
+
+    def update(self,validated_data):
+        
