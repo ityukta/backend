@@ -107,7 +107,12 @@ class Faculty(models.Model):
 
     publications = models.ManyToManyField(Publications)
     workshops = models.ManyToManyField(Workshops)
-    faculty_qualificatio
+    faculty_qualifications= models.ManyToManyField(FacultyQualification)
+    research_papers = models.ManyToManyField(ResearchPaper)
+    session_chairs=model.ManyToManyField(SessionChair)
+    work_experiences= models.ManyToManyField(WorkExperience)
+    area_of_specialisation=models.ManyToManyField(AreaOfSpecialisation)
+    academicroles=models.ManyToManyField(AcademicRole)
 
     association_with_institution = models.CharField(
         max_length=20, choices=AssociationChoices.choices, null=True, blank=True)
