@@ -7,5 +7,6 @@ from rest_framework import routers
 
 urlpatterns = [
     # path('', include(router.urls)),
-    path('initialregister', views.InitialRegistrationView.as_view())    
+    path('initialregister', views.InitialRegistrationView.as_view()),
+    path('login', views.LoginView.as_view())
 ]

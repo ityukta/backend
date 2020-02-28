@@ -16,19 +16,16 @@ class Type(models.Model):
 
 class Publications(models.Model):
     publication_id = models.AutoField(primary_key=True)
-    faculty_id = models.ForeignKey(Faculty, on_delete=models.CASCADE)
     publication_detail = models.TextField()
 
 
 class Workshops(models.Model):
     workshop_id = models.AutoField(primary_key=True)
-    faculty_id = models.ForeignKey(Faculty, on_delete=models.CASCADE)
     workshop_detail = models.TextField()
 
 
 class FacultyQualification(models.Model):
     qualification_id = models.AutoField(primary_key=True)
-    faculty_id = models.ForeignKey(Faculty, on_delete=models.CASCADE)
     degree = models.CharField(max_length=100)
     branch = models.CharField(max_length=100)
     institution = models.CharField(max_length=100)
@@ -39,19 +36,16 @@ class FacultyQualification(models.Model):
 
 class ResearchPaper(models.Model):
     research_paper_id = models.AutoField(primary_key=True)
-    faculty_id = models.ForeignKey(Faculty, on_delete=models.CASCADE)
     research_paper_details = models.TextField()
 
 
 class SessionChair(models.Model):
     session_chair_id = models.AutoField(primary_key=True)
-    faculty_id = models.ForeignKey(Faculty, on_delete=models.CASCADE)
     session_chair_details = models.TextField()
 
 
 class WorkExperience(models.Model):
     work_experience_id = models.AutoField(primary_key=True)
-    faculty_id = models.ForeignKey(Faculty, on_delete=models.CASCADE)
     designation = models.CharField(max_length=100)
     organization = models.CharField(max_length=100)
     duration = models.FloatField()
@@ -59,13 +53,11 @@ class WorkExperience(models.Model):
 
 class AreaOfSpecialisation(models.Model):
     specialiation_id = models.AutoField(primary_key=True)
-    faculty_id = models.ForeignKey(Faculty, on_delete=models.CASCADE)
     specialiation_details = models.TextField()
 
 
 class AcademicRole(models.Model):
     academic_role_id = models.AutoField(primary_key=True)
-    faculty_id = models.ForeignKey(Faculty, on_delete=models.CASCADE)
     academic_role_details = models.TextField()
 
 
@@ -105,14 +97,14 @@ class Faculty(models.Model):
     teacher_picture = models.ImageField(null=True, blank=True)
     designation = models.CharField(max_length=100, null=True, blank=True)
 
-    publications = models.ManyToManyField(Publications)
-    workshops = models.ManyToManyField(Workshops)
-    faculty_qualifications= models.ManyToManyField(FacultyQualification)
-    research_papers = models.ManyToManyField(ResearchPaper)
-    session_chairs=model.ManyToManyField(SessionChair)
-    work_experiences= models.ManyToManyField(WorkExperience)
-    area_of_specialisation=models.ManyToManyField(AreaOfSpecialisation)
-    academicroles=models.ManyToManyField(AcademicRole)
+    publications = models.ManyToManyField(Publications, null=True, blank=True)
+    workshops = models.ManyToManyField(Workshops, null=True, blank=True)
+    faculty_qualifications = models.ManyToManyField(FacultyQualification, null=True, blank=True)
+    research_papers = models.ManyToManyField(ResearchPaper, null=True, blank=True)
+    session_chairs = models.ManyToManyField(SessionChair, null=True, blank=True)
+    work_experiences = models.ManyToManyField(WorkExperience, null=True, blank=True)
+    area_of_specialisation = models.ManyToManyField(AreaOfSpecialisation, null=True, blank=True)
+    academic_roles = models.ManyToManyField(AcademicRole, null=True, blank=True)
 
     association_with_institution = models.CharField(
         max_length=20, choices=AssociationChoices.choices, null=True, blank=True)
@@ -205,3 +197,4 @@ class Test_res(models.Model):
     fcss_id = models.ForeignKey(Fcss, on_delete=models.CASCADE)
     # fcs_id = models.ForeignKey(Fcs, on_delete=models.CASCADE)
     marks = models.FileField()
+
