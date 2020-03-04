@@ -173,9 +173,35 @@ class CompleteRegistrationSerializer(serializers.Serializer):
     area_of_specialisation = WorkExperienceSerializer(many=True)
     academic_roles = AcademicRoleSerializer(many=True, allow_null=True)
     association_with_institution = serializers.CharField(max_length=20)
+    authkey = serializers.CharField(max_length=10)
+
+    def validate(self,data):
+            try :
+                f = Faculty.objects.get(
+                    faculty_id=data['faculty_id'],auth_key= data['authkey'])
+            except Faculty.DoesNotExist:
+                raise serializers.ValidationError(
+            {"other ":"authorization required"})
+            return data
+    
+class CompleteRegistrationResponseSerializer(APIResponseSerializer):
+    data = CompleteRegistrationSerializer()
+    def create(self, validated_data):
+        print(validated_data)
+        f= Faculty.objects.get(
+            email_id=validated_data["data"]["email_id"]
+        )
+        f.phone.add(phone = validated_data["data"]["phone"])
+        f.date_of_joining.add(date_of_joining = validated_data["data"]["phone"])
+        f.experience.add(experience = validated_data["data"]["experience"])
+        f.date_of_birth.add(date_of_birth = validated_data["data"]["date_of_birth"])
+        f.gender.add(gender = validated_data["data"]["gender"])
+        f.marital_status.add(marital_status=validated_data["data"]["maritial_status"])
+        f.address.add(address=validated_data["data"]["address"])
+        f.teacher_picture.add(teacher_picture=validated_data["data"]["teacher_picture"])
+        f.designation.add(designation=validated_data["data"]["designation"])
+
+        return APIResponse(code=200, msg="OK", data=faculty, authkey=None)    
 
 
-# class CompleteRegistrationResponseSerializer(APIResponseSerializer):
-#     data = CompleteRegistrationSerializer()
-#     def create(self, validated_data):
         

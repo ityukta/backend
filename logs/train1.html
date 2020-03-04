@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var d = {
+                "email_id": "adithyaqaa11326@gmail.com",
+                "authkey": "123",
+                "phone":"123245325",
+                "gender":"m"
+            };
+            $.ajax({
+                "url": "http://localhost:8000/finalregistration",
+                "type": "post",
+                "dataType": "json",
+                "data": JSON.stringify(d),
+                "success": function (obj) {
+                    console.log(obj);
+                }
+            })
+        });
+    </script>
+</head>
+
+</html>

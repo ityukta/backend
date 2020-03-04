@@ -50,3 +50,12 @@ class LoginView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         print(serializer.errors)
         return Response(APIResponse(code=404, msg="Error", data=serializer.errors['data']).__dict__, status=status.HTTP_200_OK)
+
+class Completeregistrationview(APIView):
+    def post(self,request):
+        serializer = CompleteRegistrationResponseSerializer(data = {"data":data})
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        print(serializer.errors)
+        return Response(APIResponse(code=404, msg="Error", data=serializer.errors['data']).__dict__, status=status.HTTP_200_OK)
