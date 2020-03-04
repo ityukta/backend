@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var d = {
+                "name": "adi",
+                "email_id": "adithyaqaa11326@gmail.com",
+                "password": "adi",
+                "department": "ISE",
+                "faculty_type": [{ "type_description": "P" }]
+            };
+            $.ajax({
+                "url": "http://localhost:8000/initialregister",
+                "type": "post",
+                "dataType": "json",
+                "data": JSON.stringify(d),
+                "success": function (obj) {
+                    console.log(obj);
+                }
+            })
+        });
+    </script>
+</head>
+
+</html>
