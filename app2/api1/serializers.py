@@ -39,6 +39,7 @@ class initialRegistrationResponseSerilaizer(APIResponseSerializer):
     data = InitialRequestSerializer()
 
     def create(self, validated_data):
+        print(validated_data)
         faculty = Faculty(
             name=validated_data['data']['name'], email_id=validated_data['data']['email_id'],
             password=validated_data['data']['password'], department=validated_data['data']['department'])

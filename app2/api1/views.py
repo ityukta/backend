@@ -19,20 +19,22 @@ class APIResponse():
 
 class InitialRegistrationView(APIView):
     def post(self, request):
-        data = {
-            "name": "adi",
-            "email_id": "adithyaq111326@gmail.com",
-            "password": "adi",
-            "department": "ISE",
-            "faculty_type": [{"type_description": "P"}]
-        }
-        # serilalizer = InitialRequestSerializer(data={"data" : request.data})
-        serilalizer = initialRegistrationResponseSerilaizer(data={"data" : data})
+        # data = {
+        #     "name": "adi",
+        #     "email_id": "adithyaqaaa111326@gmail.com",
+        #     "password": "adi",
+        #     "department": "ISE",
+        #     "faculty_type": [{"type_description": "P"}]
+        # }
+        # serilalizer = InitialRequestSerializer(data={"data" : data})
+        data = list(dict(request.data).keys())[0]
+        serilalizer = initialRegistrationResponseSerilaizer(data={"data" :eval(data)})
         if serilalizer.is_valid():
             serilalizer.save()
+            print(serilalizer.data)
             return Response(serilalizer.data, status=status.HTTP_200_OK)
         print(serilalizer.errors)
-        return Response(serilalizer.errors, status=status.HTTP_401_UNAUTHORIZED)
+        return Response(serilalizer.errors, status=status.HTTP_200_OK)
 
 
 class LoginView(APIView):
