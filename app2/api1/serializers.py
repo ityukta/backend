@@ -174,7 +174,7 @@ class CompleteRegistrationSerializer(serializers.Serializer):
     association_with_institution = serializers.CharField(max_length=20)
 
 
-class CompleteRegistrationResponseSerializer(APIResponseSerializer):
-    data = CompleteRegistrationSerializer()
-    def create(self, validated_data):
+# class CompleteRegistrationResponseSerializer(APIResponseSerializer):
+#     data = CompleteRegistrationSerializer()
+#     def create(self, validated_data):
         
