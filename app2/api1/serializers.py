@@ -161,47 +161,52 @@ class CompleteRegistrationSerializer(serializers.Serializer):
     gender = serializers.CharField(max_length=1)
     marital_status = serializers.CharField(max_length=50)
     address = serializers.CharField()
-    teacher_picture = serializers.ImageField()
-    designation = serializers.CharField(max_length=100)
-    publications = PublicationsSerializer(many=True, allow_null=True)
-    workshops = WorkExperienceSerializer(many=True, allow_null=True)
-    faculty_qualifications = FacultyQualificationSerializer(
-        many=True, allow_null=True)
-    research_papers = ResearchPaperSeializer(many=True, allow_null=True)
-    session_chairs = SessionChairSerializer(many=True, allow_null=True)
-    work_experiences = WorkExperienceSerializer(many=True, allow_null=True)
-    area_of_specialisation = WorkExperienceSerializer(many=True)
-    academic_roles = AcademicRoleSerializer(many=True, allow_null=True)
-    association_with_institution = serializers.CharField(max_length=20)
-    authkey = serializers.CharField(max_length=10)
+    # teacher_picture = serializers.ImageField()
+    # designation = serializers.CharField(max_length=100)
+    # publications = PublicationsSerializer(many=True, allow_null=True)
+    # workshops = WorkExperienceSerializer(many=True, allow_null=True)
+    # faculty_qualifications = FacultyQualificationSerializer(
+    #     many=True, allow_null=True)
+    # research_papers = ResearchPaperSeializer(many=True, allow_null=True)
+    # session_chairs = SessionChairSerializer(many=True, allow_null=True)
+    # work_experiences = WorkExperienceSerializer(many=True, allow_null=True)
+    # area_of_specialisation = WorkExperienceSerializer(many=True)
+    # academic_roles = AcademicRoleSerializer(many=True, allow_null=True)
+    # association_with_institution = serializers.CharField(max_length=20)
+    # authkey = serializers.CharField(max_length=10)
 
-    def validate(self,data):
-            try :
-                f = Faculty.objects.get(
-                    faculty_id=data['faculty_id'],auth_key= data['authkey'])
-            except Faculty.DoesNotExist:
-                raise serializers.ValidationError(
-            {"other ":"authorization required"})
-            return data
+    # def validate(self,data):
+    #         try :
+    #             f =LoginAuthKey.objects.get(
+    #                 faculty_id=data['faculty_id'],authkey= data['authkey'],deleted = False)
+    #         except LoginAuthKey.DoesNotExist:
+    #             raise serializers.ValidationError(
+    #         {"other ":"authorization required"})
+    #         return data
     
 class CompleteRegistrationResponseSerializer(APIResponseSerializer):
     data = CompleteRegistrationSerializer()
     def create(self, validated_data):
         print(validated_data)
         f= Faculty.objects.get(
-            email_id=validated_data["data"]["email_id"]
+            faculty_id=validated_data['data']['faculty_id']
         )
-        f.phone.add(phone = validated_data["data"]["phone"])
-        f.date_of_joining.add(date_of_joining = validated_data["data"]["phone"])
-        f.experience.add(experience = validated_data["data"]["experience"])
-        f.date_of_birth.add(date_of_birth = validated_data["data"]["date_of_birth"])
-        f.gender.add(gender = validated_data["data"]["gender"])
-        f.marital_status.add(marital_status=validated_data["data"]["maritial_status"])
-        f.address.add(address=validated_data["data"]["address"])
-        f.teacher_picture.add(teacher_picture=validated_data["data"]["teacher_picture"])
-        f.designation.add(designation=validated_data["data"]["designation"])
+        print(f.phone)
+        f.phone = validated_data["data"]["phone"]
+        f.save()
+        # f.date_of_joining = validated_data["data"]["date_of_joining"]
+        # fexperience = validated_data["data"]["experience"]
+        # f.date_of_birth= validated_data["data"]["date_of_birth"]
+        # f.gender = validated_data["data"]["gender"]
+        # f.marital_status=validated_data["data"]["maritial_status"]
+        # f.address=validated_data["data"]["address"]
+        # f.teacher_picture=validated_data["data"]["teacher_picture"]
+        # f.designation=validated_data["data"]["designation"]
+        #f.publications.add(publications(
+          #  publication_details = validated_data["data"]["publications_details"]))
+       # f.research_paper_details.add()
 
-        return APIResponse(code=200, msg="OK", data=faculty, authkey=None)    
+        return APIResponse(code=200, msg="OK", data=f, authkey=None)    
 
 
         
