@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Faculty, Type, LoginAuthKey
+from .models import *
 
 
 class APIResponse():
@@ -161,19 +161,19 @@ class CompleteRegistrationSerializer(serializers.Serializer):
     gender = serializers.CharField(max_length=1)
     marital_status = serializers.CharField(max_length=50)
     address = serializers.CharField()
-    # teacher_picture = serializers.ImageField()
-    # designation = serializers.CharField(max_length=100)
-    # publications = PublicationsSerializer(many=True, allow_null=True)
-    # workshops = WorkExperienceSerializer(many=True, allow_null=True)
-    # faculty_qualifications = FacultyQualificationSerializer(
-    #     many=True, allow_null=True)
-    # research_papers = ResearchPaperSeializer(many=True, allow_null=True)
-    # session_chairs = SessionChairSerializer(many=True, allow_null=True)
-    # work_experiences = WorkExperienceSerializer(many=True, allow_null=True)
-    # area_of_specialisation = WorkExperienceSerializer(many=True)
-    # academic_roles = AcademicRoleSerializer(many=True, allow_null=True)
-    # association_with_institution = serializers.CharField(max_length=20)
-    # authkey = serializers.CharField(max_length=10)
+    teacher_picture = serializers.ImageField()
+    designation = serializers.CharField(max_length=100)
+    publications = PublicationsSerializer(many=True, allow_null=True)
+    workshops = WorkExperienceSerializer(many=True, allow_null=True)
+    faculty_qualifications = FacultyQualificationSerializer(
+        many=True, allow_null=True)
+    research_papers = ResearchPaperSeializer(many=True, allow_null=True)
+    session_chairs = SessionChairSerializer(many=True, allow_null=True)
+    work_experiences = WorkExperienceSerializer(many=True, allow_null=True)
+    area_of_specialisation = WorkExperienceSerializer(many=True)
+    academic_roles = AcademicRoleSerializer(many=True, allow_null=True)
+    association_with_institution = serializers.CharField(max_length=20)
+    authkey = serializers.CharField(max_length=10)
 
     # def validate(self,data):
     #         try :
@@ -191,21 +191,48 @@ class CompleteRegistrationResponseSerializer(APIResponseSerializer):
         f= Faculty.objects.get(
             faculty_id=validated_data['data']['faculty_id']
         )
-        print(f.phone)
+        print(f.publications)
+        p = Publications(publication_detail= validated_data["data"]["publications"][0]["publication_detail"])
+        p.save()
+        w = Workshops(workshop_detail= validated_data["data"]["workshops"][0]["workshop_detail"])
+        w.save()
+        fq = FacultyQualification(degree = validated_data["data"]["faculty_qualifications"][0]["degree"] , 
+                branch = validated_data["data"]["faculty_qualifications"][0]["branch"],
+                institution = validated_data["data"]["faculty_qualifications"][0]["institution"],
+                percentage = validated_data["data"]["faculty_qualifications"][0]["percentage"],
+                graduation_year = validated_data["data"]["faculty_qualifications"][0]["gradution_year"]
+                university = validated_data["data"]["faculty_qualifications"][0]["university"])
+        fq.save()
+        rp = ResearchPaper(research_paper_details = validated_data["data"]["research_papers"]["research_paper_details"])
+        rp.save()
+        sc = SessionChair(session_chair_details = validated_data["data"]["session_chairs"]["session_chair_details"])
+        sc.save()
+        we = WorkExperience(designation= validated_data["data"]["work_experiences"]["designation"],
+                organization =validated_data["data"]["work_experiences"]["organisation"],
+                duration = validated_data["data"]["work_experiences"]["duration"])
+        we.save()
+        aos = AreaOfSpecialisation(specialisation_details = validated_data["data"]["area_of_specialisation"]["specialisation_details"])
+        aos.save()
+        ar = AcademicRole(academic_role_details = validated_data["data"]["academic_roles"]["academic_role_details"])
+        ar.save()
         f.phone = validated_data["data"]["phone"]
+        f.date_of_joining = validated_data["data"]["date_of_joining"]
+        fexperience = validated_data["data"]["experience"]
+        f.date_of_birth= validated_data["data"]["date_of_birth"]
+        f.gender = validated_data["data"]["gender"]
+        f.marital_status=validated_data["data"]["maritial_status"]
+        f.address=validated_data["data"]["address"]
+        f.teacher_picture=validated_data["data"]["teacher_picture"]
+        f.designation=validated_data["data"]["designation"]
+        f.publications.add(p)
+        f.workshops.add(w)
+        f.faculty_qualifications.add(fq)
+        f.research_papers.add(rq)
+        f.session_chairs.add(sc)
+        f.work_experiences.add(we)
+        f.area_of_specialisation.add(aos)
+        f.academic_roles.add(ar)
         f.save()
-        # f.date_of_joining = validated_data["data"]["date_of_joining"]
-        # fexperience = validated_data["data"]["experience"]
-        # f.date_of_birth= validated_data["data"]["date_of_birth"]
-        # f.gender = validated_data["data"]["gender"]
-        # f.marital_status=validated_data["data"]["maritial_status"]
-        # f.address=validated_data["data"]["address"]
-        # f.teacher_picture=validated_data["data"]["teacher_picture"]
-        # f.designation=validated_data["data"]["designation"]
-        #f.publications.add(publications(
-          #  publication_details = validated_data["data"]["publications_details"]))
-       # f.research_paper_details.add()
-
         return APIResponse(code=200, msg="OK", data=f, authkey=None)    
 
 
