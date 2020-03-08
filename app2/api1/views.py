@@ -6,8 +6,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status
 from .models import Faculty
-from .serializers import InitialRequestSerializer, LoginResponseSerializer, initialRegistrationResponseSerilaizer
-
+from .serializers import *
 
 class APIResponse():
     def __init__(self, code, msg, data):
@@ -52,7 +51,8 @@ class LoginView(APIView):
 
 class Completeregistrationview(APIView):
     def post(self,request):
-        serializer = CompleteRegistrationResponseSerializer(data = {"data":data})
+        data = list(dict(request.data).keys())[0]
+        serializer = CompleteRegistrationResponseSerializer(data={"data" :eval(data)})
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
