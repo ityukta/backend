@@ -1,0 +1,72 @@
+.attendance {
+  width: 100vw;
+}
+
+.attendance__year {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: space-evenly;
+      -ms-flex-pack: space-evenly;
+          justify-content: space-evenly;
+  margin-bottom: 1rem;
+}
+
+.attendance__year__sem {
+  border-radius: 5px;
+  padding: 0.3rem 1rem;
+}
+
+.attendance__year__sem:hover {
+  cursor: pointer;
+}
+
+.attendance__year__section {
+  border-radius: 5px;
+  padding: 0.3rem 1rem;
+}
+
+.attendance__year__section:hover {
+  cursor: pointer;
+}
+
+.attendance__year__month {
+  border-radius: 5px;
+  padding: 0.3rem 1rem;
+}
+
+.attendance__year__month:hover {
+  cursor: pointer;
+}
+
+.attendance__details {
+  width: 90vw;
+  position: relative;
+}
+
+.attendance__table {
+  position: absolute;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+  width: 100%;
+  border-spacing: 5px;
+}
+
+.attendance__table__row {
+  text-align: center;
+  width: 100%;
+}
+
+td {
+  padding: 5px;
+}
+
+.fa-check {
+  color: lime;
+}
+
+.fa-times {
+  color: #b30000;
+}
+/*# sourceMappingURL=attendance.css.map */

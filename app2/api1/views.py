@@ -1,9 +1,6 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
-from rest_framework import viewsets, mixins
 from rest_framework.response import Response
-from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status
 from .models import Faculty
 from .serializers import *
@@ -26,6 +23,7 @@ class InitialRegistrationView(APIView):
         # }
         # serilalizer = InitialRequestSerializer(data={"data" : data})
         data = list(dict(request.data).keys())[0]
+        print(data)
         serilalizer = initialRegistrationResponseSerilaizer(data={"data" :eval(data)})
         if serilalizer.is_valid():
             serilalizer.save()
@@ -58,3 +56,9 @@ class Completeregistrationview(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         print(serializer.errors)
         return Response(APIResponse(code=404, msg="Error", data=serializer.errors['data']).__dict__, status=status.HTTP_200_OK)
+
+
+def initialRegister(request):
+    return render(request, 'html/register1.html')
+
+

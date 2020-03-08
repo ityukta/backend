@@ -1,0 +1,14 @@
+.bluebtn {
+  color: white;
+  background: -webkit-gradient(linear, left top, right top, from(#7face7), to(#4a56f5));
+  background: linear-gradient(to right, #7face7, #4a56f5);
+}
+
+.bluebtn:hover {
+  cursor: pointer;
+}
+
+.bluebtn:focus {
+  outline: none;
+}
+/*# sourceMappingURL=button.css.map */

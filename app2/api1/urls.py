@@ -9,5 +9,6 @@ urlpatterns = [
     # path('', include(router.urls)),
     path('initialregister', views.InitialRegistrationView.as_view()),
     path('login', views.LoginView.as_view()),
-    path('finalregistration',views.Completeregistrationview.as_view())
+    path('finalregistration', views.Completeregistrationview.as_view()),
+    path('register', views.initialRegister),
 ]

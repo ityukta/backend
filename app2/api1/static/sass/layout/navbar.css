@@ -1,0 +1,48 @@
+.navbar {
+  width: 0;
+  height: -webkit-max-content;
+  height: -moz-max-content;
+  height: max-content;
+  -webkit-transition: 0.2s;
+  transition: 0.2s;
+}
+
+.show-navbar {
+  width: 230px;
+}
+
+.navbar ul {
+  padding: 1rem;
+}
+
+.navbar ul li {
+  padding: 1rem;
+  list-style: none;
+}
+
+.navbar ul li:hover {
+  cursor: pointer;
+}
+
+.navbar a {
+  text-decoration: none;
+  color: black;
+}
+
+.sub {
+  display: none;
+}
+
+.sub__li {
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+}
+
+.sub__li:hover {
+  background-color: #91e9f8;
+}
+
+.show {
+  display: block;
+}
+/*# sourceMappingURL=navbar.css.map */

@@ -1,0 +1,58 @@
+.navbar{
+    
+    width: 0;
+    height: max-content;
+    //background-color: orange;
+    transition: 0.2s;
+    border-right: 1px solid $color-border;
+}
+.show-navbar{
+    width: 230px;
+    
+}
+
+
+
+.navbar ul{
+    padding: 1rem;
+}
+.navbar ul .nav__li{
+    padding: 1rem;
+    list-style: none;
+    /*border-bottom: 1px solid $color-border;
+    border-top: 1px solid $color-border;*/
+    &:hover{
+        cursor: pointer;    //Show cursor as pointer when someone hovers over the list
+    }
+}
+.sub{
+    &__li{
+        //border-top: 1px solid $color-border;
+        //border-bottom: 1px solid $color-border;
+        list-style: none;
+        padding: 1rem 0;
+        border-radius: 2px;
+    }
+}
+.navbar a{
+    text-decoration: none;  //Remove underline of all a tags in ul
+    color:black;
+}
+.sub{
+    display: none;          //Hides all the sublist in start 
+    &__li{
+        transition: 0.2s;
+    }
+    &__li:hover{
+        background-color: rgb(209, 230, 248);
+        /*& a{
+            color: white;
+        }*/
+    }
+}
+
+.show{
+    display: block;         //Shows the sublist on click
+   
+    
+}

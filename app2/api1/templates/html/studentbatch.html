@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="../sass/main.css" type="text/css">
+</head>
+<body>
+    
+    <div class="studentbatch">
+        <div class="studentbatch__add">
+            <div class="studentbatch__add__batch">
+                <button class="search-btn studentbatch__add__batch__btn">Add batch</button>
+            </div>
+
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLong">
+                Add student 
+            </button>
+  
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLongTitle">Add student details</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="studentbatch__add__form">
+                                <div class="studentbatch__add__name formcommon">
+                                    <label for="name">Name:</label>
+                                    <input type="text" id="name" class="studentbatch__add__name__input inputcommon">
+                                </div>
+                                <div class="studentbatch__add__usn formcommon">
+                                    <label for="usn">USN:</label>
+                                    <input type="text" id="usn" class="studentbatch__add__usn__input inputcommon">
+                                </div>
+                                <div class="studentbatch__add__fathername formcommon">
+                                    <label for="fathername">Father Name:</label>
+                                    <input type="text" id="name" class="studentbatch__add__fathername__input inputcommon">
+                                </div>
+                                <div class="studentbatch__add__parentcontact formcommon">
+                                    <label for="contact">Parent/Guardian Contact number:</label>
+                                    <input type="text" id="contact" class="studentbatch__add__parentcontact__input inputcommon">
+                                </div>
+                                <div class="studentbatch__add__permanentaddress formcommon">
+                                    <label for="permanentaddress">Permanentaddress:</label>
+                                   <textarea  id="permanentaddress" cols="30" rows="3" class="studentbatch__add__permanentaddress__input inputcommon"></textarea>
+                                </div>
+                                <div class="studentbatch__add__currentaddress formcommon">
+                                    <label for="currentaddress">Currentaddress:</label>
+                                   <textarea  id="currentaddress" cols="30" rows="3" class="studentbatch__add__currentaddress__input inputcommon"></textarea>
+                                </div>
+                                <div class="studentbatch__add__hobbies formcommon">
+                                    <label for="hobbies">Hobbies:</label>
+                                    <input type="text" id="hobbies" class="studentbatch__add__parentcontact__input inputcommon">
+                                </div>
+                                <div class="studentbatch__add__personality formcommon">
+                                    <label for="personality">Personality:</label>
+                                    <input type="text" id="personality" class="studentbatch__add__personality__input inputcommon">
+                                </div>
+                                <div class="studentbatch__add__career formcommon">
+                                    <label for="career">Career aspirations:</label>
+                                    <input type="text" id="career" class="studentbatch__add__career__input inputcommon">
+                                </div>
+                                <div class="studentbatch__add__sslc formcommon">
+                                    <label for="sslc">10th results(%):</label>
+                                    <input type="number" id="sslc" class="studentbatch__add__sslc__input inputcommon">
+                                </div>
+                                <div class="studentbatch__add__puc formcommon">
+                                    <label for="puc">2nd puc results(%):</label>
+                                    <input type="number" id="puc" class="studentbatch__add__sslc__input inputcommon">
+                                </div>
+                                <div class="studentbatch__add__diploma formcommon">
+                                    <label for="diploma">Diploma results(%):</label>
+                                    <input type="number" id="diploma" class="studentbatch__add__sslc__input inputcommon">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="studentbatch__details">
+            <div class="studentbatch__details__heading">2 sem A section ISE</div>
+            <div class="studentbatch__details__batch">
+                <div class="studentbatch__details__tablehead">
+                    <div class="studentbatch__details__student__sl">Sl no</div>
+                    <div class="studentbatch__details__student__usn">USN</div>
+                    <div class="studentbatch__details__student__name">Name</div>
+                </div>
+                <div class="studentbatch__details__student">
+                    <div class="studentbatch__details__student__sl">1</div>
+                    <div class="studentbatch__details__student__usn">1rn18cs056</div>
+                    <div class="studentbatch__details__student__name">Rahul</div>
+                </div>
+                <div class="studentbatch__details__student">
+                    <div class="studentbatch__details__student__sl">2</div>
+                    <div class="studentbatch__details__student__usn">1rn18cs057</div>
+                    <div class="studentbatch__details__student__name">Mehul</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    <script src="../js/modal.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+.addstudent {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 30rem 30rem;
+      grid-template-columns: 30rem 30rem;
+  grid-gap: 5rem;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  text-align: center;
+}
+
+.addstudent__2a {
+  border: 1px solid #cfcfcf;
+  padding: 2rem;
+  border-radius: 10px;
+}
+
+.addstudent__2a__pic {
+  width: 20%;
+  margin: auto;
+  -ms-grid-column-align: center;
+      justify-self: center;
+  padding: 1rem;
+  border: 1px solid #cfcfcf;
+  border-radius: 50%;
+  margin-bottom: 1rem;
+}
+
+.addstudent__2a__pic:hover {
+  cursor: pointer;
+}
+
+@media screen and (max-width: 1200px) {
+  .addstudent {
+    display: -ms-grid;
+    display: grid;
+    -ms-grid-columns: 1fr 1fr;
+        grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media screen and (max-width: 766px) {
+  .addstudent {
+    display: -ms-grid;
+    display: grid;
+    -ms-grid-columns: 1fr 1fr;
+        grid-template-columns: 1fr 1fr;
+  }
+  .addstudent__2a__pic {
+    width: 30%;
+  }
+}
+
+@media screen and (max-width: 575px) {
+  .addstudent {
+    display: -ms-grid;
+    display: grid;
+    -ms-grid-columns: 1fr;
+        grid-template-columns: 1fr;
+  }
+  .addstudent__2a__pic {
+    width: 20%;
+  }
+}
+/*# sourceMappingURL=addstudent.css.map */
