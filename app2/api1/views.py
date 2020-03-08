@@ -5,7 +5,6 @@ from rest_framework.response import Response
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status
-
 from .models import Faculty
 from .serializers import InitialRequestSerializer, LoginResponseSerializer, initialRegistrationResponseSerilaizer
 

@@ -37,7 +37,6 @@ class InitialRequestSerializer(serializers.Serializer):
 
 class initialRegistrationResponseSerilaizer(APIResponseSerializer):
     data = InitialRequestSerializer()
-
     def create(self, validated_data):
         print(validated_data)
         faculty = Faculty(
