@@ -37,7 +37,6 @@ class InitialRequestSerializer(serializers.Serializer):
 
 class initialRegistrationResponseSerilaizer(APIResponseSerializer):
     data = InitialRequestSerializer()
-
     def create(self, validated_data):
         print(validated_data)
         faculty = Faculty(
@@ -200,7 +199,7 @@ class CompleteRegistrationResponseSerializer(APIResponseSerializer):
                 branch = validated_data["data"]["faculty_qualifications"][0]["branch"],
                 institution = validated_data["data"]["faculty_qualifications"][0]["institution"],
                 percentage = validated_data["data"]["faculty_qualifications"][0]["percentage"],
-                graduation_year = validated_data["data"]["faculty_qualifications"][0]["gradution_year"]
+                graduation_year = validated_data["data"]["faculty_qualifications"][0]["gradution_year"],
                 university = validated_data["data"]["faculty_qualifications"][0]["university"])
         fq.save()
         rp = ResearchPaper(research_paper_details = validated_data["data"]["research_papers"]["research_paper_details"])

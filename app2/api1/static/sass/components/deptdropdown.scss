@@ -1,0 +1,26 @@
+.department__dropdown{
+    padding: 5px;
+    border: 0.5px solid rgb(196, 194, 194);
+    border-radius: 5px;
+    margin-right: 3rem;
+    transform: translateY(-20%);
+    &:hover{
+        cursor: pointer;
+    }
+    &:focus{
+        outline: none;
+    }
+}
+.type__dropdown{
+    padding: 5px;
+    border: 0.5px solid rgb(196, 194, 194);
+    border-radius: 5px;
+    //margin-right: 15.5rem;
+    transform: translateY(-20%);
+    &:hover{
+        cursor: pointer;
+    }
+    &:focus{
+        outline: none;
+    }
+}

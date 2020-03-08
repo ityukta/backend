@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'sass/main.css' %}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script>
+        function register(){
+            var name = $('#name').val();
+            var emailid = $('#email').val();
+            var password = $('#password').val();
+            var department = $('#department :selected').text();
+            var type = $('#type :selected').text();
+            var typearr = {'HOD':'H', 'PROFESSOR': 'S'};
+            var data = {
+                "name" : name,
+                "email_id" : emailid,
+                "password" : password,
+                "department" : department,
+                "faculty_type" : [{'type_description' : typearr[type]}]
+            };
+            $.ajax({
+               type : "POST",
+               url : "initialregister",
+               dataType : "JSON",
+               data : JSON.stringify(data),
+               success : function(ret_obj){
+                   console.log(obj);
+                   alert(obj);
+               } 
+            });
+        }
+    </script>
+</head>
+
+<body>
+    <section class="register-section">
+        <div class="register">
+            <div class="register__pic">
+                <img src="{% static 'images/logo.jpg' %}" alt="" class="register__img">
+            </div>
+            <div class="register__details">
+                <h2 class="register__heading">Register</h2>
+                <form action="" class="register__form">
+                    <div class="register__name register__form__particular">
+                        <label for="name" class="label">Name</label>
+                        <input type="text" class="register__name__input register-input" id="name">
+                    </div>
+                    <div class="register__email register__form__particular">
+                        <label for="email" class="label">Email</label>
+                        <input type="email" class="register__email__input register-input" id="email">
+                    </div>
+                    <div class="register__password register__form__particular">
+                        <label for="password" class="label">Password</label>
+                        <input type="password" class="register__password__input register-input" id="password">
+                    </div>
+                    <div class="register__passwordrepeat register__form__particular">
+                        <label for="passwordrepeat" class="label">Repeat Password</label>
+                        <input type="password" class="register__passwordrepeat__input register-input"
+                            id="passwordrepeat">
+                    </div>
+                    <div class="register__dropdown">
+                        <label for="department" class="deptlabel">Department :</label>
+                        <select id="department" class="department__dropdown">
+                            <option value="Cse">CSE</option>
+                            <option value="Cse">ISE</option>
+                            <option value="Cse">ECE</option>
+                            <option value="Cse">EEE</option>
+                            <option value="Cse">MECH</option>
+                            <option value="Cse">CIVIL</option>
+                        </select>
+                        <label for="type" class="typelabel">Type :</label>
+                        <select id="type" class="type__dropdown">
+                            <option value="Hod">HOD</option>
+                            <option value="Professor ">PROFESSOR</option>
+                        </select>
+                    </div>
+                    <div class="register__submit">
+                        <button class="register__btn bluebtn" onclick="register()">Register</button>
+                    </div>
+
+                </form>
+                <div class="existinglogin">
+                    <span>Already have an account?</span><a href="">Login</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</body>
+
+</html>

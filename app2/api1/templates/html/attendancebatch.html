@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../sass/main.css" type="text/css">
+    <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css"
+    integrity="sha256-+N4/V/SbAFiW1MPBCXnfnP9QSN3+Keu+NlB+0ev/YKQ="
+    crossorigin="anonymous"
+  />
+  
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <img src="../images/logo.jpg" alt="" class="header__collegelogo">
+            <div class="header__content1">
+                <button class="nav-btn"><i class="fa fa-bars fa-2x"></i></button>
+                <h3 class="header__heading">Student login</h3>
+            </div>
+            <div class="header__content2">
+                <form action="" class="header__form search-show">
+                    <input type="search" class="header__search" placeholder="Search here">
+                    <button class="header__search-btn"><i class="fa fa-search fa-1x icon-sbtn"></i></button>
+                </form>
+                <div class="btn-shownone">
+                    <i class="fa fa-search fa-2x "></i>       <!--Make the btn-shownone to display block on click-->
+                </div>
+                
+                <div class="header__logout">
+                    <div class="header__logout__group">
+                        <div class="header__logout__pic">
+                            <img src="../images/user-3.jpg" alt="" class="header__logout__img">
+                        </div>
+                        <div class="header__dots"><i class="fa fa-ellipsis-v fa-1x"></i>
+                            <ul class="header__logout__list ">   <!--Add header__logout__listshow on click of header__logout__group-->
+                                <li><a href="#">My profile</a></li>
+                                <li><a href="#">Settings</a></li>
+                                <li><a href="#">Log out</a></li>
+                            </ul>   
+                        </div>
+                        <p class="header__logout__name"><span class="header__logout__span">Admin</span>    
+                            <ul class="header__logout__list ">   <!--Add header__logout__listshow on click of header__logout__group-->
+                                <li><a href="#">My profile</a></li>
+                                <li><a href="#">Settings</a></li>
+                                <li><a href="#">Log out</a></li>
+                            </ul>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <section class="section">
+            <div class="navbar "> <!--Add show-navbar on click of nav button-->
+                <ul class="nav__ul">
+                    <li class="nav__li"><a href="">home</a> </li>
+                    <li class="nav__li teacherli"><a href="" class="teacher">Professor</a>  <span></span>
+                        <ul class="sub ">  <!--Add show on click of teacherli-->
+                            <li class="sub__li"><a href="">Professors</a></li>
+                            <li class="sub__li"><a href="">Add subjects </a></li>
+                            <li class="sub__li"><a href="">Class teachers </a></li>
+                            <li class="sub__li"><a href="">Subject teachers</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav__li studentli"><a href="" class="student">Students</a>
+                        <ul class="sub studentlist"> <!--Add show on click of studentli-->
+                            <li class="sub__li"><a href=""> Add students</a></li>
+                            <li class="sub__li"><a href="">Assign subjects</a></li>
+                            <li class="sub__li"><a href="">Manage attendace</a></li>
+                            <li class="sub__li"><a href="">Manage IA marks</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div class="content">
+                <div class="attendance">
+                    <div class="attendance__year">
+                        <select  id="" class="attendance__year__sem">
+                            <option value="2nd sem">2nd sem</option>
+                            <option value="4th sem">4th sem</option>
+                            <option value="6th sem">6th sem</option>
+                            <option value="8th sem">8th sem</option>
+                        </select>
+                        <select  id="" class="attendance__year__section">
+                            <option value="A">A section</option>
+                            <option value="B">B section</option>
+                        </select>
+                        <select  id="" class="attendance__year__month">
+                            <option value="January">January</option>
+                            <option value="February">February</option>
+                            <option value="March">March</option>
+                        </select>
+                    </div>
+                    <div class="attendance__details">
+                        <table class="attendance__table">
+                            <tr class="attendance__table__heading">
+                                <th>slno</th>
+                                <th>name</th>
+                                <th>1</th>
+                                <th>2</th>
+                                <th>3</th>
+                                <th>4</th>
+                                <th>5</th>
+                                <th>6</th>
+                                <th>7</th>
+                                <th>8</th>
+                                <th>9</th>
+                                <th>10</th>
+                                <th>11</th>
+                                <th>12</th>
+                                <th>13</th>
+                                <th>14</th>
+                                <th>15</th>
+                                <th>16</th>
+                                <th>17</th>
+                                <th>18</th>
+                                <th>19</th>
+                                <th>20</th>
+                                <th>21</th>
+                                <th>22</th>
+                                <th>23</th>
+                                <th>24</th>
+                                <th>25</th>
+                                <th>26</th>
+                                <th>27</th>
+                                <th>28</th>
+                                <th>29</th>
+                                <th>30</th>
+                            </tr>
+                            <tr class="attendance__table__odd attendance__table__row">
+                                <td>1</td>
+                                <td>rahul</td>
+                                <td><i class="fa fa-check"></i></td>
+                                <td><i class="fa fa-times"></i></td>
+                                <td><i class="fa fa-check"></i></td>
+                                <td><i class="fa fa-times"></i></td>
+                                <td><i class="fa fa-check"></i></td>
+                                <td><i class="fa fa-times"></i></td>
+                                <td><i class="fa fa-check"></i></td>
+                                <td><i class="fa fa-times"></i></td>
+                                <td><i class="fa fa-check"></i></td>
+                                <td><i class="fa fa-times"></i></td>
+                                <td><i class="fa fa-check"></i></td>
+                                <td><i class="fa fa-times"></i></td>
+                                <td><i class="fa fa-check"></i></td>
+                                <td><i class="fa fa-times"></i></td>
+                                <td><i class="fa fa-check"></i></td>
+                                <td><i class="fa fa-times"></i></td>
+                                <td><i class="fa fa-check"></i></td>
+                                <td><i class="fa fa-times"></i></td>
+                                <td><i class="fa fa-check"></i></td>
+                                <td><i class="fa fa-times"></i></td>
+                                <td><i class="fa fa-check"></i></td>
+                                <td><i class="fa fa-times"></i></td>
+                                <td><i class="fa fa-check"></i></td>
+                                <td><i class="fa fa-times"></i></td>
+                                <td><i class="fa fa-check"></i></td>
+                                <td><i class="fa fa-times"></i></td>
+                                <td><i class="fa fa-check"></i></td>
+                                <td><i class="fa fa-times"></i></td>
+                                <td><i class="fa fa-check"></i></td>
+                                <td><i class="fa fa-times"></i></td>
+                            </tr>
+                            <tr class="attendance__table__odd attendance__table__row">
+                                <td>2</td>
+                                <td>mahesh</td>
+                                <td><i class="fa fa-check"></i></td>
+                                <td><i class="fa fa-times"></i></td>
+                                <td><i class="fa fa-check"></i></td>
+                                <td><i class="fa fa-times"></i></td>
+                                <td><i class="fa fa-check"></i></td>
+                                <td><i class="fa fa-times"></i></td>
+                                <td><i class="fa fa-check"></i></td>
+                                <td><i class="fa fa-times"></i></td>
+                                <td><i class="fa fa-check"></i></td>
+                                <td><i class="fa fa-times"></i></td>
+                                <td><i class="fa fa-check"></i></td>
+                                <td><i class="fa fa-times"></i></td>
+                                <td><i class="fa fa-check"></i></td>
+                                <td><i class="fa fa-times"></i></td>
+                                <td><i class="fa fa-check"></i></td>
+                                <td><i class="fa fa-times"></i></td>
+                                <td><i class="fa fa-check"></i></td>
+                                <td><i class="fa fa-times"></i></td>
+                                <td><i class="fa fa-check"></i></td>
+                                <td><i class="fa fa-times"></i></td>
+                                <td><i class="fa fa-check"></i></td>
+                                <td><i class="fa fa-times"></i></td>
+                                <td><i class="fa fa-check"></i></td>
+                                <td><i class="fa fa-times"></i></td>
+                                <td><i class="fa fa-check"></i></td>
+                                <td><i class="fa fa-times"></i></td>
+                                <td><i class="fa fa-check"></i></td>
+                                <td><i class="fa fa-times"></i></td>
+                                <td><i class="fa fa-check"></i></td>
+                                <td><i class="fa fa-times"></i></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <script src="../js/sample.js"></script>
+</body>
+</html>

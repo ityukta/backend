@@ -1,0 +1,75 @@
+.register2 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid $color-border;
+  padding: 1rem;
+  &__profile {
+  }
+  &__forms {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 1rem;
+  }
+  &__department {
+    align-self: center;
+  }
+  &__qualification {
+    display: flex;
+    flex-direction: column;
+  }
+  &__specialize {
+    display: flex;
+    flex-direction: column;
+  }
+  &__designation {
+    align-self: center;
+  }
+  &__talks {
+    &__details {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+  &__workshop {
+    grid-column: 1/3;
+    &__details {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+  &__education {
+    &__degrees {
+      padding: 0.3rem;
+    }
+    grid-column: 1/3;
+  }
+  &__workexp {
+    grid-column: 1/3;
+  }
+  &__research {
+    grid-column: 1/3;
+  }
+  &__talks {
+    grid-column: 1/3;
+  }
+  &__session {
+    grid-column: 1/3;
+  }
+
+  &__submit {
+    grid-column: 1/3;
+    position: relative;
+    &-btn {
+      /* position: absolute;
+      top: 50%;
+      transform: translateY(-50%);*/
+      width: 100%;
+      border: 10px;
+      padding: 0.8rem;
+    }
+  }
+  &__personal {
+    grid-column: 1/3;
+  }
+}

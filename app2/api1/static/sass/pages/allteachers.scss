@@ -1,0 +1,143 @@
+.content{
+    padding: 1.5rem;
+    background-color: $color-register;
+}
+.allteachers{
+    &__form{
+        margin-top: 1rem;
+        display: grid;
+        //grid-template-columns: repeat(auto-fit,minmax(15rem,1fr));
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        margin-bottom: 1rem;
+    }
+    &__names
+    {
+        width: 80%;
+        justify-self: center;
+        margin-bottom: 1rem;
+    }
+    &__inputname{
+        border-radius: 7px;
+        border: 1px solid $color-border;
+        width: 100%;
+        padding: 12px;
+    }
+    &__id
+    {
+        
+        width: 80%;
+        justify-self: center;
+        margin-bottom: 1rem;
+    }
+    &__inputid{
+        width: 100%;
+        border-radius: 7px;
+        border: 1px solid $color-border;
+        padding: 12px;
+    }
+    &__search
+    {
+        width: 80%;
+        justify-self: center;
+        margin-bottom: 1rem;
+    }
+    &__search-btn{
+        width: 100%;
+        padding: 12px;
+    }
+    &__designation{
+        width: 80%;
+        justify-self: center;
+        margin-bottom: 1rem;
+    }
+    &__inputdesignation
+    {
+        border-radius: 7px;
+        width: 100%;
+        padding: 12px;
+        border: 1px solid $color-border;
+        &:focus{
+            outline: none;
+        }
+        
+    }
+    &__details{
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        grid-gap: 2rem;
+    }
+    &__person{
+        position: relative;
+        box-shadow: 1px 1px 5px $color-border;
+        background-color: white;
+        padding: 1rem;
+        text-align: center;
+        border: 1px solid $color-border;
+        border-radius: 5px;   
+    }
+    &__dots{
+        position: absolute;
+        top:5%;
+        right: 5%;
+        &:hover{
+            cursor: pointer;
+        }
+    }
+    &__pic{
+        height: 6rem;
+        margin-bottom: 1rem;
+        
+    }
+    &__img{
+        border-radius: 50%;
+        height: 100%;
+        &:hover{
+            cursor: pointer;
+        }
+    }
+    &__name{
+        &:hover{
+            cursor: pointer;
+        }
+    }
+}
+
+@media screen and (max-width:1200px)
+{
+    .allteachers{
+        &__details{
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-gap: 2rem;
+        }
+    }
+}
+@media screen and (max-width:766px)
+{
+    .allteachers{
+        &__details{
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-gap: 2rem;
+        }
+        &__form{
+            
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+    }
+}
+@media screen and (max-width:575px)
+{
+    .allteachers{
+        &__details{
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-gap: 2rem;
+        }
+        &__form{
+            display: grid;
+            grid-template-columns: 1fr;
+        }
+    }
+}
