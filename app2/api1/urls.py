@@ -8,6 +8,7 @@ from rest_framework import routers
 urlpatterns = [
     # path('', include(router.urls)),
     path('initialregister', views.InitialRegistrationView.as_view()),
+    # path('initialregister', views.initialRegisterAjax),
     path('login', views.LoginView.as_view()),
     path('finalregistration', views.Completeregistrationview.as_view()),
     path('register', views.initialRegister),

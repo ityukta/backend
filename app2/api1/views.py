@@ -1,9 +1,13 @@
 from django.shortcuts import render
+from django.http import JsonResponse, HttpResponse
+import json
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .models import Faculty
 from .serializers import *
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework.permissions import AllowAny
 
 class APIResponse():
     def __init__(self, code, msg, data):
@@ -13,6 +17,7 @@ class APIResponse():
 
 
 class InitialRegistrationView(APIView):
+    permission_classes = (AllowAny,)
     def post(self, request):
         # data = {
         #     "name": "adi",
@@ -30,7 +35,7 @@ class InitialRegistrationView(APIView):
             print(serilalizer.data)
             return Response(serilalizer.data, status=status.HTTP_200_OK)
         print(serilalizer.errors)
-        return Response(serilalizer.errors, status=status.HTTP_200_OK)
+        return 1
 
 
 class LoginView(APIView):
@@ -61,4 +66,11 @@ class Completeregistrationview(APIView):
 def initialRegister(request):
     return render(request, 'html/register1.html')
 
-
+# @csrf_exempt
+# def initialRegisterAjax(request):
+#     print(request)
+#     if request.method == "POST":
+#         print(request.body)
+#         return "what???"
+#     print("not a post method")
+#     return HttpResponse("not working")
