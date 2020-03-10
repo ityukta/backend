@@ -4,11 +4,10 @@
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script>
-        function register(){
-           var nam = "adi"
+         $("#but1").click(function (){
             var d = {
-                "name": nam,
-                "email_id": "adithsdsydwsaefdwddawqdwq@gmail.com",
+                "name": "nam",
+                "email_id": "adithsdsydwsasdefdwddawqdwq@gmail.com",
                 "password": "adi",
                 "department": "ISE",
                 "faculty_type": [{ "type_description": "P" }]
@@ -20,7 +19,6 @@
                 "data": JSON.stringify(d),
                 "success": function (obj) {
                     console.log(obj);
-                    alert(obj)
                 }
             })
         });
@@ -69,7 +67,7 @@
                         </select>
                     </div>
                     <div class="register__submit">
-                        <button class="register__btn bluebtn" onclick="register()">Register</button>
+                        <button class="register__btn bluebtn" id = "but1">Register</button>
                     </div>
 
                 </form>

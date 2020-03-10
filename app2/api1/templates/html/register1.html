@@ -23,15 +23,19 @@
                 "department" : department,
                 "faculty_type" : [{'type_description' : typearr[type]}]
             };
+            console.log(data);
             $.ajax({
                type : "POST",
                url : "initialregister",
-               dataType : "JSON",
                data : JSON.stringify(data),
+               processData: false,
                success : function(ret_obj){
                    console.log(obj);
                    alert(obj);
-               } 
+               },
+               error: function(xhr, error, err){
+                   alert(error);
+               }
             });
         }
     </script>
