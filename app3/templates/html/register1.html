@@ -5,8 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'sass/main.css' %}">
+    <link rel="stylesheet" href="{{ url_for('static' , filename='sass/main.css') }}">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script>
         function register(){
@@ -22,17 +21,18 @@
                 "password" : password,
                 "department" : department,
                 "faculty_type" : [{'type_description' : typearr[type]}],
-                'csrfmiddlewaretoken':"{{ csrf_token }}"
             };
             console.log(data);
             $.ajax({
                type : "POST",
                url : "initialregister",
+               dataType : 'Json',
+               contentType: 'application/json',
                data : JSON.stringify(data),
                processData: false,
                success : function(ret_obj){
-                   console.log(obj);
-                   alert(obj);
+                   console.log(ret_obj);
+                   alert(ret_obj);
                },
                error: function(xhr, error, err){
                    alert(error);
@@ -46,7 +46,7 @@
     <section class="register-section">
         <div class="register">
             <div class="register__pic">
-                <img src="{% static 'images/logo.jpg' %}" alt="" class="register__img">
+                <img src="{{ url_for('static', filename='images/logo.jpg') }}" alt="" class="register__img">
             </div>
             <div class="register__details">
                 <h2 class="register__heading">Register</h2>

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../sass/main.css" type="text/css">
+    <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css"
+    integrity="sha256-+N4/V/SbAFiW1MPBCXnfnP9QSN3+Keu+NlB+0ev/YKQ="
+    crossorigin="anonymous"
+  />
+  
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <img src="../images/logo.jpg" alt="" class="header__collegelogo">
+            <div class="header__content1">
+                <button class="nav-btn"><i class="fa fa-bars fa-2x"></i></button>
+                <h3 class="header__heading">Student login</h3>
+            </div>
+            <div class="header__content2">
+                <form action="" class="header__form search-show">
+                    <input type="search" class="header__search" placeholder="Search here">
+                    <button class="header__search-btn"><i class="fa fa-search fa-1x icon-sbtn"></i></button>
+                </form>
+                <div class="btn-shownone">
+                    <i class="fa fa-search fa-2x "></i>       <!--Make the btn-shownone to display block on click-->
+                </div>
+                
+                <div class="header__logout">
+                    <div class="header__logout__group">
+                        <div class="header__logout__pic">
+                            <img src="../images/user-3.jpg" alt="" class="header__logout__img">
+                        </div>
+                        <div class="header__dots"><i class="fa fa-ellipsis-v fa-1x"></i>
+                            <ul class="header__logout__list ">   <!--Add header__logout__listshow on click of header__logout__group-->
+                                <li><a href="#">My profile</a></li>
+                                <li><a href="#">Settings</a></li>
+                                <li><a href="#">Log out</a></li>
+                            </ul>   
+                        </div>
+                        <p class="header__logout__name"><span class="header__logout__span">Admin</span>    
+                            <ul class="header__logout__list ">   <!--Add header__logout__listshow on click of header__logout__group-->
+                                <li><a href="#">My profile</a></li>
+                                <li><a href="#">Settings</a></li>
+                                <li><a href="#">Log out</a></li>
+                            </ul>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <section class="section">
+            <div class="navbar "> <!--Add show-navbar on click of nav button-->
+                <ul class="nav__ul">
+                    <li class="nav__li"><a href="">home</a> </li>
+                    <li class="nav__li teacherli"><a href="" class="teacher">Professor</a>  <span></span>
+                        <ul class="sub ">  <!--Add show on click of teacherli-->
+                            <li class="sub__li"><a href="">Professors</a></li>
+                            <li class="sub__li"><a href="">Add subjects </a></li>
+                            <li class="sub__li"><a href="">Class teachers </a></li>
+                            <li class="sub__li"><a href="">Subject teachers</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav__li studentli"><a href="" class="student">Students</a>
+                        <ul class="sub studentlist"> <!--Add show on click of studentli-->
+                            <li class="sub__li"><a href=""> Add students</a></li>
+                            <li class="sub__li"><a href="">Assign subjects</a></li>
+                            <li class="sub__li"><a href="">Manage attendace</a></li>
+                            <li class="sub__li"><a href="">Manage IA marks</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div class="content">
+                <div class="personal">
+                    <div class="personal__heading marginbottom06">
+                        <h1>Profile</h1>
+                    </div>
+                    <div class="personal__overview">
+                        <div class="personal__overview__1">
+                            <div class="personal__overview__pic">
+                                <img src="../images/user-3.jpg" alt="" class="personal__overview__img">
+                            </div>
+                            <div class="personal__overview__1details">
+                                <div class="personal__overview__name marginbottom04">John doe</div>
+                                <div class="personal__overview__department fontlight marginbottom04">ISE</div>
+                                <div class="personal__overview__designation fontlight marginbottom04">Professor</div>
+                                <div class="personal__overview__id fontheavy marginbottom04">1rn18is001</div>
+                                <div class="personal__overview__gender fontlight marginbottom04">Male</div>
+                                <div class="personal__overview__dateofjoin fontlight ">1st jan 2013</div>
+                            </div>
+                        </div>
+                        <div class="personal__overview__2">
+                            <div class="personal__overview__2details">
+                                <div class="personal__overview__phone marginbottom06">
+                                    Phone:
+                                    <span class="personal__overview__phonespan marginleft10 color-bluedarker">72584672058</span>
+                                </div>
+                                <div class="personal__overview__email marginbottom06">
+                                    Email ID:
+                                    <span class="personal__overview__emailspan marginleft9 color-bluedarker">hello@gmail.com</span>
+                                </div>
+                                <div class="personal__overview__dob marginbottom06">
+                                    Date of birth:
+                                    <span class="personal__overview__dobspan marginleft74">24th july</span>
+                                </div>
+                                <div class="personal__overview__marital marginbottom06">
+                                    Marital status:
+                                    <span class="personal__overview__maritalspan marginleft7">Married</span>
+                                </div>
+                                <div class="personal__overview__address marginbottom06">
+                                    Address:
+                                    <span class="personal__overview__addressspan marginleft9">10th main,3rd cross,park street,570089</span>
+                                </div>
+                                <div class="personal__overview__areaofspecial marginbottom06">
+                                    Area of specialization:
+                                    <span class="personal__overview__areaofspecialspan marginleft33 color-bluedarker">Data science</span>
+                                </div>
+                                <div class="personal__overview__association marginbottom06">
+                                    Association with Institution:
+                                    <span class="personal__overview__associationspan marginleft1">Regular</span>
+                                </div>
+                                <div class="personal__overview__experience">
+                                    Experience in years:
+                                    <span class="personal__overview__experiencespan marginleft4">10</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="personal__grid">
+                        <div class="personal__education border padding1">
+                            <h1 class="personal__education__heading marginbottom08">Educational Qualifications</h1>
+                            <div class="personal__education__degree">
+                                <div class="personal__education__degree__institution marginbottom06 fontheavy">
+                                    College of arts and science(UG)
+                                </div>
+                                <div class="personal__education__degree__branch marginbottom06 fontlight">
+                                    Computer science(95%)
+                                </div>
+                                <div class="personal__education__degree__graduation marginbottom06 fontlight">
+                                    2000-2004
+                                </div>
+                            </div>
+                        </div>
+                        <div class="personal__experience border padding1">
+                            <h1 class="personal__experience__heading marginbottom08">Experience</h1>
+                            <div class="personal__experience__company">
+                                <div class="personal__experience__company__name-role marginbottom06 fontheavy">
+                                    Professor at SJBIT
+                                </div>
+                                <div class="personal__experience__company__duration marginbottom06 fontlight">
+                                    Jan 2013-Jan 2015 (2years)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="personal__research border padding1">
+                            <h1 class="personal__research__heading marginbottom08">Research work</h1>
+                            <div class="personal__research__publications marginbottom08">
+                                <h3 class="personal__research__publications__heading marginbottom04 fontheavy">Publications</h3>
+                                <div class="personal__research__publications__details fontlight">
+                                    Publication 1
+                                </div>
+                            </div>
+                            <div class="personal__research__papers">
+                                <h3 class="personal__research__papers__heading marginbottom04 fontheavy">Papers</h3>
+                                <div class="personal__research__papers__details fontlight">
+                                    Paper 1
+                                </div>
+                            </div>
+                        </div>
+                        <div class="personal__invitedtalks border padding1">
+                            <h1 class="personal__invitedtalks__heading marginbottom04 fontheavy">Invited Talks Delivered</h1>
+                            <div class="personal__invitedtalks__details fontlight">
+                                Talk on digital india
+                            </div>
+                        </div>
+                        <div class="personal__session border padding1">
+                            <h1 class="personal__session__heading marginbottom04 fontheavy">Session chairs</h1>
+                            <div class="personal__session__details fontlight">
+                                Session chair example 1
+                            </div>
+                        </div>
+                        <div class="personal__workshop border padding1">
+                            <h1 class="personal__workshop__heading marginbottom04 fontheavy">Workshop</h1>
+                            <div class="personal__workshop__details fontlight">
+                                Talk on AI
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <script src="../js/sample.js"></script>
+</body>
+</html>

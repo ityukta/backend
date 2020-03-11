@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="../sass/main.css" type="text/css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css"
+      integrity="sha256-+N4/V/SbAFiW1MPBCXnfnP9QSN3+Keu+NlB+0ev/YKQ="
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <div class="register2">
+      <div class="register2__profile">
+        <form action="" class="register2__forms">
+          <div class="register2__name">
+            <label for="name">Name</label>
+            <input type="text" class="register2__name__input" id="name" />
+          </div>
+          <div class="register2__email">
+            <label for="email">Email</label>
+            <input type="email" class="register2__email__input" id="email" />
+          </div>
+          <div class="register2__department">
+            <label for="department">Department</label>
+            <select id="department" class="register2__department__input">
+              <option value="Cse">Cse</option>
+              <option value="Ise">Ise</option>
+            </select>
+          </div>
+          <div class="register2__qualification">
+            <label for="qualification"
+              ><span class="labels">Qualification</span></label
+            >
+            <textarea
+              id="qualification"
+              cols="30"
+              rows="3"
+              class="register2__qualification__input"
+            ></textarea>
+          </div>
+          <div class="register2__designation">
+            <label for="designation">Designation</label>
+            <select id="designation" class="register2__designation__input">
+              <option value="Professor">Professor</option>
+              <option value="Associate Professor">Associate Professor</option>
+              <option value="Assistant Professor">Assistant Professor</option>
+            </select>
+          </div>
+          <div class="register2__specialize">
+            <label for="specialize">Area of specialization</label>
+            <textarea
+              id="specialize"
+              class="register2__specialize__input"
+              cols="30"
+              rows="3"
+            ></textarea>
+          </div>
+          <div class="register2__date">
+            <label for="date">Date of joining</label>
+            <input type="date" class="register2__date__input" id="date" />
+          </div>
+          <div class="register2__association">
+            <label for="association">Association with instituion</label>
+            <select id="association" class="register2__association__input">
+              <option value="Regular">Regular</option>
+              <option value="Visting">Visting</option>
+              <option value="Adjunct">Adjunct</option>
+              <option value="Contract">Contract</option>
+            </select>
+          </div>
+          <div class="register2__phone">
+            <label for="phone">Phone number</label>
+            <input type="text" class="register2__phone__input" id="phone" />
+          </div>
+          <div class="register2__exp">
+            <label for="exp">Experience in years</label>
+            <input type="number" class="register2__exp__input" id="exp" />
+          </div>
+          <div class="register2__education">
+            <h3 class="register2__education__title">Add education</h3>
+            <button class="register2__education__button plus-button">
+              <i class="fa fa-plus fa-2x"></i>
+            </button>
+            <div class="register2__education__degrees">
+              <label for="degree">Degree</label>
+              <select id="degree" class="register2__education__degrees__input">
+                <option value="UG">UG</option>
+                <option value="PG">PG</option>
+                <option value="PhD">PhD</option>
+              </select>
+              <div
+                class="register2__education__institution displayflexcol marginbottom04"
+              >
+                <label for="education__institution "
+                  >Education institution</label
+                >
+                <input
+                  type="text"
+                  class="register2__education__institution__input "
+                  id="education__institution"
+                />
+              </div>
+              <div
+                class="register2__education__percentage displayflexcol marginbottom04"
+              >
+                <label for="education__percentage">Percentage</label>
+                <input
+                  type="number"
+                  class="register2__education__percentage__input"
+                  id="education__percentage"
+                />
+              </div>
+              <div
+                class="register2__education__passing displayflexcol marginbottom04"
+              >
+                <label for="passing">Year of passing</label>
+                <input
+                  type="date"
+                  class="register2__education__passing__input"
+                  id="passing"
+                />
+              </div>
+              <div class="register2__education__university displayflexcol">
+                <label for="university">University</label>
+                <input
+                  type="text"
+                  class="register2__education__university"
+                  id="university"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="register2__workexp">
+            <h3 class="register2__workexp__title">Add workexperience</h3>
+            <button class="register2__workexp__button plus-button">
+              <i class="fa fa-plus fa-2x"></i>
+            </button>
+            <div class="register2__workexp__details">
+              <div
+                class="register2__workexp__designation displayflexcol marginbottom04"
+              >
+                <label for="designation">Designation</label>
+                <input
+                  type="text"
+                  class="register2__workexp__designation__input"
+                  id="designation"
+                />
+              </div>
+              <div
+                class="register2__workexp__organization displayflexcol marginbottom04"
+              >
+                <label for="organization">Organization</label>
+                <input
+                  type="text"
+                  class="register2__workexp__organization__input"
+                  id="organization"
+                />
+              </div>
+              <div class="register2__workexp__duration displayflexcol">
+                <label for="duration">Duration</label>
+                <input
+                  type="number"
+                  class="register2__workexp__duration__input"
+                  id="duration"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="register2__research">
+            <div class="register2__research__publications">
+              <h3 class="register2__research__pubhead">Add publications</h3>
+              <button
+                class="register2__research__pubbutton plus-button marginbottom04"
+              >
+                <i class="fa fa-plus fa-2x"></i>
+              </button>
+              <div
+                class="register2__research__publications__details displayflexcol marginbottom04"
+              >
+                <label for="publication">Publication</label>
+                <input
+                  type="text"
+                  class="register2__research__publications__input"
+                  id="publication"
+                />
+              </div>
+            </div>
+            <div class="register2__research__papers">
+              <h4 class="register2__research__paperhead">Add papers</h4>
+              <button
+                class="register2__research__paperbutton plus-button marginbottom04"
+              >
+                <i class="fa fa-plus fa-2x"></i>
+              </button>
+              <div class="register2__research__papers__details displayflexcol">
+                <label for="papers">Papers</label>
+                <input
+                  type="text"
+                  class="register2__research__papers__input"
+                  id="papers"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="register2__talks">
+            <h3 class="register2__talks__talkhead">Add invited talks</h3>
+            <button
+              class="register2__talks__talkbutton plus-button marginbottom04"
+            >
+              <i class="fa fa-plus fa-2x"></i>
+            </button>
+            <div class="register2__talks__details">
+              <label for="talks">Talk topic</label>
+              <textarea
+                id="talks"
+                cols="30"
+                rows="3"
+                placeholder="Enter talks"
+                class="register2__talks__input"
+              ></textarea>
+            </div>
+          </div>
+          <div class="register2__session">
+            <h3 class="register2__session__sessionhead">Add session chairs</h3>
+            <button
+              class="register2__session__sessionbutton plus-button marginbottom04"
+            >
+              <i class="fa fa-plus fa-2x"></i>
+            </button>
+            <div class="register2__session__details displayflexcol">
+              <label for="session">Session1</label>
+              <input
+                type="text"
+                class="register2__session__input"
+                id="session"
+              />
+            </div>
+          </div>
+          <div class="register2__workshop">
+            <h3 class="register2__workshop__workshophead">
+              Add workshop/Seminar/Fdp
+            </h3>
+            <button
+              class="register2__workshop__workshopbutton plus-button marginbottom04"
+            >
+              <i class="fa fa-plus fa-2x"></i>
+            </button>
+            <div class="register2__workshop__details">
+              <select
+                id=""
+                class="register2__workshop__input-dropdown marginbottom04"
+              >
+                <option value="Workshops">Workshops</option>
+                <option value="Seminar">Seminar</option>
+                <option value="FDPs">FDPs</option>
+                <option value="Training pgm">Training pgm</option>
+              </select>
+              <textarea
+                id=""
+                cols="30"
+                rows="3"
+                class="register2__workshop__input-text"
+              ></textarea>
+            </div>
+          </div>
+          <div class="register2__personal">
+            <div class="register2__personal__dob displayflexcol marginbottom06">
+              <label for="dob" class="fontheavy">Date of birth</label>
+              <input type="date" class="register2__personal__dob__input" />
+            </div>
+            <div class="register2__personal__gender marginbottom06">
+              <label for="gender" class="fontheavy">Gender</label>
+              <input
+                type="radio"
+                value="male"
+                name="gend"
+                class="register2__personal__gender__input marginleft6"
+              />male
+              <input
+                type="radio"
+                value="female"
+                name="gend"
+                class="register2__personal__gender__input"
+              />female
+              <input
+                type="radio"
+                value="transgender"
+                name="gend"
+                class="register2__personal__gender__input"
+              />transgender
+            </div>
+            <div class="register2__personal__marital">
+              <label for="marital" class="fontheavy ">Marital Status</label>
+              <input
+                type="radio"
+                value="Married"
+                name="marital"
+                class="register2__personal__marital__input marginleft3"
+              />Married
+              <input
+                type="radio"
+                value="Unmarried"
+                name="marital"
+                class="register2__personal__marital__input"
+              />Unmarried
+            </div>
+          </div>
+          <div class="register2__submit">
+            <button class="register2__submit-btn bluebtn">Submit</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

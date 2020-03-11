@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head> 
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../sass/main.css" type="text/css">
+    <!--<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">-->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css"
+      integrity="sha256-+N4/V/SbAFiW1MPBCXnfnP9QSN3+Keu+NlB+0ev/YKQ="
+      crossorigin="anonymous"
+    />
+    
+</head>
+<body> 
+    <div class="container">
+        <header class="header">
+            <img src="../images/logo.jpg" alt="" class="header__collegelogo">
+            <div class="header__content1">
+                <button class="nav-btn"><i class="fa fa-bars fa-2x"></i></button>
+                <h3 class="header__heading">Student login</h3>
+            </div>
+            <div class="header__content2">
+                <form action="" class="header__form search-show">
+                    <input type="search" class="header__search" placeholder="Search here">
+                    <button class="header__search-btn"><i class="fa fa-search fa-1x icon-sbtn"></i></button>
+                </form>
+                <div class="btn-shownone">
+                    <i class="fa fa-search fa-2x "></i>       <!--Make the btn-shownone to display block on click-->
+                </div>
+                
+                <div class="header__logout">
+                    <div class="header__logout__group">
+                        <div class="header__logout__pic">
+                            <img src="../images/user-3.jpg" alt="" class="header__logout__img">
+                        </div>
+                        <div class="header__dots"><i class="fa fa-ellipsis-v fa-1x"></i>
+                            <ul class="header__logout__list ">   <!--Add header__logout__listshow on click of header__logout__group-->
+                                <li><a href="#">My profile</a></li>
+                                <li><a href="#">Settings</a></li>
+                                <li><a href="#">Log out</a></li>
+                            </ul>   
+                        </div>
+                        <p class="header__logout__name"><span class="header__logout__span">Admin</span>    
+                            <ul class="header__logout__list ">   <!--Add header__logout__listshow on click of header__logout__group-->
+                                <li><a href="#">My profile</a></li>
+                                <li><a href="#">Settings</a></li>
+                                <li><a href="#">Log out</a></li>
+                            </ul>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <section class="section">
+            <div class="navbar "> <!--Add show-navbar on click of nav button-->
+                <ul class="nav__ul">
+                    <li class="nav__li"><a href="">home</a> </li>
+                    <li class="nav__li teacherli"><a href="" class="teacher">Professor</a>  <span></span>
+                        <ul class="sub ">  <!--Add show on click of teacherli-->
+                            <li class="sub__li"><a href="">Professors</a></li>
+                            <li class="sub__li"><a href="">Add subjects </a></li>
+                            <li class="sub__li"><a href="">Class teachers </a></li>
+                            <li class="sub__li"><a href="">Subject teachers</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav__li studentli"><a href="" class="student">Students</a>
+                        <ul class="sub studentlist"> <!--Add show on click of studentli-->
+                            <li class="sub__li"><a href=""> Add students</a></li>
+                            <li class="sub__li"><a href="">Assign subjects</a></li>
+                            <li class="sub__li"><a href="">Manage attendace</a></li>
+                            <li class="sub__li"><a href="">Manage IA marks</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div class="content">
+                <div class="allteachers">
+                    <div class="allteachers__heading"><h1>Professor</h1></div>
+                    
+                    <form action="">
+                        <div class="allteachers__form">         <!--Contains the forms to input teacher name and id-->
+                            <div class="allteachers__names">
+                                <input type="text" class="allteachers__inputname" placeholder="Professor Name">
+                            </div>
+                            <div class="allteachers__id">
+                                <input type="text" class="allteachers__inputid" placeholder="Professor Id">
+                            </div>
+                            <div class="allteachers__designation">
+                                <select name="" id="" class="allteachers__inputdesignation">
+                                    <option value="">Hod</option>
+                                    <option value="">Professor</option>
+                                    <option value="">Associate professor</option>
+                                    <option value="">Assistant professor</option>
+                                </select>
+                            </div>
+                            <div class="allteachers__search">
+                                <input type="submit" class="allteachers__search-btn search-btn" value="Search">
+                            </div>
+                        </div>
+                    </form>
+                    <div class="allteachers__details">
+                        <div class="allteachers__person">      <!--Contains details of specific teacher -->
+                            <div class="allteachers__dots">
+                                <i class="fa fa-ellipsis-v fa-1x"></i>
+                            </div>
+                            <div class="allteachers__pic">
+                                <img src="../images/user-3.jpg" alt="" class="allteachers__img">
+                            </div>
+                            <div class="allteachers__name">
+                                <p>John doe</p>
+                            </div>
+                        </div>
+                        <div class="allteachers__person">
+                            <div class="allteachers__dots">
+                                <i class="fa fa-ellipsis-v fa-1x"></i>
+                            </div>
+                            <div class="allteachers__pic">
+                                <img src="../images/user-3.jpg" alt="" class="allteachers__img">
+                            </div>
+                            <div class="allteachers__name">
+                                <p>John doe</p>
+                            </div>
+                        </div>
+                        <div class="allteachers__person">
+                            <div class="allteachers__dots">
+                                <i class="fa fa-ellipsis-v fa-1x"></i>
+                            </div>
+                            <div class="allteachers__pic">
+                                <img src="../images/user-3.jpg" alt="" class="allteachers__img">
+                            </div>
+                            <div class="allteachers__name">
+                                <p>John doe</p>
+                            </div>
+                        </div>
+                        <div class="allteachers__person">
+                            <div class="allteachers__dots">
+                                <i class="fa fa-ellipsis-v fa-1x"></i>
+                            </div>
+                            <div class="allteachers__pic">
+                                <img src="../images/user-3.jpg" alt="" class="allteachers__img">
+                            </div>
+                            <div class="allteachers__name">
+                                <p>John doe</p>
+                            </div>
+                        </div>
+                        <div class="allteachers__person">
+                            <div class="allteachers__dots">
+                                <i class="fa fa-ellipsis-v fa-1x"></i>
+                            </div>
+                            <div class="allteachers__pic">
+                                <img src="../images/user-3.jpg" alt="" class="allteachers__img">
+                            </div>
+                            <div class="allteachers__name">
+                                <p>John doe</p>
+                            </div>
+                        </div>
+                        <div class="allteachers__person">
+                            <div class="allteachers__dots">
+                                <i class="fa fa-ellipsis-v fa-1x"></i>
+                            </div>
+                            <div class="allteachers__pic">
+                                <img src="../images/user-3.jpg" alt="" class="allteachers__img">
+                            </div>
+                            <div class="allteachers__name">
+                                <p>John doe</p>
+                            </div>
+                        </div>
+                        <div class="allteachers__person">
+                            <div class="allteachers__dots">
+                                <i class="fa fa-ellipsis-v fa-1x"></i>
+                            </div>
+                            <div class="allteachers__pic">
+                                <img src="../images/user-3.jpg" alt="" class="allteachers__img">
+                            </div>
+                            <div class="allteachers__name">
+                                <p>John doe</p>
+                            </div>
+                        </div>
+                        <div class="allteachers__person">
+                            <div class="allteachers__dots">
+                                <i class="fa fa-ellipsis-v fa-1x"></i>
+                            </div>
+                            <div class="allteachers__pic">
+                                <img src="../images/user-3.jpg" alt="" class="allteachers__img">
+                            </div>
+                            <div class="allteachers__name">
+                                <p>John doe</p>
+                            </div>
+                        </div>
+                        <div class="allteachers__person">
+                            <div class="allteachers__dots">
+                                <i class="fa fa-ellipsis-v fa-1x"></i>
+                            </div>
+                            <div class="allteachers__pic">
+                                <img src="../images/user-3.jpg" alt="" class="allteachers__img">
+                            </div>
+                            <div class="allteachers__name">
+                                <p>John doe</p>
+                            </div>
+                        </div>
+                        <div class="allteachers__person">
+                            <div class="allteachers__dots">
+                                <i class="fa fa-ellipsis-v fa-1x"></i>
+                            </div>
+                            <div class="allteachers__pic">
+                                <img src="../images/user-3.jpg" alt="" class="allteachers__img">
+                            </div>
+                            <div class="allteachers__name">
+                                <p>John doe</p>
+                            </div>
+                        </div>
+                        <div class="allteachers__person">
+                            <div class="allteachers__dots">
+                                <i class="fa fa-ellipsis-v fa-1x"></i>
+                            </div>
+                            <div class="allteachers__pic">
+                                <img src="../images/user-3.jpg" alt="" class="allteachers__img">
+                            </div>
+                            <div class="allteachers__name">
+                                <p>John doe</p>
+                            </div>
+                        </div>
+                        <div class="allteachers__person">
+                            <div class="allteachers__dots">
+                                <i class="fa fa-ellipsis-v fa-1x"></i>
+                            </div>
+                            <div class="allteachers__pic">
+                                <img src="../images/user-3.jpg" alt="" class="allteachers__img">
+                            </div>
+                            <div class="allteachers__name">
+                                <p>John doe</p>
+                            </div>
+                        </div>
+                    </div>    
+                    
+                </div>
+            </div>
+        </section>
+    </div>
+    <script src="../js/sample.js"></script>
+</body>
+</html>
