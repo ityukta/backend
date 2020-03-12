@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{{ url_for('static' , filename='sass/main.css') }}">
+    <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css"
+    integrity="sha256-+N4/V/SbAFiW1MPBCXnfnP9QSN3+Keu+NlB+0ev/YKQ="
+    crossorigin="anonymous"
+  />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script>
+      $(document).ready(function(){
+        var authkey = localStorage.getItem('authkey');
+        var facultyid = localStorage.getItem('faculty_id');
+        $('#semester-select').on('change', function(){
+            alert($('#semester-select').val());
+        });
+      });
+  </script>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <img src="{{ url_for('static' , filename = 'images/logo.jpg') }}" alt="" class="header__collegelogo">
+            <div class="header__content1">
+                <button class="nav-btn"><i class="fa fa-bars fa-2x"></i></button>
+                <h3 class="header__heading">Student login</h3>
+            </div>
+            <div class="header__content2">
+                <form action="" class="header__form search-show">
+                    <input type="search" class="header__search" placeholder="Search here">
+                    <button class="header__search-btn"><i class="fa fa-search fa-1x icon-sbtn"></i></button>
+                </form>
+                <div class="btn-shownone">
+                    <i class="fa fa-search fa-2x "></i>       <!--Make the btn-shownone to display block on click-->
+                </div>
+                
+                <div class="header__logout">
+                    <div class="header__logout__group">
+                        <div class="header__logout__pic">
+                            <img src="{{ url_for('static' , filename = 'images/user-3.jpg') }}" alt="" class="header__logout__img">
+                        </div>
+                        <div class="header__dots"><i class="fa fa-ellipsis-v fa-1x"></i>
+                            <ul class="header__logout__list ">   <!--Add header__logout__listshow on click of header__logout__group-->
+                                <li><a href="#">My profile</a></li>
+                                <li><a href="#">Settings</a></li>
+                                <li><a href="#">Log out</a></li>
+                            </ul>   
+                        </div>
+                        <p class="header__logout__name"><span class="header__logout__span">Admin</span>    
+                            <ul class="header__logout__list ">   <!--Add header__logout__listshow on click of header__logout__group-->
+                                <li><a href="#">My profile</a></li>
+                                <li><a href="#">Settings</a></li>
+                                <li><a href="#">Log out</a></li>
+                            </ul>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <section class="section">
+            <div class="navbar "> <!--Add show-navbar on click of nav button-->
+                <ul class="nav__ul">
+                    <li class="nav__li"><a href="">home</a> </li>
+                    <li class="nav__li teacherli"><a href="" class="teacher">Professor</a>  <span></span>
+                        <ul class="sub ">  <!--Add show on click of teacherli-->
+                            <li class="sub__li"><a href="">Professors</a></li>
+                            <li class="sub__li"><a href="">Add subjects </a></li>
+                            <li class="sub__li"><a href="">Class teachers </a></li>
+                            <li class="sub__li"><a href="">Subject teachers</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav__li studentli"><a href="" class="student">Students</a>
+                        <ul class="sub studentlist"> <!--Add show on click of studentli-->
+                            <li class="sub__li"><a href=""> Add students</a></li>
+                            <li class="sub__li"><a href="">Assign subjects</a></li>
+                            <li class="sub__li"><a href="">Manage attendace</a></li>
+                            <li class="sub__li"><a href="">Manage IA marks</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div class="content">
+               <div class="dayattendance">
+                    <div class="dayattendance__batch">
+                        <select id="semester-select" class="dayattendance__batch__sem">
+                            <option>Select Sem</option>
+                            <option value="4">4th sem</option>
+                            <option value="6">6th sem</option>
+                        </select>
+                        <select id="subject" class="dayattendance__batch__sem">
+                            <option>OS</option>
+                            <option>CNC</option>
+                        </select>
+                        <input type="date" class="dayattendance__batch__date">
+                    </div>
+                    
+                    <div class="dayattendance__details">
+                        <table class="dayattendance__details__table">
+                            <tr class="dayattendance__details__table__row">
+                                <th>USN</th>
+                                <th class="dayattendance__details__table__name">Name</th>
+                                <th>P/A</th>
+                            </tr>
+                            <tr class="dayattendance__details__table__row">
+                                <td>01</td>
+                                <td>rishab</td>
+                                <td><i class="fa fa-check"></i></td>
+                            </tr>
+                            <tr class="dayattendance__details__table__row">
+                                <td>02</td>
+                                <td>aarshab</td>
+                                <td><i class="fa fa-check"></i></td>
+                            </tr>
+                            <tr class="dayattendance__details__table__row">
+                                <td>03</td>
+                                <td>vishnu</td>
+                                <td><i class="fa fa-times"></i></td>
+                            </tr>
+                            <tr class="dayattendance__details__table__row">
+                                <td>04</td>
+                                <td>alex</td>
+                                <td><i class="fa fa-check"></i></td>
+                            </tr>
+                            <tr class="dayattendance__details__table__row">
+                                <td>05</td>
+                                <td>akash</td>
+                                <td><i class="fa fa-times"></i></td>
+                            </tr>
+                        </table>
+                    </div>
+
+
+
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination">
+                          <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+                          <li class="page-item"><a class="page-link" href="#">1</a></li>
+                          <li class="page-item"><a class="page-link" href="#">2</a></li>
+                          <li class="page-item"><a class="page-link" href="#">3</a></li>
+                          <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                        </ul>
+                    </nav>
+               </div>
+            </div>
+        </section>
+    </div>
+    <script src="{{ url_for('static' , filename='js/sample.js') }}"></script>
+</body>
+</html>

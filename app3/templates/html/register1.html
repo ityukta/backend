@@ -32,7 +32,12 @@
                processData: false,
                success : function(ret_obj){
                    console.log(ret_obj);
-                   alert(ret_obj);
+                   if(ret_obj['status_code'] == 200){
+                       alert('Successfully Registered faculty.');
+                       location.reload();
+                   }else{
+                       alert('some error');
+                   }
                },
                error: function(xhr, error, err){
                    alert(error);
@@ -85,7 +90,7 @@
                         </select>
                     </div>
                     <div class="register__submit">
-                        <button class="register__btn bluebtn" onclick="register()">Register</button>
+                        <button class="register__btn bluebtn" type="button" onclick="register()">Register</button>
                     </div>
 
                 </form>

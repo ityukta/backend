@@ -4,19 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="../sass/main.css" type="text/css">
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'sass/main.css') }}" type="text/css">
     <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css"
     integrity="sha256-+N4/V/SbAFiW1MPBCXnfnP9QSN3+Keu+NlB+0ev/YKQ="
     crossorigin="anonymous"
   />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   
 </head>
 <body>
     <div class="container">
         <header class="header">
-            <img src="../images/logo.jpg" alt="" class="header__collegelogo">
+            <img src="{{ url_for('static', filename = 'images/logo.jpg') }}" alt="" class="header__collegelogo">
             <div class="header__content1">
                 <button class="nav-btn"><i class="fa fa-bars fa-2x"></i></button>
                 <h3 class="header__heading">Student login</h3>
@@ -33,7 +34,7 @@
                 <div class="header__logout">
                     <div class="header__logout__group">
                         <div class="header__logout__pic">
-                            <img src="../images/user-3.jpg" alt="" class="header__logout__img">
+                            <img src="{{ url_for('static', filename = 'images/user-3.jpg') }}" alt="" class="header__logout__img">
                         </div>
                         <div class="header__dots"><i class="fa fa-ellipsis-v fa-1x"></i>
                             <ul class="header__logout__list ">   <!--Add header__logout__listshow on click of header__logout__group-->

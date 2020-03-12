@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="../sass/main.css" type="text/css">
-    <link rel="stylesheet" href="../sass/pages/assignclass.css" type="text/css">
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'sass/main.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'sass/pages/assignclass.css') }}" type="text/css">
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css"
@@ -16,7 +16,7 @@
 <body>
     <div class="container">
         <header class="header">
-            <img src="../images/logo.jpg" alt="" class="header__collegelogo">
+            <img src="{{ url_for('static', filename = 'images/logo.jpg') }}" alt="" class="header__collegelogo">
             <div class="header__content1">
                 <button class="nav-btn"><i class="fa fa-bars fa-2x"></i></button>
                 <h3 class="header__heading">Student login</h3>
@@ -33,7 +33,7 @@
                 <div class="header__logout">
                     <div class="header__logout__group">
                         <div class="header__logout__pic">
-                            <img src="../images/user-3.jpg" alt="" class="header__logout__img">
+                            <img src="{{ url_for('static', filename = 'images/user-3.jpg') }}" alt="" class="header__logout__img">
                         </div>
                         <div class="header__dots"><i class="fa fa-ellipsis-v fa-1x"></i>
                             <ul class="header__logout__list ">   <!--Add header__logout__listshow on click of header__logout__group-->
@@ -89,7 +89,7 @@
                                 <i class="fa fa-ellipsis-v fa-1x"></i>
                             </div>
                             <div class="assignclass__teacher-pic ">         <!--Add assignclass__picshow to display teacher picture-->
-                                <img src="../images/user-3.jpg" alt="" class="assignclass__teacher-img">
+                                <img src="{{ url_for('static', filename = 'images/user-3.jpg') }}" alt="" class="assignclass__teacher-img">
                             </div>
                             <div class="assignclass__teacherdetails ">      <!--Add assignclass__detailshow to display teacher details-->
                                 <p class="assignclass__teachername">Name: John doe</p>
@@ -108,7 +108,7 @@
                                 <i class="fa fa-ellipsis-v fa-1x"></i>
                             </div>
                             <div class="assignclass__teacher-pic assignclass__picshow">
-                                <img src="../images/user-3.jpg" alt="" class="assignclass__teacher-img">
+                                <img src="{{ url_for('static', filename = 'images/user-3.jpg') }}" alt="" class="assignclass__teacher-img">
                             </div>
                             <div class="assignclass__teacherdetails assignclass__detailshow">
                                 <p class="assignclass__teachername">Name: John doe</p>
@@ -129,7 +129,7 @@
                                 <i class="fa fa-ellipsis-v fa-1x"></i>
                             </div>
                             <div class="assignclass__teacher-pic assignclass__picshow">
-                                <img src="../images/user-3.jpg" alt="" class="assignclass__teacher-img">
+                                <img src="{{ url_for('static', filename = 'images/user-3.jpg') }}" alt="" class="assignclass__teacher-img">
                             </div>
                             <div class="assignclass__teacherdetails assignclass__detailshow">
                                 <p class="assignclass__teachername">Name: John doe</p>
@@ -148,7 +148,7 @@
                                 <i class="fa fa-ellipsis-v fa-1x"></i>
                             </div>
                             <div class="assignclass__teacher-pic assignclass__picshow">
-                                <img src="../images/user-3.jpg" alt="" class="assignclass__teacher-img">
+                                <img src="{{ url_for('static', filename = 'images/user-3.jpg') }}" alt="" class="assignclass__teacher-img">
                             </div>
                             <div class="assignclass__teacherdetails assignclass__detailshow">
                                 <p class="assignclass__teachername">Name: John doe</p>
@@ -169,7 +169,7 @@
                                 <i class="fa fa-ellipsis-v fa-1x"></i>
                             </div>
                             <div class="assignclass__teacher-pic assignclass__picshow">
-                                <img src="../images/user-3.jpg" alt="" class="assignclass__teacher-img">
+                                <img src="{{ url_for('static', filename = 'images/user-3.jpg') }}" alt="" class="assignclass__teacher-img">
                             </div>
                             <div class="assignclass__teacherdetails assignclass__detailshow">
                                 <p class="assignclass__teachername">Name: John doe</p>
@@ -188,7 +188,7 @@
                                 <i class="fa fa-ellipsis-v fa-1x"></i>
                             </div>
                             <div class="assignclass__teacher-pic assignclass__picshow">
-                                <img src="../images/user-3.jpg" alt="" class="assignclass__teacher-img">
+                                <img src="{{ url_for('static', filename = 'images/user-3.jpg') }}" alt="" class="assignclass__teacher-img">
                             </div>
                             <div class="assignclass__teacherdetails assignclass__detailshow">
                                 <p class="assignclass__teachername">Name: John doe</p>
@@ -203,6 +203,6 @@
             </div>
         </section>
     </div>
-    <script src="../js/sample.js"></script>
+    <script src="{{ url_for('static', filename = 'js/sample.js') }}"></script>
 </body>
 </html>

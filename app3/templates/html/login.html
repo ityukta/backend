@@ -1,36 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>loginpage</title>
-    <link rel="stylesheet" href="../css/login.css" type="text/css">
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'css/login.css') }}" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700,900" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script>
+        function submit_login() {
+            var emailid = $('#email').val();
+            var password = $('#password').val();
+            var data = {
+                "emailid" : emailid,
+                "password" : password
+            };
+            $.ajax({
+                type: "POST",
+                url: "/login",
+                dataType: 'Json',
+                contentType: 'application/json',
+                data : JSON.stringify(data),
+                processData: false,
+                success: function(ret_obj){
+                    console.log(ret_obj);
+                    if(ret_obj['status_code'] == 200){
+                        if(ret_obj['data']['first_login']  == 1){
+                            localStorage.setItem("authkey", ret_obj['authkey']);
+                            localStorage.setItem("faculty_id", ret_obj['data']['faculty_id']);
+                            //window.location.href = 'register2';
+                        }
+                    }
+                }
+            })
+        }
+    </script>
+
 </head>
+
 <body>
-   
-        <div class="container">
-            <div class="container__logo">
-             <img src="../images/logo.jpg" alt="logo" class="logo" />
-            </div>
-           
-                <div class="container__login">
-                 Login
-                </div>
-                <forms class="container__info">
-                 <span class="email__text">Email Address</span><br />
-                    <input type="email" name="email"  class="email"><br />
-                 <span class="password__text"> Password</span> <a href="forgotpassword.html" class="forgotpassword">forgot password?</a><br />
-                    <input type="password" name="password"  class="password"/><br />
-                 <div class="container__button">
-                    <input type="submit" value="Login" class="button">
-                 </div>
-                </forms>
-                <div class="container__register">
-                    Dont have an account yet?<a href="#" class="register">Register</a>
-                </div>
-            
+
+    <div class="container">
+        <div class="container__logo">
+            <img src="{{ url_for('static' , filename ='images/logo.jpg') }}" alt="logo" class="logo" />
         </div>
-   
+
+        <div class="container__login">
+            Login
+        </div>
+        <forms class="container__info">
+            <span class="email__text">Email Address</span><br />
+            <input type="email" name="email" class="email" id="email"><br />
+            <span class="password__text"> Password</span> <a href="forgotpassword.html" class="forgotpassword">forgot
+                password?</a><br />
+            <input type="password" name="password" class="password" id="password" /><br />
+            <div class="container__button">
+                <button type="button" value="" class="button" onclick="submit_login()">Login</button>
+            </div>
+        </forms>
+        <div class="container__register">
+            Dont have an account yet?<a href="#" class="register">Register</a>
+        </div>
+
+    </div>
+
 </body>
+
 </html>

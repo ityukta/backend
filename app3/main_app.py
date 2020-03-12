@@ -8,10 +8,10 @@ import json
 APP = Flask(__name__)
 
 
-@APP.route('/')
+@APP.route('/', methods = ['GET'])
 def homepage_view():
     """This is the homepage """
-    return 'Hello World'
+    return render_template('html/login.html')
 
 
 @APP.route('/createdatabase')
@@ -26,6 +26,21 @@ def initial_register_view():
     """ url for initial register"""
     return render_template('html/register1.html')
 
+@APP.route('/register2', methods=['GET'])
+def final_register_view():
+    """ url for Complete register"""
+    return render_template('html/register2.html')
+
+@APP.route('/assignclass', methods=['GET'])
+def add_class_view():
+    """ url to add class"""
+    return render_template('html/assignclass.html')
+
+@APP.route('/addattendance', methods=['GET'])
+def attendance_view():
+    """ url to attendance"""
+    return render_template('html/dayattendance.html')
+
 # Endpoints
 
 
@@ -39,7 +54,32 @@ def initial_register_ajax():
     print(response)
     return jsonify(response)
 
+@APP.route('/login', methods = ['POST'])
+def login_ajax():
+    """This is the ajax endpoint for login"""
+    data = request.get_json()
+    print(data)
+    response = dbop.validate_login(data)
+    print(response)
+    return jsonify(response)
 
+@APP.route('/getdetails', methods = ['POST'])
+def lget_details_ajax():
+    """This is the ajax endpoint for login"""
+    data = request.get_json()
+    print(data)
+    response = dbop.get_faculty_details(data)
+    print(response)
+    return jsonify(response)
+
+@APP.route('/getclass', methods = ['POST'])
+def class_details_ajax():
+    """This is the ajax endpoint for login"""
+    data = request.get_json()
+    print(data)
+    response = dbop.get_class_details(data)
+    print(response)
+    return jsonify(response)
 if __name__ == '__main__':
-    APP.run(debug=True)
+    APP.run(debug=True, threaded=True)
     APP.run()

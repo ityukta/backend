@@ -41,7 +41,23 @@
         outline: none;
     }
 }
-
+.pagination{
+    display: flex;
+    justify-content: center;
+    .page-item{
+        //margin-left: 1rem;
+        list-style: none;
+        padding: 0.7rem;
+        border-radius: 5px;
+        border: 1px solid rgb(207, 207, 207);
+        &:hover{
+            cursor: pointer;
+        }
+    }
+    .page-link{
+        text-decoration: none;
+    }
+}
 /*.icon-sbtn{
     height: 5%;
     &::before{
