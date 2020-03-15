@@ -1,0 +1,185 @@
+.header
+{
+    //background:linear-gradient(to right,$color-bluelight,$color-bluedark) ;
+    height: 8vh;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    &__collegelogo{
+        position: absolute;
+        height: 50px;
+        left:10%;
+        transform: translateX(-80%);
+    }
+    &__content1{
+        width: 20%;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+    }
+    &__content2{
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        width: 25vw;
+        min-width: 20rem;
+    }
+    &__form{                                //Contains the search form and button
+        display: flex;
+        height: 2rem;
+        justify-self: center;
+        position: relative;
+    }
+    &__search{
+        border-radius: 20px;
+        border: 1px solid $color-border;
+        padding: 1.1rem;
+        padding-right: 3rem;
+        width: 15rem;
+        &:focus{
+            outline: none;
+        }
+    } 
+    &__search-btn{
+        position: absolute;
+        border: none;
+       
+        left:82%;
+        top:50%;
+        background-color: white;
+       
+        padding: 10px 15px;
+        transform: translateY(-42%);
+        border-radius: 50%;
+        &:hover{
+            cursor: pointer;
+        }
+        &:focus{
+            outline: none;
+        }
+
+    }
+    &__dots{
+        display: none;
+    }
+    &__logout{                              //Contains img,drop down associated with the logout feature
+        position: relative;
+        display: flex;
+        width: 100%;
+        align-items: center;
+        justify-content: flex-end;
+        /*&:hover{
+            background-color: grey;
+        }*/
+        &__group{
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            transition: 0.3s;
+            &:hover{
+                background-color:$color-hover;
+                cursor: pointer;
+            }
+        }
+        &__pic{                             //Is the parent container of the logout image
+            margin-right: 5px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+        }
+        &__img{
+           
+            height: 100%;
+            border-radius: 50%;
+        }
+        &__list{
+                                        //Has the styling for the drop down list
+            display: none;
+            padding: 5px;
+            background-color: white;
+            position: absolute;
+            top:100%;
+            list-style: none;
+            & li{
+                padding: 5px;
+                & a{
+                    color:black;
+                    text-decoration: none;
+                }
+                &:hover{
+                    background-color: $color-hover;
+                }
+            }
+        }
+        &__listshow{
+            display: block;
+        }
+    }
+    border-bottom: 1px solid $color-border;
+}
+.nav-btn{
+    height: 2rem;
+}
+
+@media screen and (max-width:1200px)
+{
+    .header__heading{
+        display: none;
+    }
+   
+}
+@media screen and (max-width:991px)
+{
+    .header__collegelogo{
+        left:50%;
+    }
+    /*.header__content2{
+        display: flex;
+        justify-content: space-between;
+    }*/
+    .header__form{
+        display: none;
+        position: absolute;
+        top:115%;
+        left:65%;
+    }
+    .header__search{
+        width: 20vw;
+    }
+    .header__search-btn{
+        position: absolute;
+        left: 75%;
+    }
+    .header__logout__span{
+        display: none;
+    }
+    /*.search-show{
+        display: inline;
+    }*/
+    
+}
+@media screen and (max-width:575px)
+{
+    .header__logout__name{
+        display: none;
+    }
+    .header__logout__pic{
+        display: none;
+    }
+    .header__dots{
+        display: block;
+    }
+    .header__logout__group:hover{
+        background-color: white;
+    }
+    .header__logout__list{
+        transform: translateX(-50%);
+        & li:hover{
+            background-color: white;
+        }
+    }
+}
+
+

@@ -1,0 +1,49 @@
+.dayattendance{
+    &__batch{
+        display: flex;
+        justify-content: space-evenly;
+        //margin-bottom: 1rem;
+        &__sem{
+            border-radius: 5px;
+            border: 1px solid rgb(207, 207, 207);
+            padding: 0.4rem;
+            &:hover{
+                cursor: pointer;
+            }
+            &:focus{
+                outline: none;
+            }
+        }
+        &__date{
+            border-radius: 5px;
+            border: 1px solid rgb(207, 207, 207);
+            padding: 0.4rem;
+            &:hover{
+                cursor: pointer;
+            }
+            &:focus{
+                outline: none;
+            }
+        }
+    }
+    &__details{
+        display: flex;
+        justify-content: space-evenly;
+        &__table{
+            width: 70vw;
+           
+            &__row{
+                display: flex;
+                justify-content: space-around;
+                width: 100%;
+                padding: 0.5rem;
+            }
+            border-spacing: 3rem;
+            &__name{
+               
+               
+            }
+        }
+        
+    }
+}

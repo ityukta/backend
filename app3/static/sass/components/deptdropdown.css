@@ -1,0 +1,33 @@
+.department__dropdown {
+  padding: 5px;
+  border: 0.5px solid #c4c2c2;
+  border-radius: 5px;
+  margin-right: 3rem;
+  -webkit-transform: translateY(-20%);
+          transform: translateY(-20%);
+}
+
+.department__dropdown:hover {
+  cursor: pointer;
+}
+
+.department__dropdown:focus {
+  outline: none;
+}
+
+.type__dropdown {
+  padding: 5px;
+  border: 0.5px solid #c4c2c2;
+  border-radius: 5px;
+  -webkit-transform: translateY(-20%);
+          transform: translateY(-20%);
+}
+
+.type__dropdown:hover {
+  cursor: pointer;
+}
+
+.type__dropdown:focus {
+  outline: none;
+}
+/*# sourceMappingURL=deptdropdown.css.map */

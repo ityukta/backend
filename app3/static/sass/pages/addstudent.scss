@@ -1,0 +1,55 @@
+.addstudent{
+    display: grid;
+    grid-template-columns: 30rem 30rem;
+    grid-gap: 5rem;
+    justify-content: center;
+    text-align: center;
+    &__2a{
+        border:1px solid rgb(207, 207, 207);
+        padding: 2rem;
+        border-radius: 10px;
+        &__pic{
+            width: 20%;
+            margin: auto;
+            justify-self: center;
+            padding: 1rem;
+            border:1px solid rgb(207, 207, 207);
+            border-radius: 50%;
+            margin-bottom: 1rem;
+            &:hover{
+                cursor: pointer;
+            }
+        }
+    }
+}
+@media screen and (max-width:1200px)
+{
+    .addstudent{
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+}
+@media screen and (max-width:766px)
+{
+    .addstudent{
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        &__2a{
+            &__pic{
+                width: 30%;
+            }
+        }
+    }
+}
+@media screen and (max-width:575px)
+{
+    .addstudent{
+        display: grid;
+        grid-template-columns: 1fr;
+        &__2a{
+            &__pic{
+                width: 20%;
+            }
+        }
+    }
+}

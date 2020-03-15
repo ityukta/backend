@@ -1,0 +1,53 @@
+.content {
+  padding: 1.5rem;
+}
+
+.allteachers__form {
+  margin-top: 1rem;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: (minmax(15rem, 1fr))[auto-fit];
+      grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  margin-bottom: 1rem;
+}
+
+.allteachers__name {
+  -ms-grid-column-align: center;
+      justify-self: center;
+  margin-bottom: 1rem;
+}
+
+.allteachers__id {
+  -ms-grid-column-align: center;
+      justify-self: center;
+  margin-bottom: 1rem;
+}
+
+.allteachers__search {
+  -ms-grid-column-align: center;
+      justify-self: center;
+  margin-bottom: 1rem;
+}
+
+.allteachers__details {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 1fr 1fr 1fr 1fr;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+
+.allteachers__person {
+  padding: 1rem;
+  text-align: center;
+}
+
+.allteachers__pic {
+  height: 6rem;
+  margin-bottom: 1rem;
+}
+
+.allteachers__img {
+  border-radius: 50%;
+  height: 100%;
+}
+/*# sourceMappingURL=allteachers.css.map */

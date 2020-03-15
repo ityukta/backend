@@ -1,0 +1,65 @@
+.studentbatch {
+  padding: 1rem 3rem;
+}
+
+.studentbatch__add {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+}
+
+.studentbatch__add__batch__btn {
+  padding: 0.6rem 1rem;
+}
+
+.studentbatch__add__form .formcommon {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  margin-top: 1rem;
+}
+
+.studentbatch__add__form .inputcommon {
+  border-radius: 10px;
+  border: 1px solid #cfcfcf;
+  padding: 0.4rem;
+}
+
+.studentbatch__details {
+  padding: 1rem;
+}
+
+.studentbatch__details__heading {
+  text-align: center;
+  font-size: 25px;
+  font-weight: 600;
+}
+
+.studentbatch__details__batch {
+  padding: 1rem;
+}
+
+.studentbatch__details__tablehead {
+  display: -ms-grid;
+  display: grid;
+  justify-items: center;
+  -ms-grid-columns: 1fr 1fr 1fr;
+      grid-template-columns: 1fr 1fr 1fr;
+  margin-bottom: 1rem;
+}
+
+.studentbatch__details__student {
+  display: -ms-grid;
+  display: grid;
+  justify-items: center;
+  -ms-grid-columns: 1fr 1fr 1fr;
+      grid-template-columns: 1fr 1fr 1fr;
+  margin-bottom: 0.5rem;
+}
+/*# sourceMappingURL=studentbatch.css.map */

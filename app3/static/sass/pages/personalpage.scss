@@ -1,0 +1,73 @@
+.personal {
+  //font-weight: 600;
+
+  &__overview {
+    padding: 1rem;
+    border-radius: 10px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border: 1px solid $color-border;
+
+    &__1 {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      //justify-content: space-between;
+      border-right: 1px solid $color-border;
+      margin-right: 1rem;
+    }
+    &__2 {
+      display: flex;
+      //justify-content: center;
+      align-items: center;
+      justify-content: space-between;
+    }
+    &__pic {
+      flex: 20% 0 0;
+      margin-right: 1.5rem;
+    }
+    &__img {
+      border-radius: 50%;
+    }
+    &__1details {
+      flex-grow: 1;
+    }
+    &__2details {
+    }
+    &__name {
+      font-weight: 600;
+      font-size: 20px;
+    }
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 2rem;
+    margin-top: 2rem;
+  }
+  &__experience {
+  }
+}
+@media screen and (max-width: 767px) {
+  .personal {
+    &__grid {
+      display: grid;
+      grid-template-columns: 1fr;
+    }
+    &__overview {
+      display: grid;
+      grid-template-columns: 1fr;
+      &__1 {
+        padding: 1rem;
+        //justify-self: center;
+        border: none;
+        border-bottom: 1px solid $color-border;
+      }
+      &__2 {
+        margin-top: 1rem;
+        justify-self: end;
+      }
+    }
+  }
+}

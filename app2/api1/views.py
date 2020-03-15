@@ -39,6 +39,7 @@ class InitialRegistrationView(APIView):
 
 
 class LoginView(APIView):
+    permission_classes = (AllowAny,)
     def post(self, request):
         data = {
             'email_id': 'achsarwwe6@gmail.com',
@@ -53,6 +54,7 @@ class LoginView(APIView):
         return Response(APIResponse(code=404, msg="Error", data=serializer.errors['data']).__dict__, status=status.HTTP_200_OK)
 
 class Completeregistrationview(APIView):
+    permission_classes = (AllowAny,)
     def post(self,request):
         data = list(dict(request.data).keys())[0]
         serializer = CompleteRegistrationResponseSerializer(data={"data" :eval(data)})
