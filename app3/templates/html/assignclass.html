@@ -1,19 +1,144 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="{{ url_for('static', filename = 'sass/main.css') }}" type="text/css">
     <link rel="stylesheet" href="{{ url_for('static', filename = 'sass/pages/assignclass.css') }}" type="text/css">
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css"
-      integrity="sha256-+N4/V/SbAFiW1MPBCXnfnP9QSN3+Keu+NlB+0ev/YKQ="
-      crossorigin="anonymous"
-    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css"
+        integrity="sha256-+N4/V/SbAFiW1MPBCXnfnP9QSN3+Keu+NlB+0ev/YKQ=" crossorigin="anonymous" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var authkey = localStorage.getItem('authkey');
+            var faculty_id = localStorage.getItem('faculty_id');
+            var data = {
+                'authkey': authkey,
+                'faculty_id': faculty_id
+            };
+            $.ajax({
+                type: "POST",
+                url: "getclassdetails",
+                dataType: 'Json',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                processData: false,
+                success: function (ret_obj) {
+                    console.log(ret_obj);
+                    var class_data = ret_obj['data'];
+                    for (i = 0; i < class_data.length; i++) {
+                        temp = '.assignclass__' + class_data[i]['sem'] + '__' + class_data[i]['sec'] + " " + ".assignclass__add"
+                        $(temp).addClass('assignclass__addshownone');
+                        temp = '.assignclass__' + class_data[i]['sem'] + '__' + class_data[i]['sec'] + " " + ".assignclass__teacher-pic"
+                        $(temp).addClass('assignclass__picshow');
+                        temp = '.assignclass__' + class_data[i]['sem'] + '__' + class_data[i]['sec'] + " " + ".assignclass__teacherdetails"
+                        $(temp).addClass('assignclass__detailshow');
+                        $(temp + " .assignclass__teachername").text('Name: ' + class_data[i]['details']['name']);
+                        $(temp + " .assignclass__teacherid").text('Teacher id: ' + class_data[i]['classteacher_id']);
+                    }
+                }
+            });
+            $('#modal-department').change(function () {
+                console.log($(this).val());
+                $('#c_teacher').removeAttr('disabled');
+                if ($(this).val() != 'Select') {
+                    var authkey = localStorage.getItem('authkey');
+                    var faculty_id = localStorage.getItem('faculty_id');
+                    var dep = $('#modal-department').find(":selected").text();
+                    var data = {
+                        'authkey': authkey,
+                        'faculty_id': faculty_id,
+                        'department': dep
+                    };
+                    $.ajax({
+                        type: "POST",
+                        url: "getdetails",
+                        dataType: 'Json',
+                        contentType: 'application/json',
+                        data: JSON.stringify(data),
+                        processData: false,
+                        success: function (ret_obj) {
+                            for (i = 0; i < ret_obj['data'].length; i++) {
+                                $('#c_teacher').append('<option id="' + ret_obj['data'][i]['faculty_id'] + '">' + ret_obj['data'][i]['name'] + '</option>');
+                            }
+                        }
+                    });
+                }
+                else {
+                    $('#c_teacher').attr('disabled', true);
+                }
+            });
+        });
+        function openmodal(sem, sec) {
+            $('.modal').toggleClass('modal_dispnone');
+            $('.modal #sem').val(sem);
+            $('.modal #sec').val(sec);
+        }
+        function submitaddclass() {
+            var authkey = localStorage.getItem('authkey');
+            var faculty_id = localStorage.getItem('faculty_id');
+            var dep = $('#modal-department').find(":selected").text();
+            var c_teach = $('#c_teacher').find(":selected").text();
+            var c_id = $('#c_teacher').find(":selected").attr('id');
+            var sem = $('.modal #sem').val();
+            var sec = $('.modal #sec').val();
+            var data = {
+                'authkey': authkey,
+                'faculty_id': faculty_id,
+                'department': dep,
+                'sem': sem,
+                'sec': sec,
+                'c_id': c_id,
+                'c_teacher': c_teach
+            };
+            console.log(data);
+            $.ajax({
+                type: "POST",
+                url: "addclass",
+                dataType: 'Json',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                processData: false,
+                success: function (ret_obj) {
+                    console.log(ret_obj);
+                    $('.modal').toggleClass('modal_dispnone');
+                    location.reload();
+                }
+            });
+        }
+    </script>
 </head>
+
 <body>
+    <!-- Modal definition -->
+
+    <div class="modal modal__dispnone">
+        <!--modal__dispnone is a class to hide the modal from the page-->
+        <div class="modal__body">
+            <div class="close-btn"><i class="fa fa-times fa-2x"></i></div>
+            <div>
+                <input type="hidden" id="sem">
+                <input type="hidden" id="sec">
+                <label for="modal-department">Department</label>
+                <select name="dep" id="modal-department">
+                    <option value="Select">Select</option>
+                    <option value="ISE">ISE</option>
+                    <option value="CSE">CSE</option>
+                </select>
+                <br>
+                <label for="class_teacher">Select Class teacher</label>
+                <select name="class_teacher" id="c_teacher" disabled>
+                    <option value="select class teacher">Select</option>
+                </select>
+                <br>
+                <button id="submit-c_teacher" onclick="submitaddclass()">Submit</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- end modal definition -->
     <div class="container">
         <header class="header">
             <img src="{{ url_for('static', filename = 'images/logo.jpg') }}" alt="" class="header__collegelogo">
@@ -27,23 +152,27 @@
                     <button class="header__search-btn"><i class="fa fa-search fa-1x icon-sbtn"></i></button>
                 </form>
                 <div class="btn-shownone">
-                    <i class="fa fa-search fa-2x "></i>       <!--Make the btn-shownone to display block on click-->
+                    <i class="fa fa-search fa-2x "></i>
+                    <!--Make the btn-shownone to display block on click-->
                 </div>
-                
+
                 <div class="header__logout">
                     <div class="header__logout__group">
                         <div class="header__logout__pic">
-                            <img src="{{ url_for('static', filename = 'images/user-3.jpg') }}" alt="" class="header__logout__img">
+                            <img src="{{ url_for('static', filename = 'images/user-3.jpg') }}" alt=""
+                                class="header__logout__img">
                         </div>
                         <div class="header__dots"><i class="fa fa-ellipsis-v fa-1x"></i>
-                            <ul class="header__logout__list ">   <!--Add header__logout__listshow on click of header__logout__group-->
+                            <ul class="header__logout__list ">
+                                <!--Add header__logout__listshow on click of header__logout__group-->
                                 <li><a href="#">My profile</a></li>
                                 <li><a href="#">Settings</a></li>
                                 <li><a href="#">Log out</a></li>
-                            </ul>   
+                            </ul>
                         </div>
-                        <p class="header__logout__name"><span class="header__logout__span">Admin</span>    
-                            <ul class="header__logout__list ">   <!--Add header__logout__listshow on click of header__logout__group-->
+                        <p class="header__logout__name"><span class="header__logout__span">Admin</span>
+                            <ul class="header__logout__list ">
+                                <!--Add header__logout__listshow on click of header__logout__group-->
                                 <li><a href="#">My profile</a></li>
                                 <li><a href="#">Settings</a></li>
                                 <li><a href="#">Log out</a></li>
@@ -54,11 +183,13 @@
             </div>
         </header>
         <section class="section">
-            <div class="navbar "> <!--Add show-navbar on click of nav button-->
+            <div class="navbar ">
+                <!--Add show-navbar on click of nav button-->
                 <ul class="nav__ul">
                     <li class="nav__li"><a href="">home</a> </li>
-                    <li class="nav__li teacherli"><a href="" class="teacher">Professor</a>  <span></span>
-                        <ul class="sub ">  <!--Add show on click of teacherli-->
+                    <li class="nav__li teacherli"><a href="" class="teacher">Professor</a> <span></span>
+                        <ul class="sub ">
+                            <!--Add show on click of teacherli-->
                             <li class="sub__li"><a href="">Professors</a></li>
                             <li class="sub__li"><a href="">Add subjects </a></li>
                             <li class="sub__li"><a href="">Class teachers </a></li>
@@ -66,7 +197,8 @@
                         </ul>
                     </li>
                     <li class="nav__li studentli"><a href="" class="student">Students</a>
-                        <ul class="sub studentlist">                        <!--Add show on click of studentli-->
+                        <ul class="sub studentlist">
+                            <!--Add show on click of studentli-->
                             <li class="sub__li"><a href=""> Add students</a></li>
                             <li class="sub__li"><a href="">Assign subjects</a></li>
                             <li class="sub__li"><a href="">Manage attendace</a></li>
@@ -79,8 +211,9 @@
                 <div class="assignclass">
                     <div class="assignclass__2">
                         <div class="assignclass__2__a">
-                            <div class="assignclass__add ">                 <!--Add assignclass__addshownone to hide the plus -->
-                                <div class="assignclass__add__pic">
+                            <div class="assignclass__add ">
+                                <!--Add assignclass__addshownone to hide the plus -->
+                                <div class="assignclass__add__pic" id="2-a" onclick="openmodal(2, 'a')">
                                     <i class="fa fa-plus fa-2x"></i>
                                 </div>
                                 <p class="assignclass__add__text">Add class teacher for 2nd A</p>
@@ -88,18 +221,21 @@
                             <div class="assignclass__dots">
                                 <i class="fa fa-ellipsis-v fa-1x"></i>
                             </div>
-                            <div class="assignclass__teacher-pic ">         <!--Add assignclass__picshow to display teacher picture-->
-                                <img src="{{ url_for('static', filename = 'images/user-3.jpg') }}" alt="" class="assignclass__teacher-img">
+                            <div class="assignclass__teacher-pic ">
+                                <!--Add assignclass__picshow to display teacher picture-->
+                                <img src="{{ url_for('static', filename = 'images/user-3.jpg') }}" alt=""
+                                    class="assignclass__teacher-img">
                             </div>
-                            <div class="assignclass__teacherdetails ">      <!--Add assignclass__detailshow to display teacher details-->
+                            <div class="assignclass__teacherdetails ">
+                                <!--Add assignclass__detailshow to display teacher details-->
                                 <p class="assignclass__teachername">Name: John doe</p>
                                 <p class="assignclass__teacherid">Teacher id: 1rs18is001</p>
                                 <p class="assignclass__teacherclass">Class teacher: 2nd semister A</p>
                             </div>
                         </div>
-                        <div class="assignclass__2__b"> 
-                            <div class="assignclass__add assignclass__addshownone">
-                                <div class="assignclass__add__pic">
+                        <div class="assignclass__2__b">
+                            <div class="assignclass__add">
+                                <div class="assignclass__add__pic" id="2-b" onclick="openmodal(2, 'b')">
                                     <i class="fa fa-plus fa-2x"></i>
                                 </div>
                                 <p class="assignclass__add__text">Add class teacher for 2nd B</p>
@@ -107,10 +243,11 @@
                             <div class="assignclass__dots">
                                 <i class="fa fa-ellipsis-v fa-1x"></i>
                             </div>
-                            <div class="assignclass__teacher-pic assignclass__picshow">
-                                <img src="{{ url_for('static', filename = 'images/user-3.jpg') }}" alt="" class="assignclass__teacher-img">
+                            <div class="assignclass__teacher-pic">
+                                <img src="{{ url_for('static', filename = 'images/user-3.jpg') }}" alt=""
+                                    class="assignclass__teacher-img">
                             </div>
-                            <div class="assignclass__teacherdetails assignclass__detailshow">
+                            <div class="assignclass__teacherdetails">
                                 <p class="assignclass__teachername">Name: John doe</p>
                                 <p class="assignclass__teacherid">Teacher id: 1rs18is001</p>
                                 <p class="assignclass__teacherclass">Class teacher: 2nd semister B</p>
@@ -119,7 +256,7 @@
                     </div>
                     <div class="assignclass__4">
                         <div class="assignclass__4__a">
-                            <div class="assignclass__add assignclass__addshownone">
+                            <div class="assignclass__add" id="4-a" onclick="openmodal(4, 'a')">
                                 <div class="assignclass__add__pic">
                                     <i class="fa fa-plus fa-2x"></i>
                                 </div>
@@ -128,17 +265,18 @@
                             <div class="assignclass__dots">
                                 <i class="fa fa-ellipsis-v fa-1x"></i>
                             </div>
-                            <div class="assignclass__teacher-pic assignclass__picshow">
-                                <img src="{{ url_for('static', filename = 'images/user-3.jpg') }}" alt="" class="assignclass__teacher-img">
+                            <div class="assignclass__teacher-pic">
+                                <img src="{{ url_for('static', filename = 'images/user-3.jpg') }}" alt=""
+                                    class="assignclass__teacher-img">
                             </div>
-                            <div class="assignclass__teacherdetails assignclass__detailshow">
+                            <div class="assignclass__teacherdetails">
                                 <p class="assignclass__teachername">Name: John doe</p>
                                 <p class="assignclass__teacherid">Teacher id: 1rs17is001</p>
                                 <p class="assignclass__teacherclass">Class teacher: 4th semister A</p>
                             </div>
                         </div>
                         <div class="assignclass__4__b">
-                            <div class="assignclass__add assignclass__addshownone">
+                            <div class="assignclass__add" id="4-b" onclick="openmodal(4, 'b')">
                                 <div class="assignclass__add__pic">
                                     <i class="fa fa-plus fa-2x"></i>
                                 </div>
@@ -147,10 +285,11 @@
                             <div class="assignclass__dots">
                                 <i class="fa fa-ellipsis-v fa-1x"></i>
                             </div>
-                            <div class="assignclass__teacher-pic assignclass__picshow">
-                                <img src="{{ url_for('static', filename = 'images/user-3.jpg') }}" alt="" class="assignclass__teacher-img">
+                            <div class="assignclass__teacher-pic">
+                                <img src="{{ url_for('static', filename = 'images/user-3.jpg') }}" alt=""
+                                    class="assignclass__teacher-img">
                             </div>
-                            <div class="assignclass__teacherdetails assignclass__detailshow">
+                            <div class="assignclass__teacherdetails">
                                 <p class="assignclass__teachername">Name: John doe</p>
                                 <p class="assignclass__teacherid">Teacher id: 1rs17is001</p>
                                 <p class="assignclass__teacherclass">Class teacher: 4th semister B</p>
@@ -159,7 +298,7 @@
                     </div>
                     <div class="assignclass__6">
                         <div class="assignclass__6__a">
-                            <div class="assignclass__add assignclass__addshownone">
+                            <div class="assignclass__add" id="6-a" onclick="openmodal(6, 'a')">
                                 <div class="assignclass__add__pic">
                                     <i class="fa fa-plus fa-2x"></i>
                                 </div>
@@ -168,17 +307,18 @@
                             <div class="assignclass__dots">
                                 <i class="fa fa-ellipsis-v fa-1x"></i>
                             </div>
-                            <div class="assignclass__teacher-pic assignclass__picshow">
-                                <img src="{{ url_for('static', filename = 'images/user-3.jpg') }}" alt="" class="assignclass__teacher-img">
+                            <div class="assignclass__teacher-pic">
+                                <img src="{{ url_for('static', filename = 'images/user-3.jpg') }}" alt=""
+                                    class="assignclass__teacher-img">
                             </div>
-                            <div class="assignclass__teacherdetails assignclass__detailshow">
+                            <div class="assignclass__teacherdetails">
                                 <p class="assignclass__teachername">Name: John doe</p>
                                 <p class="assignclass__teacherid">Teacher id: 1rs16is001</p>
                                 <p class="assignclass__teacherclass">Class teacher: 6th semister A</p>
                             </div>
                         </div>
                         <div class="assignclass__6__b">
-                            <div class="assignclass__add assignclass__addshownone">
+                            <div class="assignclass__add" id="6-b" onclick="openmodal(6, 'b')">
                                 <div class="assignclass__add__pic">
                                     <i class="fa fa-plus fa-2x"></i>
                                 </div>
@@ -187,22 +327,24 @@
                             <div class="assignclass__dots">
                                 <i class="fa fa-ellipsis-v fa-1x"></i>
                             </div>
-                            <div class="assignclass__teacher-pic assignclass__picshow">
-                                <img src="{{ url_for('static', filename = 'images/user-3.jpg') }}" alt="" class="assignclass__teacher-img">
+                            <div class="assignclass__teacher-pic">
+                                <img src="{{ url_for('static', filename = 'images/user-3.jpg') }}" alt=""
+                                    class="assignclass__teacher-img">
                             </div>
-                            <div class="assignclass__teacherdetails assignclass__detailshow">
+                            <div class="assignclass__teacherdetails">
                                 <p class="assignclass__teachername">Name: John doe</p>
                                 <p class="assignclass__teacherid">Teacher id: 1rs16is001</p>
                                 <p class="assignclass__teacherclass">Class teacher: 6th semister B</p>
                             </div>
                         </div>
                     </div>
-                    
-                  
+
+
                 </div>
             </div>
         </section>
     </div>
     <script src="{{ url_for('static', filename = 'js/sample.js') }}"></script>
 </body>
+
 </html>

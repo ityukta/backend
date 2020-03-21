@@ -4,6 +4,7 @@ contains functions to perform all database operations
 import sqlite3 as sql
 import string
 import random
+import datetime
 
 
 def create_fresh_database():
@@ -258,8 +259,11 @@ def add_initial_faculty(data):
         c.execute(insert_faculty_query,
                   (data['name'], data['email_id'], data['password'], data['department']))
         faculty_id = c.lastrowid
+        if data['type_description'] != 'P':
+            c.execute(insert_faculty_type_query,
+                      (data['type_description'], faculty_id))
         c.execute(insert_faculty_type_query,
-                  (data['type_description'], faculty_id))
+                  ('P', faculty_id))
         conn.commit()
         conn.close()
         response = {"status_message": "successful",
@@ -293,8 +297,10 @@ def validate_login(data):
             insert_login_authkey_query = """
                 INSERT INTO LoginAuthKey(authkey, faculty_id) VALUES (? , ?)
             """
-            random_authkey = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(16))
-            c.execute(insert_login_authkey_query, (random_authkey, faculty_details['faculty_id']))
+            random_authkey = ''.join(random.SystemRandom().choice(
+                string.ascii_uppercase + string.digits) for _ in range(16))
+            c.execute(insert_login_authkey_query,
+                      (random_authkey, faculty_details['faculty_id']))
             conn.commit()
             response = {"status_message": "Successful",
                         "status_code": 200, "authkey": random_authkey, "data": faculty_details}
@@ -304,6 +310,7 @@ def validate_login(data):
     #                 "data": "The following error occured" + str(E)}
     return response
 
+
 def get_faculty_details(data):
     """function to get one faculty data using id and authkey"""
     conn = sql.connect('database.db')
@@ -311,21 +318,44 @@ def get_faculty_details(data):
         SELECT *FROM LoginAuthKey WHERE authkey = ? AND faculty_id = ? AND DELETED = 0
     """
     c = conn.cursor()
-    _ = c.execute(check_authkey_query, (data['authkey'], data['faculty_id'])).fetchone()
+    _ = c.execute(check_authkey_query,
+                  (data['authkey'], data['faculty_id'])).fetchone()
     if _ is None:
-        response = {"status_message": "Unauthorized access", "status_code": 404, "data": "Invalid Authkey provided"}
+        response = {"status_message": "Unauthorized access",
+                    "status_code": 404, "data": "Invalid Authkey provided"}
         return response
-    get_data_query = """
-        SELECT *FROM Faculty WHERE faculty_id = ?
-    """
-    f_data = c.execute(get_data_query, (data['faculty_id'], )).fetchone()
-    if f_data is not None:
-        f_data = dict(
-            zip([cur[0] for cur in c.description], f_data))
-        response = {"statusmessage": "Successful", "status_code":200, "data": f_data}
+    request_params = list(data.keys())
+    if 'faculty_id' in request_params and 'department' not in request_params:
+        get_data_query = """
+            SELECT *FROM Faculty WHERE faculty_id = ?
+        """
+        f_data = c.execute(get_data_query, (data['faculty_id'], )).fetchone()
+        if f_data is not None:
+            f_data = dict(
+                zip([cur[0] for cur in c.description], f_data))
+            response = {"statusmessage": "Successful",
+                        "status_code": 200, "data": f_data}
+            return response
+        else:
+            response = {"status_message": "Unsuccessful",
+                        "status_code": 301, "data": "data not available"}
+    elif 'department' in request_params:
+        get_faculty_query = """
+            SELECT faculty_id, name FROM faculty WHERE department = ?
+        """
+        c_data = c.execute(get_faculty_query,
+                           (data['department'], )).fetchall()
+        print(c_data)
+        for i in range(len(c_data)):
+            c_data[i] = dict(
+                zip([cur[0] for cur in c.description], c_data[i]))
+        response = {"statusmessage": "Successful",
+                    "status_code": 200, "data": c_data}
         return response
-    else:
-         response = {"status_message": "Unsuccessful", "status_code": 301, "data": "data not available"}
+    response = {"statusmessage": "Unsuccessful",
+                "status_code": 501, "data": "bad Request"}
+    return response
+
 
 def get_class_details(data):
     conn = sql.connect('database.db')
@@ -333,16 +363,106 @@ def get_class_details(data):
         SELECT *FROM LoginAuthKey WHERE authkey = ? AND faculty_id = ? AND DELETED = 0
     """
     c = conn.cursor()
-    _ = c.execute(check_authkey_query, (data['authkey'], data['faculty_id'])).fetchone()
+    _ = c.execute(check_authkey_query,
+                  (data['authkey'], data['faculty_id'])).fetchone()
     if _ is None:
-        response = {"status_message": "Unauthorized access", "status_code": 404, "data": "Invalid Authkey provided"}
+        response = {"status_message": "Unauthorized access",
+                    "status_code": 404, "data": "Invalid Authkey provided"}
         return response
-    get_data_query =  """
+    get_data_query = """
         SELECT *FROM class WHERE classteacher_id = ?
     """
     c_data = c.execute(get_data_query, (data['faculty_id'])).fetchone()
     if c_data is not None:
         c_data = dict(
             zip([cur[0] for cur in c.description], c_data))
-        response = {"statusmessage": "Successful", "status_code":200, "data": c_data}
+        response = {"statusmessage": "Successful",
+                    "status_code": 200, "data": c_data}
         return response
+
+
+def get_all_class_details(data):
+    conn = sql.connect('database.db')
+    check_authkey_query = """
+        SELECT *FROM LoginAuthKey WHERE authkey = ? AND faculty_id = ? AND DELETED = 0
+    """
+    c = conn.cursor()
+    _ = c.execute(check_authkey_query,
+                  (data['authkey'], data['faculty_id'])).fetchone()
+    if _ is None:
+        response = {"status_message": "Unauthorized access",
+                    "status_code": 404, "data": "Invalid Authkey provided"}
+        return response
+    current_year = datetime.datetime.now().year
+    get_class_details_query = """
+        SELECT *FROM Class WHERE graduation_year IN (? , ? , ?)
+    """
+    c_data = c.execute(get_class_details_query, (current_year+1,
+                                                 current_year+2, current_year+3)).fetchall()
+    print(c_data)
+    c_data_keys = c.description
+    for i in range(len(c_data)):
+        c_data[i] = dict(
+            zip([cur[0] for cur in c_data_keys], c_data[i]))
+        teacher_id = c_data[i]['classteacher_id']
+        get_teacher_data = """
+            SELECT name FROM faculty WHERE faculty_id = ?
+        """
+        f_data = c.execute(get_teacher_data, (teacher_id, )).fetchone()
+        f_data = dict(
+            zip([cur[0] for cur in c.description], f_data))
+        c_data[i]['details'] = f_data
+    response = {"statusmessage": "Successful",
+                "status_code": 200, "data": c_data}
+    return response
+
+
+def add_class(data):
+    conn = sql.connect('database.db')
+    check_authkey_query = """
+        SELECT *FROM LoginAuthKey WHERE authkey = ? AND faculty_id = ? AND DELETED = 0
+    """
+    c = conn.cursor()
+    _ = c.execute(check_authkey_query,
+                  (data['authkey'], data['faculty_id'])).fetchone()
+    if _ is None:
+        response = {"status_message": "Unauthorized access",
+                    "status_code": 404, "data": "Invalid Authkey provided"}
+        return response
+    current_year = datetime.datetime.now().year
+    if data['sem'] in ['2', '1']:
+        current_year += 3
+    elif data['sem'] in ['3', '4']:
+        current_year += 2
+    elif data['sem'] in ['5', '6']:
+        current_year += 1
+    get_faculty_id_query = """
+        SELECT faculty_id FROM faculty WHERE faculty_id = ? AND name = ?
+    """
+    f_data = c.execute(get_faculty_id_query,
+                       (data['c_id'], data['c_teacher'])).fetchone()
+    if f_data is None:
+        response = {"status_message": "Incorrect data",
+                    "status_code": 501, "data": "Invalid faculty for class teacher"}
+        return response
+    create_new_class_query = """
+        INSERT INTO Class(sem, sec, graduation_year, department, classteacher_id) VALUES(
+            ?, ?, ?, ?, ?
+        )
+    """
+    add_faculty_type_query = """
+        INSERT INTO Type(type_description, faculty_id) VALUES (? ,?)
+    """
+    print(f_data)
+    try:
+        c.execute(create_new_class_query,
+                    (data['sem'], data['sec'], current_year, data['department'], f_data[0]))
+        c.execute(add_faculty_type_query, ("C", f_data[0]))
+        conn.commit()
+        response = {"status_message": "successful",
+                    "status_code": 200, "data": data}
+    except Exception as E:
+        response = {"status_message": "Unsuccessful",
+                    "status_code": 301, "data": str(E)}
+    return response
+    

@@ -13,7 +13,7 @@
     $(document).ready(function () {
       var data = {
         "authkey": localStorage.getItem("authkey"),
-        "faculty_id" : localStorage.getItem("faculty_id")
+        "faculty_id": localStorage.getItem("faculty_id")
       };
       $.ajax({
         type: "POST",
@@ -23,17 +23,296 @@
         data: JSON.stringify(data),
         processData: false,
         success: function (ret_obj) {
+          if (ret_obj['status_code'] == 200) {
+            $('#email').val(ret_obj['data']['name']);
+            $('#name').val(ret_obj['data']['email_id']);
+            $('#department').val(ret_obj['data']['department']);
+            $('#email').attr('disabled', true);
+            $('#name').attr('disabled', true);
+            $('#department').attr('disabled', true);
+          }
           console.log(ret_obj);
         }
       });
     });
+    function addneweducation() {
+      var count = $('.register2__education__degree__container > div.register2__education__degrees').length;
+      var t = `
+      <div class="register2__education__degrees" id = "`+ (count + 1) + `">
+              <h3> Education Details - `+ (count + 1) + `</h3>
+              <label for="degree">Degree</label>
+              <select id="degree" class="register2__education__degrees__input">
+                <option value="UG">UG</option>
+                <option value="PG">PG</option>
+                <option value="PhD">PhD</option>
+              </select>
+              <div class="register2__education__institution displayflexcol marginbottom04">
+                <label for="education__institution ">Education institution</label>
+                <input type="text" class="register2__education__institution__input " id="education__institution" />
+              </div>
+              <div class="register2__education__percentage displayflexcol marginbottom04">
+                <label for="education__percentage">Percentage</label>
+                <input type="number" class="register2__education__percentage__input" id="education__percentage" />
+              </div>
+              <div class="register2__education__passing displayflexcol marginbottom04">
+                <label for="passing">Year of passing</label>
+                <input type="date" class="register2__education__passing__input" id="passing" />
+              </div>
+              <div class="register2__education__university displayflexcol">
+                <label for="university">University</label>
+                <input type="text" class="register2__education__university__input" id="university" />
+              </div>
+            </div>
+      `;
+      $('.register2__education__degree__container').append(t);
+    }
+    function addworkexperience() {
+      var count = $('.register2__workexp__container > div.register2__workexp__details').length;
+      var t = `
+      <div class="register2__workexp__details" id = "`+ (count + 1) + `">
+        <h3> Work Experience - `+ (count + 1) + `</h3>
+            <div class="register2__workexp__designation displayflexcol marginbottom04">
+              <label for="designation">Designation</label>
+              <input type="text" class="register2__workexp__designation__input" id="designation" />
+            </div>
+            <div class="register2__workexp__organization displayflexcol marginbottom04">
+              <label for="organization">Organization</label>
+              <input type="text" class="register2__workexp__organization__input" id="organization" />
+            </div>
+            <div class="register2__workexp__duration displayflexcol">
+              <label for="duration">Duration</label>
+              <input type="number" class="register2__workexp__duration__input" id="duration" />
+            </div>
+          </div>
+      `;
+      $('.register2__workexp__container').append(t);
+    }
+
+    function addpublications() {
+      var count = $('.register2__research_publications_container > div.register2__research__publications__details').length;
+      var t = `
+      <div class="register2__research__publications__details displayflexcol marginbottom04" id="`+ (count + 1) + `">
+        <h3> Publication - `+ (count + 1) + `</h3>
+              <label for="publication">Publication</label>
+              <input type="text" class="register2__research__publications__input" id="publication" />
+            </div>
+      `;
+      $('.register2__research_publications_container').append(t);
+    }
+    function addpaper() {
+      var count = $('.register2__research_papers_container > div.register2__research__publications__details').length;
+      var t = `
+      <div class="register2__research__papers__details displayflexcol" id="`+ (count + 1) + `">
+        <h3> Paper - `+ (count + 1) + `</h3>
+              <label for="papers">Papers</label>
+              <input type="text" class="register2__research__papers__input" id="papers" />
+            </div>
+      `;
+      $('.register2__research_papers_container').append(t);
+    }
+    function addinvitedtalks() {
+      var count = $('.register2__talks_container > div.register2__talks__details').length;
+      var t = `
+      <div class="register2__talks__details" id = "`+ (count + 1) + `">
+        <h3> Invited Talk - `+ (count + 1) + `</h3>
+            <label for="talks">Talk topic</label>
+            <textarea id="talks" cols="30" rows="3" placeholder="Enter talks"
+              class="register2__talks__input"></textarea>
+          </div>
+      `;
+      $('.register2__talks_container').append(t);
+    }
+    function addsession() {
+      var count = $('.register2__session__container > div.register2__session__details').length;
+      var t = `
+      <div class="register2__session__details displayflexcol" id="`+ (count + 1) + `">
+        <h3> Session - `+ (count + 1) + `</h3>
+            <label for="session">Session1</label>
+            <input type="text" class="register2__session__input" id="session" />
+          </div>
+      `;
+      $('.register2__session__container').append(t);
+    }
+
+    function addworkshop() {
+      var count = $('.register2__workshop__container > div.register2__workshop__details').length;
+      var t = `
+      <div class="register2__workshop__details" id = "`+ (count + 1) + `">
+        <h3> Workshop - `+ (count + 1) + `</h3>
+            <select id="workshop_type" class="register2__workshop__input-dropdown marginbottom04">
+              <option value="Workshops">Workshops</option>
+              <option value="Seminar">Seminar</option>
+              <option value="FDPs">FDPs</option>
+              <option value="Training pgm">Training pgm</option>
+            </select>
+            <textarea id="workshop_description" cols="30" rows="3" class="register2__workshop__input-text"></textarea>
+          </div>
+      `;
+      $('.register2__workshop__container').append(t);
+    }
+    // function getBase64(file) {
+    //   var reader = new FileReader();
+    //   reader.readAsDataURL(file);
+    //   reader.onload = function () {
+    //     console.log(reader.result);
+    //     return reader.result;
+    //   };
+    //   reader.onerror = function (error) {
+    //     console.log('Error: ', error);
+    //   };
+    // }
+    function submitregister2() {
+      var authkey = localStorage.getItem("authkey");
+      var faculty_id = localStorage.getItem("faculty_id");
+      var name = $('#name').val();
+      var email = $('#email').val();
+      var department = $('#department').val();
+      var qualification = $('#qualification').val();
+      var designation = $('#designation').find(':selected').text();
+      var specialization = $('#specialize').val();
+      var dateofjoining = $('#date').val();
+      var association = $('#associaiton').find(":Selected").text();
+      var phone = $('#phone').val();
+      var experience = $('#exp').val();
+      var teacherimage_data = null;
+      //var teacherimage = new FormData($('#teacherimg'));
+      // teacherimage_file = document.querySelector('#teacherimg').files[0]
+      // img = getBase64(teacherimage_file);
+      // console.log(img);
+      
+      console.log(teacherimage_data);
+      var education = [];
+      var len_edu = $('.register2__education__degree__container > div.register2__education__degrees').length;
+      for (i = 0; i < len_edu; i++) {
+        temp = '.register2__education__degree__container';
+        degree = $(temp + " #" + (i + 1) + " .register2__education__degrees__input").find(":selected").text();
+        edu_inst = $(temp + " #" + (i + 1) + " .register2__education__institution__input").val();
+        edu_percent = $(temp + " #" + (i + 1) + " .register2__education__percentage__input").val();
+        year_pass = $(temp + " #" + (i + 1) + " .register2__education__passing__input").val();
+        university = $(temp + " #" + (i + 1) + " .register2__education__university__input").val();
+        var data = {
+          'degree': degree,
+          'educational_institution': edu_inst,
+          'percentage': edu_percent,
+          'year_of_passing': year_pass,
+          'university': university
+        };
+        education.push(data);
+      }
+      var workexperience = []
+      var len_work_experience = $('.register2__workexp__container > div.register2__workexp__details').length;
+      for (i = 0; i < len_work_experience; i++) {
+        temp = '.register2__workexp__container';
+        designation = $(temp + " #" + (i + 1) + " #designation").val();
+        organization = $(temp + " #" + (i + 1) + " #organization").val();
+        duration = $(temp + " #" + (i + 1) + " #duration").val();
+        data = {
+          'designation': designation,
+          'organization': organization,
+          'duration': duration
+        };
+        workexperience.push(data);
+      }
+
+      var publications = [];
+      var len_publications = $('.register2__research_publications_container > div.register2__research__publications__details').length;
+      for (i = 0; i < len_publications; i++) {
+        temp = '.register2__research_publications_container';
+        publication = $(temp + " #" + (i + 1) + " #publication").val();
+        data = {
+          'publication_details': publication
+        };
+        publications.push(data);
+      }
+
+      var papers = [];
+      var len_papers = $('.register2__research_papers_container > div.register2__research__publications__details').length;
+      for (i = 0; i < len_papers; I++) {
+        temp = '.register2__research_papers_container';
+        paper = $(temp + " #" + (i + 1) + " #papers").val();
+        data = {
+          'paper_details': paper
+        };
+        papers.push(data);
+      }
+
+      var invitedtalks = [];
+      var len_invited_talks = $('.register2__talks_container > div.register2__talks__details').length;
+      for (i = 0; i < len_invited_talks; i++) {
+        temp = '.register2__talks_container';
+        invited_talk = $(temp + " #" + (i + 1) + " #talks").val();
+        data = {
+          'invited_talk_details': invited_talk
+        };
+        invitedtalks.push(data);
+      }
+
+      var sessions = [];
+      var len_sessions = $('.register2__session__container > div.register2__session__details').length;
+      for (i = 0; i < len_sessions; i++) {
+        temp = '.register2__session__container';
+        session = $(temp + " #" + (i + 1) + " #session").val();
+        data = {
+          'session_details': session
+        };
+        sessions.push(data);
+      }
+
+      var workshops = [];
+      var len_workshops = $('.register2__workshop__container > div.register2__workshop__details').length;
+      for (i = 0; i < len_workshops; i++) {
+        temp = '.register2__workshop__container';
+        workshop_type = $(temp + " #" + (i + 1) + " #workshop_type").find(":selected").text();
+        workshop_description = $(temp + " #" + (i + 1) + " #workshop_description").val();
+        data = {
+          'workshop_type': workshop_type,
+          'workshop_description': workshop_description
+        };
+        workshops.push(data);
+      }
+
+      var final_data = {
+        'authkey': authkey,
+        'faculty_id': faculty_id,
+        'name': name,
+        'email_id': email,
+        'department': department,
+        'qualification': qualification,
+        'designation': designation,
+        'specialization': specialization,
+        'dateofjoining': dateofjoining,
+        'association': association,
+        'phone': phone,
+        'experience': experience,
+        'teacherimage': "dummy_string",
+        'education': education,
+        'work_experience': workexperience,
+        'publications': publications,
+        'papers': papers,
+        'invitedtalks': invitedtalks,
+        'sessions': sessions,
+        'workshops': workshops
+      };
+      console.log(JSON.stringify(final_data));
+      $.ajax({
+        type: "POST",
+        url: "/finalregister",
+        dataType: 'Json',
+        contentType: 'application/json',
+        data: JSON.stringify(final_data),
+        processData: false,
+        success: function (ret_obj) {
+          console.log(ret_obj);
+        }
+      });
+    }
   </script>
 </head>
 
 <body>
   <div class="register2">
     <div class="register2__profile">
-      <form action="" class="register2__forms">
+      <div action="" class="register2__forms">
         <div class="register2__name">
           <label for="name">Name</label>
           <input type="text" class="register2__name__input" id="name" />
@@ -44,10 +323,11 @@
         </div>
         <div class="register2__department">
           <label for="department">Department</label>
-          <select id="department" class="register2__department__input">
+          <input type="text" id="department" class="register2__department__input">
+          <!-- <select id="department" >
             <option value="Cse">Cse</option>
             <option value="Ise">Ise</option>
-          </select>
+          </select> -->
         </div>
         <div class="register2__qualification">
           <label for="qualification"><span class="labels">Qualification</span></label>
@@ -86,114 +366,78 @@
           <label for="exp">Experience in years</label>
           <input type="number" class="register2__exp__input" id="exp" />
         </div>
+
+        <div class="register2__teacherimage">
+          <label for="teacherimg"></label>
+          <input type="file" id="teacherimg" class="register2__teacherimage__input">
+        </div>
+
         <div class="register2__education">
           <h3 class="register2__education__title">Add education</h3>
-          <button class="register2__education__button plus-button">
+          <button class="register2__education__button plus-button" onclick="addneweducation()">
             <i class="fa fa-plus fa-2x"></i>
           </button>
-          <div class="register2__education__degrees">
-            <label for="degree">Degree</label>
-            <select id="degree" class="register2__education__degrees__input">
-              <option value="UG">UG</option>
-              <option value="PG">PG</option>
-              <option value="PhD">PhD</option>
-            </select>
-            <div class="register2__education__institution displayflexcol marginbottom04">
-              <label for="education__institution ">Education institution</label>
-              <input type="text" class="register2__education__institution__input " id="education__institution" />
-            </div>
-            <div class="register2__education__percentage displayflexcol marginbottom04">
-              <label for="education__percentage">Percentage</label>
-              <input type="number" class="register2__education__percentage__input" id="education__percentage" />
-            </div>
-            <div class="register2__education__passing displayflexcol marginbottom04">
-              <label for="passing">Year of passing</label>
-              <input type="date" class="register2__education__passing__input" id="passing" />
-            </div>
-            <div class="register2__education__university displayflexcol">
-              <label for="university">University</label>
-              <input type="text" class="register2__education__university" id="university" />
-            </div>
+          <div class="register2__education__degree__container">
+
           </div>
+
         </div>
         <div class="register2__workexp">
           <h3 class="register2__workexp__title">Add workexperience</h3>
-          <button class="register2__workexp__button plus-button">
+          <button class="register2__workexp__button plus-button" onclick="addworkexperience()">
             <i class="fa fa-plus fa-2x"></i>
           </button>
-          <div class="register2__workexp__details">
-            <div class="register2__workexp__designation displayflexcol marginbottom04">
-              <label for="designation">Designation</label>
-              <input type="text" class="register2__workexp__designation__input" id="designation" />
-            </div>
-            <div class="register2__workexp__organization displayflexcol marginbottom04">
-              <label for="organization">Organization</label>
-              <input type="text" class="register2__workexp__organization__input" id="organization" />
-            </div>
-            <div class="register2__workexp__duration displayflexcol">
-              <label for="duration">Duration</label>
-              <input type="number" class="register2__workexp__duration__input" id="duration" />
-            </div>
+          <div class="register2__workexp__container">
           </div>
         </div>
         <div class="register2__research">
           <div class="register2__research__publications">
             <h3 class="register2__research__pubhead">Add publications</h3>
-            <button class="register2__research__pubbutton plus-button marginbottom04">
+            <button class="register2__research__pubbutton plus-button marginbottom04" onclick="addpublications()">
               <i class="fa fa-plus fa-2x"></i>
             </button>
-            <div class="register2__research__publications__details displayflexcol marginbottom04">
-              <label for="publication">Publication</label>
-              <input type="text" class="register2__research__publications__input" id="publication" />
+            <div class="register2__research_publications_container">
+
             </div>
+
           </div>
           <div class="register2__research__papers">
             <h4 class="register2__research__paperhead">Add papers</h4>
-            <button class="register2__research__paperbutton plus-button marginbottom04">
+            <button class="register2__research__paperbutton plus-button marginbottom04" onclick="addpaper()">
               <i class="fa fa-plus fa-2x"></i>
             </button>
-            <div class="register2__research__papers__details displayflexcol">
-              <label for="papers">Papers</label>
-              <input type="text" class="register2__research__papers__input" id="papers" />
+            <div class="register2__research_papers_container">
+
             </div>
           </div>
         </div>
         <div class="register2__talks">
           <h3 class="register2__talks__talkhead">Add invited talks</h3>
-          <button class="register2__talks__talkbutton plus-button marginbottom04">
+          <button class="register2__talks__talkbutton plus-button marginbottom04" onclick="addinvitedtalks()">
             <i class="fa fa-plus fa-2x"></i>
           </button>
-          <div class="register2__talks__details">
-            <label for="talks">Talk topic</label>
-            <textarea id="talks" cols="30" rows="3" placeholder="Enter talks"
-              class="register2__talks__input"></textarea>
+          <div class="register2__talks_container">
+
           </div>
         </div>
         <div class="register2__session">
           <h3 class="register2__session__sessionhead">Add session chairs</h3>
-          <button class="register2__session__sessionbutton plus-button marginbottom04">
+          <button class="register2__session__sessionbutton plus-button marginbottom04" onclick="addsession()">
             <i class="fa fa-plus fa-2x"></i>
           </button>
-          <div class="register2__session__details displayflexcol">
-            <label for="session">Session1</label>
-            <input type="text" class="register2__session__input" id="session" />
+          <div class="register2__session__container">
+
           </div>
         </div>
         <div class="register2__workshop">
           <h3 class="register2__workshop__workshophead">
             Add workshop/Seminar/Fdp
           </h3>
-          <button class="register2__workshop__workshopbutton plus-button marginbottom04">
+          <button class="register2__workshop__workshopbutton plus-button marginbottom04" onclick="addworkshop()">
             <i class="fa fa-plus fa-2x"></i>
           </button>
-          <div class="register2__workshop__details">
-            <select id="" class="register2__workshop__input-dropdown marginbottom04">
-              <option value="Workshops">Workshops</option>
-              <option value="Seminar">Seminar</option>
-              <option value="FDPs">FDPs</option>
-              <option value="Training pgm">Training pgm</option>
-            </select>
-            <textarea id="" cols="30" rows="3" class="register2__workshop__input-text"></textarea>
+          <div class="register2__workshop__container">
+
           </div>
         </div>
         <div class="register2__personal">
@@ -215,9 +459,9 @@
           </div>
         </div>
         <div class="register2__submit">
-          <button class="register2__submit-btn bluebtn">Submit</button>
+          <button class="register2__submit-btn bluebtn" onclick="submitregister2()">Submit</button>
         </div>
-      </form>
+      </div>
     </div>
   </div>
 </body>
