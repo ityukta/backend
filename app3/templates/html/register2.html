@@ -35,6 +35,8 @@
         }
       });
     });
+
+
     function addneweducation() {
       var count = $('.register2__education__degree__container > div.register2__education__degrees').length;
       var t = `
@@ -50,13 +52,17 @@
                 <label for="education__institution ">Education institution</label>
                 <input type="text" class="register2__education__institution__input " id="education__institution" />
               </div>
+              <div class="register2__education__branch displayflexcol marginbottom04">
+                <label for="education__branch">Education Branch</label>
+                <input type="text" class="register2__education__branch__input" id="education__branch" />
+              </div>
               <div class="register2__education__percentage displayflexcol marginbottom04">
                 <label for="education__percentage">Percentage</label>
                 <input type="number" class="register2__education__percentage__input" id="education__percentage" />
               </div>
               <div class="register2__education__passing displayflexcol marginbottom04">
                 <label for="passing">Year of passing</label>
-                <input type="date" class="register2__education__passing__input" id="passing" />
+                <input type="number" class="register2__education__passing__input" id="passing" />
               </div>
               <div class="register2__education__university displayflexcol">
                 <label for="university">University</label>
@@ -100,7 +106,7 @@
       $('.register2__research_publications_container').append(t);
     }
     function addpaper() {
-      var count = $('.register2__research_papers_container > div.register2__research__publications__details').length;
+      var count = $('.register2__research_papers_container > div.register2__research__papers__details').length;
       var t = `
       <div class="register2__research__papers__details displayflexcol" id="`+ (count + 1) + `">
         <h3> Paper - `+ (count + 1) + `</h3>
@@ -139,13 +145,13 @@
       var t = `
       <div class="register2__workshop__details" id = "`+ (count + 1) + `">
         <h3> Workshop - `+ (count + 1) + `</h3>
-            <select id="workshop_type" class="register2__workshop__input-dropdown marginbottom04">
+            <select id="workshop_type" class="register2__workshop__input_dropdown marginbottom04">
               <option value="Workshops">Workshops</option>
               <option value="Seminar">Seminar</option>
               <option value="FDPs">FDPs</option>
               <option value="Training pgm">Training pgm</option>
             </select>
-            <textarea id="workshop_description" cols="30" rows="3" class="register2__workshop__input-text"></textarea>
+            <textarea id="workshop_description" cols="30" rows="3" class="register2__workshop__input_text"></textarea>
           </div>
       `;
       $('.register2__workshop__container').append(t);
@@ -167,14 +173,15 @@
       var name = $('#name').val();
       var email = $('#email').val();
       var department = $('#department').val();
-      var qualification = $('#qualification').val();
+      // var qualification = $('#qualification').val();
       var designation = $('#designation').find(':selected').text();
       var specialization = $('#specialize').val();
       var dateofjoining = $('#date').val();
       var association = $('#associaiton').find(":Selected").text();
       var phone = $('#phone').val();
       var experience = $('#exp').val();
-      var teacherimage_data = null;
+      var teacherimage_data = b64;
+      console.log(teacherimage_data);
       //var teacherimage = new FormData($('#teacherimg'));
       // teacherimage_file = document.querySelector('#teacherimg').files[0]
       // img = getBase64(teacherimage_file);
@@ -187,12 +194,14 @@
         temp = '.register2__education__degree__container';
         degree = $(temp + " #" + (i + 1) + " .register2__education__degrees__input").find(":selected").text();
         edu_inst = $(temp + " #" + (i + 1) + " .register2__education__institution__input").val();
+        edu_branch = $(temp + " #" + (i + 1) + " .register2__education__branch__input").val();
         edu_percent = $(temp + " #" + (i + 1) + " .register2__education__percentage__input").val();
         year_pass = $(temp + " #" + (i + 1) + " .register2__education__passing__input").val();
         university = $(temp + " #" + (i + 1) + " .register2__education__university__input").val();
         var data = {
           'degree': degree,
           'educational_institution': edu_inst,
+          'branch': edu_branch,
           'percentage': edu_percent,
           'year_of_passing': year_pass,
           'university': university
@@ -203,9 +212,9 @@
       var len_work_experience = $('.register2__workexp__container > div.register2__workexp__details').length;
       for (i = 0; i < len_work_experience; i++) {
         temp = '.register2__workexp__container';
-        designation = $(temp + " #" + (i + 1) + " #designation").val();
-        organization = $(temp + " #" + (i + 1) + " #organization").val();
-        duration = $(temp + " #" + (i + 1) + " #duration").val();
+        designation = $(temp + " #" + (i + 1) + " .register2__workexp__designation__input").val();
+        organization = $(temp + " #" + (i + 1) + " .register2__workexp__organization__input").val();
+        duration = $(temp + " #" + (i + 1) + " .register2__workexp__duration__input").val();
         data = {
           'designation': designation,
           'organization': organization,
@@ -218,7 +227,7 @@
       var len_publications = $('.register2__research_publications_container > div.register2__research__publications__details').length;
       for (i = 0; i < len_publications; i++) {
         temp = '.register2__research_publications_container';
-        publication = $(temp + " #" + (i + 1) + " #publication").val();
+        publication = $(temp + " #" + (i + 1) + " .register2__research__publications__input").val();
         data = {
           'publication_details': publication
         };
@@ -229,7 +238,7 @@
       var len_papers = $('.register2__research_papers_container > div.register2__research__publications__details').length;
       for (i = 0; i < len_papers; I++) {
         temp = '.register2__research_papers_container';
-        paper = $(temp + " #" + (i + 1) + " #papers").val();
+        paper = $(temp + " #" + (i + 1) + " .register2__research__papers__input").val();
         data = {
           'paper_details': paper
         };
@@ -240,7 +249,7 @@
       var len_invited_talks = $('.register2__talks_container > div.register2__talks__details').length;
       for (i = 0; i < len_invited_talks; i++) {
         temp = '.register2__talks_container';
-        invited_talk = $(temp + " #" + (i + 1) + " #talks").val();
+        invited_talk = $(temp + " #" + (i + 1) + " .register2__talks__input").val();
         data = {
           'invited_talk_details': invited_talk
         };
@@ -251,7 +260,7 @@
       var len_sessions = $('.register2__session__container > div.register2__session__details').length;
       for (i = 0; i < len_sessions; i++) {
         temp = '.register2__session__container';
-        session = $(temp + " #" + (i + 1) + " #session").val();
+        session = $(temp + " #" + (i + 1) + " .register2__session__input").val();
         data = {
           'session_details': session
         };
@@ -262,36 +271,43 @@
       var len_workshops = $('.register2__workshop__container > div.register2__workshop__details').length;
       for (i = 0; i < len_workshops; i++) {
         temp = '.register2__workshop__container';
-        workshop_type = $(temp + " #" + (i + 1) + " #workshop_type").find(":selected").text();
-        workshop_description = $(temp + " #" + (i + 1) + " #workshop_description").val();
+        workshop_type = $(temp + " #" + (i + 1) + " .register2__workshop__input_dropdown").find(":selected").text();
+        workshop_description = $(temp + " #" + (i + 1) + " .register2__workshop__input_text").val();
         data = {
           'workshop_type': workshop_type,
           'workshop_description': workshop_description
         };
         workshops.push(data);
       }
-
+      var dob = $('.register2__personal__dob__input').val();
+      var gender = $('input[name=gend]:checked', '.register2__personal__gender').val();
+      var marital_status = $('input[name=marital]:checked', '.register2__personal__marital').val();
+      var address = $('#address').val();
       var final_data = {
         'authkey': authkey,
         'faculty_id': faculty_id,
         'name': name,
         'email_id': email,
         'department': department,
-        'qualification': qualification,
         'designation': designation,
-        'specialization': specialization,
-        'dateofjoining': dateofjoining,
-        'association': association,
+        // 'specialization': specialization,
+        'date_of_joining': dateofjoining,
+        'association_with_institution': association,
         'phone': phone,
         'experience': experience,
-        'teacherimage': "dummy_string",
+        'teacher_picture': teacherimage_data,
         'education': education,
         'work_experience': workexperience,
         'publications': publications,
         'papers': papers,
         'invitedtalks': invitedtalks,
         'sessions': sessions,
-        'workshops': workshops
+        'workshops': workshops,
+        'date_of_birth': dob,
+        'gender': gender,
+        'address': address,
+        'marital_status': marital_status//,
+        // 'first_login' : 0
       };
       console.log(JSON.stringify(final_data));
       $.ajax({
@@ -329,10 +345,10 @@
             <option value="Ise">Ise</option>
           </select> -->
         </div>
-        <div class="register2__qualification">
+        <!-- <div class="register2__qualification">
           <label for="qualification"><span class="labels">Qualification</span></label>
           <textarea id="qualification" cols="30" rows="3" class="register2__qualification__input"></textarea>
-        </div>
+        </div> -->
         <div class="register2__designation">
           <label for="designation">Designation</label>
           <select id="designation" class="register2__designation__input">
@@ -368,10 +384,13 @@
         </div>
 
         <div class="register2__teacherimage">
-          <label for="teacherimg"></label>
+          <label for="teacherimg">Upload Image</label>
           <input type="file" id="teacherimg" class="register2__teacherimage__input">
         </div>
-
+        <div class="register2__address">
+          <label for="address">Enter address</label>
+          <input type="text" id="address" class="register2__address__input">
+        </div>
         <div class="register2__education">
           <h3 class="register2__education__title">Add education</h3>
           <button class="register2__education__button plus-button" onclick="addneweducation()">
@@ -465,5 +484,16 @@
     </div>
   </div>
 </body>
-
+<script>
+  var input = document.getElementById('teacherimg');
+    input.onchange = function () {
+      var file = input.files[0],
+        reader = new FileReader();
+      reader.onloadend = function () {
+        b64 = reader.result.replace(/^data:.+;base64,/, '');
+        console.log(b64);
+      };
+      reader.readAsDataURL(file);
+    };
+</script>
 </html>

@@ -316,11 +316,77 @@ body {
   -webkit-transform: translate(-50%, -50%);
           transform: translate(-50%, -50%);
   background-color: white;
-  padding: 5rem;
+  padding: 2rem;
+  width: 25rem;
+  height: 23rem;
   -webkit-animation-name: modalpop;
           animation-name: modalpop;
   -webkit-animation-duration: 0.8s;
           animation-duration: 0.8s;
+}
+
+.addsubject {
+  padding: 1rem;
+}
+
+.addsubject__subjectname {
+  width: 100%;
+  margin-bottom: 1rem;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.addsubject__subjectname__input {
+  margin-top: 5px;
+  padding: 0.4rem;
+  border-radius: 5px;
+}
+
+.addsubject__subjectcode {
+  margin-bottom: 1rem;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.addsubject__subjectcode__input {
+  margin-top: 5px;
+  padding: 0.4rem;
+  border-radius: 5px;
+}
+
+.addsubject__subjectteacher {
+  margin-bottom: 1rem;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.addsubject__subjectteacher__input {
+  margin-top: 5px;
+  padding: 0.4rem;
+  border-radius: 5px;
+}
+
+.addsubject .submitsubject {
+  width: 100%;
+  padding: 0.5rem;
+  border: none;
+  margin-top: 10px;
+  border-radius: 10px;
 }
 
 .section {
@@ -1044,6 +1110,17 @@ body {
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
+}
+
+.assignclass__selectdept {
+  width: 10rem;
+}
+
+.assignclass__selectdept .dept {
+  width: 100%;
+  padding: 0.3rem;
+  border-radius: 10px;
+  border: 1px solid #cfcfcf;
 }
 
 .assignclass__selectyear {

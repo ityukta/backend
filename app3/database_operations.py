@@ -274,6 +274,57 @@ def add_initial_faculty(data):
     return response
 
 
+def update_faculty_details(data):
+    conn = sql.connect('database.db')
+    check_authkey_query = """
+        SELECT *FROM LoginAuthKey WHERE authkey = ? AND faculty_id = ? AND DELETED = 0
+    """
+    c = conn.cursor()
+    _ = c.execute(check_authkey_query,
+                  (data['authkey'], data['faculty_id'])).fetchone()
+    if _ is None:
+        response = {"status_message": "Unauthorized access",
+                    "status_code": 404, "data": "Invalid Authkey provided"}
+        return response
+    del data['authkey']
+    inp_faculty_id = data['faculty_id']
+    del data['faculty_id']
+    attributes = []
+    other_attributes = []
+    for key, value in data.items():
+        if type(value) is list:
+            other_attributes.append(key)
+        else:
+            attributes.append(key)
+    update_query_values = " = ?, ".join(attributes) + " = ?"
+    update_faculty_details_query = f"""
+        UPDATE Faculty SET {update_query_values} WHERE faculty_id = ?
+    """
+    values_to_update_list = [data[key] for key in attributes]
+    values_to_update_list.append(inp_faculty_id)
+    values_to_update_list = tuple(values_to_update_list)
+    c.execute(update_faculty_details_query, values_to_update_list)
+
+    for attrs in other_attributes:
+        if attrs == 'education':
+            education_data = data[attrs]
+            for each_education_data in education_data:
+                degree = each_education_data['degree']
+                educational_institution = each_education_data['educational_institution']
+                branch = each_education_data['branch']
+                percentage = each_education_data['percentage']
+                year_of_passing = each_education_data['year_of_passing']
+                university = each_education_data['university']
+                insert_education_details_query = """
+                    INSERT INTO FacultyQualification(degree, branch, institution, percentage, graduation_year, university, faculty_id) VALUES(?, ?, ?, ?, ?, ?, ?)
+                """
+                c.execute(insert_education_details_query, (degree, branch, educational_institution, percentage, year_of_passing, university, inp_faculty_id))
+        elif attrs == 'work_experience':
+            work_experience
+    conn.commit()
+    response = {"msg": "successful"}
+    return response
+
 def validate_login(data):
     """ Function to validate initial register"""
     conn = sql.connect('database.db')

@@ -78,6 +78,14 @@
             <div class="content">
                 <div class="assignclass">
                     <div class="assignclass__selectclass">
+                        <div class="assignclass__selectdept">
+                            <select class="dept" >
+                                <option value="CSE">CSE</option>
+                                <option value="ISE">ISE</option>
+                                <option value="ECE">ECE</option>
+                                <option value="EEE">EEE</option>
+                            </select>
+                        </div>
                         <div class="assignclass__selectyear">
                             <select id="" class="year">
                                 <option value="2nd year">2nd year</option>
@@ -98,7 +106,7 @@
                                 <div class="assignclass__add__pic">
                                     <i class="fa fa-plus fa-2x"></i>
                                 </div>
-                                <p class="assignclass__add__text">Add teacher for Data communcation</p>
+                                <p class="assignclass__add__text">Add subject 1</p>
                             </div>
                             <div class="assignclass__dots">
                                 <i class="fa fa-ellipsis-v fa-1x"></i>
@@ -112,7 +120,7 @@
                                 <p class="assignclass__teacherclass">Subject teacher:Data communcation </p>
                                 <p class="assignclass__subjectcode">Subject code:18csl14</p>
                             </div>
-                        </div>
+                        </div> 
                         <div class="assignclass__2__b"> 
                             <div class="assignclass__add assignclass__addshownone">
                                 <div class="assignclass__add__pic">
@@ -223,6 +231,27 @@
                 </div>
             </div>
         </section>
+        <div class="modal ">    <!--modal__dispnone is a class to hide the modal from the page-->
+            <div class="modal__body">
+                <div class="close-btn"><i class="fa fa-times fa-2x"></i></div>
+                <div class="addsubject">
+                    <div class="addsubject__subjectname">
+                        <label for="subjectname">Subjectname:</label>
+                        <input type="text" id="subjectname" placeholder="Subjectname" class="addsubject__subjectname__input">
+                    </div>
+                    <div class="addsubject__subjectcode">
+                        <label for="subjectcode">Subjectcode:</label>
+                        <input type="text" id="subjectcode" placeholder="Subjectcode" class="addsubject__subjectcode__input">
+                    </div>
+                    <div class="addsubject__subjectteacher">
+                        <label for="subjectteacher">Subjectteacher:</label>
+                        <input type="text" id="subjectteacher" placeholder="Subjectteacher" class="addsubject__subjectteacher__input">
+                    </div>
+                    <button class="submitsubject bluebtn">Submit</button>
+                </div>
+               
+            </div>
+        </div>
     </div>
     <script src="../js/sample.js"></script>
 </body>

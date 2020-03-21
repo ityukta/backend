@@ -14,8 +14,51 @@
         left: 50%;
         transform: translate(-50%,-50%);
         background-color: white;
-        padding: 5rem;
+        padding: 2rem;
+        width: 25rem;
+        height: 23rem;
         animation-name:modalpop ;
         animation-duration: 0.8s;
+    }
+}
+.addsubject{
+    padding: 1rem;
+    &__subjectname{
+        width: 100%;
+        margin-bottom: 1rem;
+        display: flex;
+        flex-direction: column;
+        &__input{
+            margin-top: 5px;
+            padding: 0.4rem;
+            border-radius: 5px;
+        }
+    }
+    &__subjectcode{
+        margin-bottom: 1rem;
+        display: flex;
+        flex-direction: column;
+        &__input{
+            margin-top: 5px;
+            padding: 0.4rem;
+            border-radius: 5px;
+        }
+    }
+    &__subjectteacher{
+        margin-bottom: 1rem;
+        display: flex;
+        flex-direction: column;
+        &__input{
+            margin-top: 5px;
+            padding: 0.4rem;
+            border-radius: 5px;
+        }
+    }
+    .submitsubject{
+        width: 100%;
+        padding: 0.5rem;
+        border: none;
+        margin-top: 10px;
+        border-radius: 10px;
     }
 }

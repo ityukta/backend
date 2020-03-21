@@ -60,7 +60,8 @@
                         data: JSON.stringify(data),
                         processData: false,
                         success: function (ret_obj) {
-                            for (i = 0; i < ret_obj['data'].length; i++) {
+                            console.log(ret_obj);
+                            for (i = 0; i < (ret_obj['data']).length; i++) {
                                 $('#c_teacher').append('<option id="' + ret_obj['data'][i]['faculty_id'] + '">' + ret_obj['data'][i]['name'] + '</option>');
                             }
                         }
