@@ -121,6 +121,15 @@ def get_subjectteacher_details_ajax():
     print(response)
     return jsonify(response)
 
+@APP.route('/addsubject', methods=['POST'])
+def add_subject_ajax():
+    """This endpoint is to add new subject into the database"""
+    data = request.get_json()
+    print(data)
+    response = dbop.add_subject(data)
+    print(response)
+    return jsonify(response)
+
 if __name__ == '__main__':
     APP.run(debug=True, threaded=True)
     APP.run()

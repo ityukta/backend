@@ -531,27 +531,91 @@ def get_subjectteacher_details(data):
                     "status_code": 404, "data": "Invalid Authkey provided"}
         return response
     get_class_id_query = """
-        SELECT *FROM Class WHERE department = ? and sem = ? and graduation_year = ?
+        SELECT *FROM Class WHERE department = ? and sec = ? and graduation_year = ?
 
     """
-    class_id_details = c.execute(get_class_id_query,(data['dept'],data['sec'],data["graduation_year"])).fetchone()
-    if _ is None:
-        response = {"status_message": "Unauthorized access",
-                    "status_code": 404, "data": "class not found"}
+    class_id_details = c.execute(get_class_id_query,(data['dept'],data['sec'],data['graduation_year'])).fetchone()
+    if class_id_details is None:
+        response = {"statusmessage": "Error",
+                "status_code": 501, "data": "class not found"}
         return response
     get_fcs_details_query = """ 
         SELECT *FROM Fcs WHERE class_id= ?
     """
     print(class_id_details)
-    try :
-        fcs_data= c.execute(get_fcs_details_query,(class_id_details[0],)).fetchall()
-        response = {"statusmessage": "Successful",
-                "status_code": 200, "data": fcs_data}
+
+    fcs_data= c.execute(get_fcs_details_query,(class_id_details[0],)).fetchall()
+    if fcs_data is None:
+        response = {"statusmessage": "Error",
+                "status_code": 501, "data": "class not found"}
         return response
-    except Exception as E:
-        response = {"statusmessage": "Successful",
-                "status_code": 200, "data": str(E)}
+
+    print(fcs_data)
+    get_faculty_query = """ 
+            SELECT name,teacher_picture FROM Faculty WHERE faculty_id =?
+        """
+    get_subject_details_query = """
+            SELECT *FROM Subject WHERE subject_id = ?
+        """
+    res = []
+    for fcs in fcs_data: 
+        faculty_name = c.execute(get_faculty_query,(fcs[1],)).fetchone()
+        print(faculty_name)
+
+        subject_details = c.execute(get_subject_details_query,(fcs[3],)).fetchone()
+        print(subject_details)
+        if faculty_name is None  or subject_details is None:
+            response = {"statusmessage": "Error",
+                    "status_code": 501, "data": "class not found"}
+            return response
+        res.append({
+            'sem' : class_id_details[1] , 'name':faculty_name[0] , 'subject_name' : subject_details[1] , 
+            'subject_code': subject_details[2] , 'credits':subject_details[3] , 'teacher_picture':faculty_name[1], 
+            'faculty_id':fcs[1]
+            })
+    response = {"status_message": "successful",
+                    "status_code": 200, "data": res}
+    return response
+
+def add_subject(data):
+    conn = sql.connect('database.db')
+   
+    get_class_id_query = """
+            SELECT class_id FROM Class WHERE sem = ? and sec = ? and graduation_year=? and department = ?
+        """  
+    add_subject_details = """
+        INSERT INTO Subject(subject_name,subject_code,credits) VALUES(?,?,?)
+    """
+    get_subject_id_query = """
+        SELECT subject_id FROM Subject WHERE subject_code = ?
+    """
+    add_fcs_query = """
+            INSERT INTO Fcs(faculty_id,class_id,subject_id) VALUES(?,?,?)
+    """
+    c= conn.cursor()
+    
+   
+
+    c_id = c.execute(get_class_id_query,(data['sem'],data['sec'],data['year'],data['dept'])).fetchone()
+    print(c_id)
+
+
+
+    c.execute(add_subject_details,(data['subject_name'],data['subjectcode'],data['credits']))
+    conn.commit()
+
+    s_id = c.execute(get_subject_id_query,(data['subjectcode'],)).fetchone()
+    print(s_id)
+    if c_id is None or s_id is None:
+        response = {"statusmessage": "Error",
+                    "status_code": 501, "data": "class not found"}
         return response
+    c.execute(add_fcs_query,(data['subjectteacher'],c_id[0],s_id[0]))
+    conn.commit()
+    response = {"status_message": "successful",
+                    "status_code": 200, "data": "successfully added"}
+    return response
+
 
 
 
