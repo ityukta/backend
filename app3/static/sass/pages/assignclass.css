@@ -17,6 +17,17 @@
           justify-content: space-between;
 }
 
+.assignclass__selectdept {
+  width: 10rem;
+}
+
+.assignclass__selectdept .dept {
+  width: 100%;
+  padding: 0.3rem;
+  border-radius: 10px;
+  border: 1px solid #cfcfcf;
+}
+
 .assignclass__selectyear {
   width: 10rem;
 }

@@ -1,0 +1,93 @@
+.modal {
+  top: 0;
+  left: 0;
+  position: fixed;
+  height: 100vh;
+  width: 100vw;
+  background-color: rgba(77, 77, 77, 0.3);
+}
+
+.modal__dispnone {
+  display: none;
+}
+
+.modal__body {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 2rem;
+  width: 25rem;
+  height: 23rem;
+  -webkit-animation-name: modalpop;
+          animation-name: modalpop;
+  -webkit-animation-duration: 0.8s;
+          animation-duration: 0.8s;
+}
+
+.addsubject {
+  padding: 1rem;
+}
+
+.addsubject__subjectname {
+  width: 100%;
+  margin-bottom: 1rem;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.addsubject__subjectname__input {
+  margin-top: 5px;
+  padding: 0.4rem;
+  border-radius: 5px;
+}
+
+.addsubject__subjectcode {
+  margin-bottom: 1rem;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.addsubject__subjectcode__input {
+  margin-top: 5px;
+  padding: 0.4rem;
+  border-radius: 5px;
+}
+
+.addsubject__subjectteacher {
+  margin-bottom: 1rem;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.addsubject__subjectteacher__input {
+  margin-top: 5px;
+  padding: 0.4rem;
+  border-radius: 5px;
+}
+
+.addsubject .submitsubject {
+  width: 100%;
+  padding: 0.5rem;
+  border: none;
+  margin-top: 10px;
+  border-radius: 10px;
+}
+/*# sourceMappingURL=modal.css.map */

@@ -9,6 +9,15 @@
         justify-content: space-between;
        // background-color:red
     }
+    &__selectdept{
+        width: 10rem;
+        .dept{
+            width: 100%;
+            padding: 0.3rem;
+            border-radius: 10px;
+            border:1px solid rgb(207, 207, 207);
+        }
+    }
     &__selectyear{
         width: 10rem;
         .year{

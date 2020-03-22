@@ -58,6 +58,14 @@
         text-decoration: none;
     }
 }
+.close-btn{
+    position: absolute;
+    top:5px;
+    right: 10px;
+    &:hover{
+        cursor: pointer;
+    }
+}
 /*.icon-sbtn{
     height: 5%;
     &::before{

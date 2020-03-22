@@ -19,6 +19,32 @@
   color: rgba(0, 0, 0, 0.6);
 }
 
+@-webkit-keyframes modalpop {
+  0% {
+    opacity: 0;
+    -webkit-transform: translate(-150px, -1000px);
+            transform: translate(-150px, -1000px);
+  }
+  100% {
+    opacity: 1;
+    -webkit-transform: translate();
+            transform: translate();
+  }
+}
+
+@keyframes modalpop {
+  0% {
+    opacity: 0;
+    -webkit-transform: translate(-150px, -1000px);
+            transform: translate(-150px, -1000px);
+  }
+  100% {
+    opacity: 1;
+    -webkit-transform: translate();
+            transform: translate();
+  }
+}
+
 * {
   padding: 0;
   margin: 0;
@@ -199,6 +225,16 @@ body {
   text-decoration: none;
 }
 
+.close-btn {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+}
+
+.close-btn:hover {
+  cursor: pointer;
+}
+
 /*.icon-sbtn{
     height: 5%;
     &::before{
@@ -258,6 +294,99 @@ body {
 
 .type__dropdown:focus {
   outline: none;
+}
+
+.modal {
+  top: 0;
+  left: 0;
+  position: fixed;
+  height: 100vh;
+  width: 100vw;
+  background-color: rgba(77, 77, 77, 0.3);
+}
+
+.modal__dispnone {
+  display: none;
+}
+
+.modal__body {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 2rem;
+  width: 25rem;
+  height: 23rem;
+  -webkit-animation-name: modalpop;
+          animation-name: modalpop;
+  -webkit-animation-duration: 0.8s;
+          animation-duration: 0.8s;
+}
+
+.addsubject {
+  padding: 1rem;
+}
+
+.addsubject__subjectname {
+  width: 100%;
+  margin-bottom: 1rem;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.addsubject__subjectname__input {
+  margin-top: 5px;
+  padding: 0.4rem;
+  border-radius: 5px;
+}
+
+.addsubject__subjectcode {
+  margin-bottom: 1rem;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.addsubject__subjectcode__input {
+  margin-top: 5px;
+  padding: 0.4rem;
+  border-radius: 5px;
+}
+
+.addsubject__subjectteacher {
+  margin-bottom: 1rem;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.addsubject__subjectteacher__input {
+  margin-top: 5px;
+  padding: 0.4rem;
+  border-radius: 5px;
+}
+
+.addsubject .submitsubject {
+  width: 100%;
+  padding: 0.5rem;
+  border: none;
+  margin-top: 10px;
+  border-radius: 10px;
 }
 
 .section {
@@ -981,6 +1110,17 @@ body {
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
+}
+
+.assignclass__selectdept {
+  width: 10rem;
+}
+
+.assignclass__selectdept .dept {
+  width: 100%;
+  padding: 0.3rem;
+  border-radius: 10px;
+  border: 1px solid #cfcfcf;
 }
 
 .assignclass__selectyear {

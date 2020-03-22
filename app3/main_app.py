@@ -54,6 +54,16 @@ def initial_register_ajax():
     print(response)
     return jsonify(response)
 
+@APP.route('/finalregister', methods=['POST'])
+def final_register_ajax():
+    """This endpoint is to add all the faculty details"""
+    data = request.get_json()
+    print(data)
+    print(data['teacher_picture'])
+    # response = dbop.update_faculty_details(data)
+    response = {"msg" :"success"}
+    return jsonify(response)
+
 @APP.route('/login', methods = ['POST'])
 def login_ajax():
     """This is the ajax endpoint for login"""
@@ -80,6 +90,26 @@ def class_details_ajax():
     response = dbop.get_class_details(data)
     print(response)
     return jsonify(response)
+
+@APP.route('/getclassdetails', methods=['POST'])
+def get_all_class_details_ajax():
+    """This endpoint is to get all details"""
+    data = request.get_json()
+    print(data)
+    response = dbop.get_all_class_details(data)
+    print(response)
+    return jsonify(response)
+
+@APP.route('/addclass', methods=['POST'])
+def add_class_ajax():
+    """This endpoint is to add new class into the database"""
+    data = request.get_json()
+    print(data)
+    response = dbop.add_class(data)
+    print(response)
+    return jsonify(response)
+
+
 if __name__ == '__main__':
     APP.run(debug=True, threaded=True)
     APP.run()

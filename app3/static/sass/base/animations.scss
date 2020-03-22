@@ -1,0 +1,10 @@
+@keyframes modalpop{
+    0%{
+        opacity: 0;
+        transform: translate(-150px,-1000px);
+    }
+    100%{
+        opacity: 1;
+        transform: translate();
+    }
+}
