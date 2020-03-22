@@ -178,6 +178,7 @@ def create_fresh_database():
             faculty_id INTEGER NOT NULL,
             class_id INTEGER NOT NULL,
             subject_id INTEGER NOT NULL,
+            section TEXT NOT NULL ,
             FOREIGN KEY(faculty_id) REFERENCES Faculty(faculty_id) ON DELETE SET NULL,
             FOREIGN KEY(class_id) REFERENCES Class(class_id) ON DELETE SET NULL,
             FOREIGN KEY(subject_id) REFERENCES Subject(subject_id) ON DELETE SET NULL
@@ -516,4 +517,44 @@ def add_class(data):
         response = {"status_message": "Unsuccessful",
                     "status_code": 301, "data": str(E)}
     return response
+
+def get_subjectteacher_details(data):
+    conn = sql.connect('database.db')
+    check_authkey_query = """
+        SELECT *FROM LoginAuthKey WHERE authkey = ? AND faculty_id = ? AND DELETED = 0
+    """
+    c = conn.cursor()
+    _ = c.execute(check_authkey_query,
+                  (data['authkey'], data['faculty_id'])).fetchone()
+    if _ is None:
+        response = {"status_message": "Unauthorized access",
+                    "status_code": 404, "data": "Invalid Authkey provided"}
+        return response
+    get_class_id_query = """
+        SELECT *FROM Class WHERE department = ? and sem = ? and graduation_year = ?
+
+    """
+    class_id_details = c.execute(get_class_id_query,(data['dept'],data['sec'],data["graduation_year"])).fetchone()
+    if _ is None:
+        response = {"status_message": "Unauthorized access",
+                    "status_code": 404, "data": "class not found"}
+        return response
+    get_fcs_details_query = """ 
+        SELECT *FROM Fcs WHERE class_id= ?
+    """
+    print(class_id_details)
+    try :
+        fcs_data= c.execute(get_fcs_details_query,(class_id_details[0],)).fetchall()
+        response = {"statusmessage": "Successful",
+                "status_code": 200, "data": fcs_data}
+        return response
+    except Exception as E:
+        response = {"statusmessage": "Successful",
+                "status_code": 200, "data": str(E)}
+        return response
+
+
+
+    
+
     

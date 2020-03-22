@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="../sass/main.css" type="text/css">
+    <title>Assign teacher</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'sass/main.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'sass/pages/assignclass.css') }}" type="text/css">
     <!--<link rel="stylesheet" href="../sass/pages/assignclass.css" type="text/css">-->
     <link
       rel="stylesheet"
@@ -12,11 +13,145 @@
       integrity="sha256-+N4/V/SbAFiW1MPBCXnfnP9QSN3+Keu+NlB+0ev/YKQ="
       crossorigin="anonymous"
     />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <style>
+        .modal{
+            z-index: 1000;
+        }
+    </style>
+    <script>
+          $(document).ready(function () {
+           
+        function openmodal(branch,year,sec) {
+            $('.modal').toggleClass('modal__dispnone');
+            $('.modal #branch').val(branch);
+            $('.modal #year').val(year);
+            $('.modal #sec').val(sec)
+        };
+
+         $('#dept-id').change(function () {
+           if ($('#year-id').find(":selected").val() != "none" && $('#sec-id').find(":selected").val() != "none") {
+            var authkey = localStorage.getItem('authkey');
+            var faculty_id = localStorage.getItem('faculty_id');
+            var data = {
+                'authkey': authkey,
+                'faculty_id': faculty_id,
+                'dept':$('#dept-id').val(),
+                'sec':$('#sec-id').val(),
+                'graduation_year':$('#year-id').val()
+
+            } ;
+            $.ajax({
+                        type: "POST",
+                        url: "getfcs",
+                        dataType: 'Json',
+                        contentType: 'application/json',
+                        data: JSON.stringify(data),
+                        processData: false,
+                        success: function (ret_obj) {
+                            console.log(ret_obj);
+                            console.log(ret_obj['data'])
+                        }
+                })
+
+           } 
+    
+         
+         });
+         
+         $('#year-id').change(function () {
+           if ($('#dept-id').find(":selected").val() != "none" && $('#sec-id').find(":selected").val() != "none") {
+            var authkey = localStorage.getItem('authkey');
+            var faculty_id = localStorage.getItem('faculty_id');
+            var data = {
+                'authkey': authkey,
+                'faculty_id': faculty_id,
+                'dept':$('#dept-id').val(),
+                'sec':$('#sec-id').val(),
+                'graduation_year':$('#year-id').val()
+
+            } ;
+            $.ajax({
+                        type: "POST",
+                        url: "getfcs",
+                        dataType: 'Json',
+                        contentType: 'application/json',
+                        data: JSON.stringify(data),
+                        processData: false,
+                        success: function (ret_obj) {
+                            console.log(ret_obj);
+                            console.log(ret_obj['data'])
+                        }
+                })
+
+           } 
+    
+         
+         });
+         
+         $('#sec-id').change(function () {
+           if ($('#year-id').find(":selected").val() != "none" && $('#dept-id').find(":selected").val() != "none") {
+            var authkey = localStorage.getItem('authkey');
+            var faculty_id = localStorage.getItem('faculty_id');
+            var data = {
+                'authkey': authkey,
+                'faculty_id': faculty_id,
+                'dept':$('#dept-id').val(),
+                'sec':$('#sec-id').val(),
+                'graduation_year':$('#year-id').val()
+
+            } ;
+            $.ajax({
+                        type: "POST",
+                        url: "getfcs",
+                        dataType: 'Json',
+                        contentType: 'application/json',
+                        data: JSON.stringify(data),
+                        processData: false,
+                        success: function (ret_obj) {
+                            console.log(ret_obj);
+                            console.log(ret_obj['data'])
+                        }
+                })
+
+           } 
+    
+         
+         });
+    })
+</script>
+    
 </head>
 <body>
+    <div class="modal modal__dispnone">    <!--modal__dispnone is a class to hide the modal from the page-->
+        <div class="modal__body">
+            <div class="close-btn"><i class="fa fa-times fa-2x"></i></div>
+            <div class="addsubject">
+                <input type="hidden" id="branch">
+                <input type="hidden" id="year">
+                <input type="hidden" id="sec">
+                <div class="addsubject__subjectname">
+                    <label for="subjectname">Subjectname:</label>
+                    <input type="text" id="subjectname" placeholder="Subjectname" class="addsubject__subjectname__input">
+                </div>
+                <div class="addsubject__subjectcode">
+                    <label for="subjectcode">Subjectcode:</label>
+                    <input type="text" id="subjectcode" placeholder="Subjectcode" class="addsubject__subjectcode__input">
+                </div>
+                <div class="addsubject__subjectteacher">
+                    <label for="subjectteacher">Subjectteacher:</label>
+                    <input type="text" id="subjectteacher" placeholder="Subjectteacher" class="addsubject__subjectteacher__input">
+                </div>
+                <button class="submitsubject bluebtn">Submit</button>
+            </div>
+           
+        </div>
+    </div>
+
+<!-- end of modal defination  -->
     <div class="container">
         <header class="header">
-            <img src="../images/logo.jpg" alt="" class="header__collegelogo">
+            <img src="{{ url_for('static', filename='images/logo.jpg') }}" alt="" class="header__collegelogo">
             <div class="header__content1">
                 <button class="nav-btn"><i class="fa fa-bars fa-2x"></i></button>
                 <h3 class="header__heading">Student login</h3>
@@ -33,7 +168,8 @@
                 <div class="header__logout">
                     <div class="header__logout__group">
                         <div class="header__logout__pic">
-                            <img src="../images/user-3.jpg" alt="" class="header__logout__img">
+                            <img src="{{ url_for('static' , filename ='images/user-3.jpg') }}" alt="" class="header__logout__img" />
+                            <!-- <img src="../images/user-3.jpg" alt="" class="header__logout__img"> -->
                         </div>
                         <div class="header__dots"><i class="fa fa-ellipsis-v fa-1x"></i>
                             <ul class="header__logout__list ">   <!--Add header__logout__listshow on click of header__logout__group-->
@@ -79,7 +215,8 @@
                 <div class="assignclass">
                     <div class="assignclass__selectclass">
                         <div class="assignclass__selectdept">
-                            <select class="dept" >
+                            <select class="dept" id="dept-id">
+                                <option value="" selected hidden>Select branch </option>
                                 <option value="CSE">CSE</option>
                                 <option value="ISE">ISE</option>
                                 <option value="ECE">ECE</option>
@@ -87,14 +224,16 @@
                             </select>
                         </div>
                         <div class="assignclass__selectyear">
-                            <select id="" class="year">
-                                <option value="2nd year">2nd year</option>
-                                <option value="3rd year">3rd year</option>
-                                <option value="4th year">4th year</option>
+                            <select id="year-id" class="year">
+                                <option value="none" selected hidden>Select year</option>
+                                <option value="2020">2020</option>
+                                <option value="2021">2021</option>
+                                <option value="2022">2022</option>
                             </select>
                         </div>
                         <div class="assignclass__selectsection">
-                            <select id="" class="section">
+                            <select id="sec-id" class="section">
+                                <option value="none" selected hidden>Select section</option>
                                 <option value="A section">A section</option>
                                 <option value="B sections">B section</option>
                             </select>
@@ -103,7 +242,7 @@
                     <div class="assignclass__2">
                         <div class="assignclass__2__a">
                             <div class="assignclass__add ">                 <!--Add assignclass__addshownone to hide the plus -->
-                                <div class="assignclass__add__pic">
+                                <div class="assignclass__add__pic" onclick="openmodal('ISE',2020,'A')">
                                     <i class="fa fa-plus fa-2x"></i>
                                 </div>
                                 <p class="assignclass__add__text">Add subject 1</p>
@@ -112,7 +251,8 @@
                                 <i class="fa fa-ellipsis-v fa-1x"></i>
                             </div>
                             <div class="assignclass__teacher-pic ">         <!--Add assignclass__picshow to display teacher picture-->
-                                <img src="../images/user-3.jpg" alt="" class="assignclass__teacher-img">
+                                <img src="{{ url_for('static' , filename ='images/user-3.jpg') }}" alt="" class="assignclass__teacher-img" />
+
                             </div>
                             <div class="assignclass__teacherdetails ">      <!--Add assignclass__detailshow to display teacher details-->
                                 <p class="assignclass__teachername">Name: John doe</p>
@@ -121,7 +261,7 @@
                                 <p class="assignclass__subjectcode">Subject code:18csl14</p>
                             </div>
                         </div> 
-                        <div class="assignclass__2__b"> 
+                        <div class="assignclass__2__b" > 
                             <div class="assignclass__add assignclass__addshownone">
                                 <div class="assignclass__add__pic">
                                     <i class="fa fa-plus fa-2x"></i>
@@ -131,8 +271,9 @@
                             <div class="assignclass__dots">
                                 <i class="fa fa-ellipsis-v fa-1x"></i>
                             </div>
-                            <div class="assignclass__teacher-pic assignclass__picshow">
-                                <img src="../images/user-3.jpg" alt="" class="assignclass__teacher-img">
+                            <div class="assignclass__teacher-pic assignclass__picshow" >
+                                <img src="{{ url_for('static' , filename ='images/user-3.jpg') }}" alt="" class="assignclass__teacher-img" />
+                                <!-- <img src="../images/user-3.jpg" alt="" class="assignclass__teacher-img"> -->
                             </div>
                             <div class="assignclass__teacherdetails assignclass__detailshow">
                                 <p class="assignclass__teachername">Name: John doe</p>
@@ -154,7 +295,8 @@
                                 <i class="fa fa-ellipsis-v fa-1x"></i>
                             </div>
                             <div class="assignclass__teacher-pic assignclass__picshow">
-                                <img src="../images/user-3.jpg" alt="" class="assignclass__teacher-img">
+                                <img src="{{ url_for('static' , filename ='images/user-3.jpg') }}" alt="" class="assignclass__teacher-img" />
+                                <!-- <img src="../images/user-3.jpg" alt="" class="assignclass__teacher-img"> -->
                             </div>
                             <div class="assignclass__teacherdetails assignclass__detailshow">
                                 <p class="assignclass__teachername">Name: John doe</p>
@@ -174,7 +316,8 @@
                                 <i class="fa fa-ellipsis-v fa-1x"></i>
                             </div>
                             <div class="assignclass__teacher-pic assignclass__picshow">
-                                <img src="../images/user-3.jpg" alt="" class="assignclass__teacher-img">
+                                <img src="{{ url_for('static' , filename ='images/user-3.jpg') }}" alt="" class="assignclass__teacher-img" />
+                                <!-- <img src="../images/user-3.jpg" alt="" class="assignclass__teacher-img"> -->
                             </div>
                             <div class="assignclass__teacherdetails assignclass__detailshow">
                                 <p class="assignclass__teachername">Name: John doe</p>
@@ -196,7 +339,8 @@
                                 <i class="fa fa-ellipsis-v fa-1x"></i>
                             </div>
                             <div class="assignclass__teacher-pic assignclass__picshow">
-                                <img src="../images/user-3.jpg" alt="" class="assignclass__teacher-img">
+                                <img src="{{ url_for('static' , filename ='images/user-3.jpg') }}" alt="" class="assignclass__teacher-img" />
+                                <!-- <img src="../images/user-3.jpg" alt="" class="assignclass__teacher-img"> -->
                             </div>
                             <div class="assignclass__teacherdetails assignclass__detailshow">
                                 <p class="assignclass__teachername">Name: John doe</p>
@@ -216,7 +360,7 @@
                                 <i class="fa fa-ellipsis-v fa-1x"></i>
                             </div>
                             <div class="assignclass__teacher-pic assignclass__picshow">
-                                <img src="../images/user-3.jpg" alt="" class="assignclass__teacher-img">
+                                <img src="{{ url_for('static' , filename ='images/user-3.jpg') }}" alt="" class="assignclass__teacher-img" />
                             </div>
                             <div class="assignclass__teacherdetails assignclass__detailshow">
                                 <p class="assignclass__teachername">Name: John doe</p>
@@ -231,28 +375,8 @@
                 </div>
             </div>
         </section>
-        <div class="modal ">    <!--modal__dispnone is a class to hide the modal from the page-->
-            <div class="modal__body">
-                <div class="close-btn"><i class="fa fa-times fa-2x"></i></div>
-                <div class="addsubject">
-                    <div class="addsubject__subjectname">
-                        <label for="subjectname">Subjectname:</label>
-                        <input type="text" id="subjectname" placeholder="Subjectname" class="addsubject__subjectname__input">
-                    </div>
-                    <div class="addsubject__subjectcode">
-                        <label for="subjectcode">Subjectcode:</label>
-                        <input type="text" id="subjectcode" placeholder="Subjectcode" class="addsubject__subjectcode__input">
-                    </div>
-                    <div class="addsubject__subjectteacher">
-                        <label for="subjectteacher">Subjectteacher:</label>
-                        <input type="text" id="subjectteacher" placeholder="Subjectteacher" class="addsubject__subjectteacher__input">
-                    </div>
-                    <button class="submitsubject bluebtn">Submit</button>
-                </div>
-               
-            </div>
-        </div>
     </div>
-    <script src="../js/sample.js"></script>
 </body>
+<script src="{{ url_for('static', filename = 'js/sample.js') }}"></script>
+
 </html>
