@@ -531,10 +531,10 @@ def get_subjectteacher_details(data):
                     "status_code": 404, "data": "Invalid Authkey provided"}
         return response
     get_class_id_query = """
-        SELECT *FROM Class WHERE department = ? and sec = ? and graduation_year = ?
+        SELECT *FROM Class WHERE department = ? and sec = ? and graduation_year =? and sem = ?
 
     """
-    class_id_details = c.execute(get_class_id_query,(data['dept'],data['sec'],data['graduation_year'])).fetchone()
+    class_id_details = c.execute(get_class_id_query,(data['dept'],data['sec'],data['graduation_year'],data['sem'])).fetchone()
     if class_id_details is None:
         response = {"statusmessage": "Error",
                 "status_code": 501, "data": "class not found"}
@@ -579,6 +579,17 @@ def get_subjectteacher_details(data):
 
 def add_subject(data):
     conn = sql.connect('database.db')
+    check_authkey_query = """
+        SELECT *FROM LoginAuthKey WHERE authkey = ? AND faculty_id = ? AND DELETED = 0
+    """
+    c = conn.cursor()
+    _ = c.execute(check_authkey_query,
+                  (data['authkey'], data['faculty_id'])).fetchone()
+    if _ is None:
+        response = {"status_message": "Unauthorized access",
+                    "status_code": 404, "data": "Invalid Authkey provided"}
+        return response
+
    
     get_class_id_query = """
             SELECT class_id FROM Class WHERE sem = ? and sec = ? and graduation_year=? and department = ?
@@ -592,10 +603,6 @@ def add_subject(data):
     add_fcs_query = """
             INSERT INTO Fcs(faculty_id,class_id,subject_id) VALUES(?,?,?)
     """
-    c= conn.cursor()
-    
-   
-
     c_id = c.execute(get_class_id_query,(data['sem'],data['sec'],data['year'],data['dept'])).fetchone()
     print(c_id)
 
@@ -615,6 +622,51 @@ def add_subject(data):
     response = {"status_message": "successful",
                     "status_code": 200, "data": "successfully added"}
     return response
+
+
+def get_year_sem_sec(data):
+    conn = sql.connect('database.db')
+    print(data)
+    check_authkey_query = """
+        SELECT *FROM LoginAuthKey WHERE authkey = ? AND faculty_id = ? AND DELETED = 0
+    """
+    c = conn.cursor()
+    _ = c.execute(check_authkey_query,
+                  (data['authkey'], data['faculty_id'])).fetchone()
+    if _ is None:
+        response = {"status_message": "Unauthorized access",
+                    "status_code": 404, "data": "Invalid Authkey provided"}
+        return response
+    param = list(data.keys())
+     
+    if 'department' in param and 'year' not in param and 'sem' not in param:
+        get_all_year = """ 
+            SELECT graduation_year FROM Class WHERE department = ?
+        """
+        year = c.execute(get_all_year,(data['department'],)).fetchall()
+        # print(year,"year")
+        response = {"status_message": "successful",
+                    "status_code": 200, "data": year}
+        return response
+    elif 'department' in param and 'year' in param and 'sem' not in param:
+        get_all_sem = """ 
+            SELECT sem FROM Class WHERE department = ? and graduation_year = ?
+        """
+        sem = c.execute(get_all_sem,(data['department'],data['year'])).fetchall()
+        # print(sem,"sem")
+        response = {"status_message": "successful",
+                    "status_code": 200, "data": sem}
+        return response
+    elif 'department' in param and 'year' in param and 'sem' in param:
+        get_all_sec = """ 
+            SELECT sec FROM Class WHERE department = ? and graduation_year = ? and sem = ?
+        """
+        sec = c.execute(get_all_sec,(data['department'],data['year'],data['sem'])).fetchall()
+        # print(sec,"section")
+        response = {"status_message": "successful",
+                    "status_code": 200, "data": sec}
+        return response
+
 
 
 

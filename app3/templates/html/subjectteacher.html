@@ -39,7 +39,7 @@
                         processData: false,
                         success: function (ret_obj) {
                             console.log(ret_obj);
-                            var d = "<option>Select Teacher</option>";
+                            var d = "<option selected hidden>Select Teacher</option>";
                             for (i = 0; i < (ret_obj['data']).length; i++) {
                                 d += `'<option value="` + ret_obj['data'][i]['faculty_id'] + `">` + ret_obj['data'][i]['name'] + `</option>'`;
                             }
@@ -51,7 +51,29 @@
         $(document).ready(function () {
 
             $('#dept-id').change(function () {
-                if ($('#year-id').find(":selected").val() != "none" && $('#sec-id').find(":selected").val() != "none") {
+                var d = {
+                    'authkey': localStorage.getItem('authkey'),
+                    'faculty_id': localStorage.getItem('faculty_id'),
+                    'department': $('#dept-id').val()
+                };
+                $.ajax({
+                        type: "POST",
+                        url: "get_year_sem_sec",
+                        dataType: 'Json',
+                        contentType: 'application/json',
+                    
+                        data: JSON.stringify(d),
+                        processData: false,
+                        success: function (ret_obj) {
+                            console.log(ret_obj);
+                            var d = "<option selected>Select year</option>";
+                            for (i = 0; i < (ret_obj['data']).length; i++) {
+                                d += `'<option value="` + ret_obj['data'][i]['0'] + `">` + ret_obj['data'][i]['0'] + `</option>'`;
+                            }
+                            $('#year-id').html(d);
+                        }
+                    });
+                    if ($('#year-id').find(":selected").val() != "none" && $('#sec-id').find(":selected").val() != "none" && $('#sem-id').find(":selected").val()!="none") {
                     var authkey = localStorage.getItem('authkey');
                     var faculty_id = localStorage.getItem('faculty_id');
                     var data = {
@@ -59,7 +81,8 @@
                         'faculty_id': faculty_id,
                         'dept': $('#dept-id').val(),
                         'sec': $('#sec-id').val(),
-                        'graduation_year': $('#year-id').val()
+                        'graduation_year': $('#year-id').val(),
+                        'sem':$('#sem-id').val()
 
                     };
                     $.ajax({
@@ -72,6 +95,8 @@
                         success: function (ret_obj) {
                             console.log(ret_obj);
                             console.log(ret_obj['data']);
+                            var branch = $('#dept-id').val()
+                            
                             var d = `
                             <div class="assignclass__2__a">
                             <div class="assignclass__add ">
@@ -110,19 +135,40 @@
                             </div>`;
                             d += fill_data;
                                 }
-                            
-                            }
+                        }
                             $('.subject_teachers__container').html(d);
+                        
                         }
                     })
 
                 }
-
-
             });
 
             $('#year-id').change(function () {
-                if ($('#dept-id').find(":selected").val() != "none" && $('#sec-id').find(":selected").val() != "none") {
+                var d = {
+                    'authkey': localStorage.getItem('authkey'),
+                    'faculty_id': localStorage.getItem('faculty_id'),
+                    'department': $('#dept-id').val(),
+                    'year': $('#year-id').val()
+                };
+                $.ajax({
+                        type: "POST",
+                        url: "get_year_sem_sec",
+                        dataType: 'Json',
+                        contentType: 'application/json',
+                    
+                        data: JSON.stringify(d),
+                        processData: false,
+                        success: function (ret_obj) {
+                            console.log(ret_obj);
+                            var d = "<option selected>Select sem</option>";
+                            for (i = 0; i < (ret_obj['data']).length; i++) {
+                                d += `'<option value="` + ret_obj['data'][i]['0'] + `">` + ret_obj['data'][i]['0'] + `</option>'`;
+                            }
+                            $('#sem-id').html(d);
+                        }
+                    });
+                    if ($('#sec-id').find(":selected").val() != "none" && $('#dept-id').find(":selected").val() != "none" && $('#sem-id').find(":selected").val()!="none") {
                     var authkey = localStorage.getItem('authkey');
                     var faculty_id = localStorage.getItem('faculty_id');
                     var data = {
@@ -130,7 +176,8 @@
                         'faculty_id': faculty_id,
                         'dept': $('#dept-id').val(),
                         'sec': $('#sec-id').val(),
-                        'graduation_year': $('#year-id').val()
+                        'graduation_year': $('#year-id').val(),
+                        'sem':$('#sem-id').val()
 
                     };
                     $.ajax({
@@ -143,6 +190,8 @@
                         success: function (ret_obj) {
                             console.log(ret_obj);
                             console.log(ret_obj['data']);
+                            var branch = $('#dept-id').val()
+                            
                             var d = `
                             <div class="assignclass__2__a">
                             <div class="assignclass__add ">
@@ -181,19 +230,42 @@
                             </div>`;
                             d += fill_data;
                                 }
-                               
-                            }
+                        }
                             $('.subject_teachers__container').html(d);
+                        
                         }
                     })
 
                 }
-
-
             });
 
-            $('#sec-id').change(function () {
-                if ($('#year-id').find(":selected").val() != "none" && $('#dept-id').find(":selected").val() != "none") {
+            $('#sem-id').change(function(){
+                var d = {
+                    'authkey': localStorage.getItem('authkey'),
+                    'faculty_id': localStorage.getItem('faculty_id'),
+                    'department': $('#dept-id').val(),
+                    'year': $('#year-id').val(),
+                    'sem':$('#sem-id').val()
+                };
+                $.ajax({
+                        type: "POST",
+                        url: "get_year_sem_sec",
+                        dataType: 'Json',
+                        contentType: 'application/json',
+                    
+                        data: JSON.stringify(d),
+                        processData: false,
+                        success: function (ret_obj) {
+                            console.log(ret_obj);
+                            
+                            var d = "<option selected>Select sem</option>";
+                            for (i = 0; i < (ret_obj['data']).length; i++) {
+                                d += `'<option value="` + ret_obj['data'][i]['0'] + `">` + ret_obj['data'][i]['0'] + ` - Section </option>'`;
+                            }
+                            $('#sec-id').html(d);
+                        }
+                    });
+                    if ($('#year-id').find(":selected").val() != "none" && $('#dept-id').find(":selected").val() != "none" && $('#sec-id').find(":selected").val()!="none") {
                     var authkey = localStorage.getItem('authkey');
                     var faculty_id = localStorage.getItem('faculty_id');
                     var data = {
@@ -201,7 +273,79 @@
                         'faculty_id': faculty_id,
                         'dept': $('#dept-id').val(),
                         'sec': $('#sec-id').val(),
-                        'graduation_year': $('#year-id').val()
+                        'graduation_year': $('#year-id').val(),
+                        'sem':$('#sem-id').val()
+
+                    };
+                    $.ajax({
+                        type: "POST",
+                        url: "getfcs",
+                        dataType: 'Json',
+                        contentType: 'application/json',
+                        data: JSON.stringify(data),
+                        processData: false,
+                        success: function (ret_obj) {
+                            console.log(ret_obj);
+                            console.log(ret_obj['data']);
+                            var branch = $('#dept-id').val()
+                            
+                            var d = `
+                            <div class="assignclass__2__a">
+                            <div class="assignclass__add ">
+                                <!--Add assignclass__addshownone to hide the plus -->
+                                <div class="assignclass__add__pic" onclick="openmodal('`+$('#dept-id').val()+`','`+$('#year-id').val()+`','`+$('#sem-id').val()+`','`+$('#sec-id').val()+`')">
+                                    <i class="fa fa-plus fa-2x"></i>
+                                </div>
+                                <p class="assignclass__add__text">Add subject 1</p>
+                            </div>
+                        </div>
+                            `;
+                            if (ret_obj['status_code']==200)
+                            {
+                                for (i = 0; i < ret_obj['data'].length; i++) {
+                                    credits = ret_obj['data'][i]['credits'];
+                                    sub_faculty_id = ret_obj['data'][i]['faculty_id'];
+                                    sub_teacher_name = ret_obj['data'][i]['name'];
+                                    sub_code = ret_obj['data'][i]['subject_code'];
+                                    teacher_pic = ret_obj['data'][i]['teacher_picture'];
+                                    subject_name = ret_obj['data'][i]['subject_name'];
+                                    var fill_data = `
+                                    <div class="assignclass__2__b" > 
+                                <div class="assignclass__dots">
+                                    <i class="fa fa-ellipsis-v fa-1x"></i>
+                                </div>
+                                <div class="assignclass__teacher-pic assignclass__picshow" >
+                                    <img src="data:image/jpg;base64, `+teacher_pic+`" alt="" class="assignclass__teacher-img" height="30" width="30">
+                                </div>
+                                <div class="assignclass__teacherdetails assignclass__detailshow">
+                                    <p class="assignclass__teachername">Name:`+sub_teacher_name+`</p>
+                                    <p class="assignclass__teacherid">Teacher id:`+sub_faculty_id+`</p>
+                                    <p class="assignclass__teacherclass">Subject:`+subject_name+`</p>
+                                    <p class="assignclass__subjectcode">Subject code:`+sub_code+`</p>
+                                    <p class="assignclass__credits">Credits:`+credits+`</p>
+                                </div>
+                            </div>`;
+                            d += fill_data;
+                                }
+                        }
+                            $('.subject_teachers__container').html(d);
+                        
+                        }
+                    })
+
+                }
+            });
+            $('#sec-id').change(function () {
+                if ($('#year-id').find(":selected").val() != "none" && $('#dept-id').find(":selected").val() != "none" && $('#sem-id').find(":selected").val()!="none") {
+                    var authkey = localStorage.getItem('authkey');
+                    var faculty_id = localStorage.getItem('faculty_id');
+                    var data = {
+                        'authkey': authkey,
+                        'faculty_id': faculty_id,
+                        'dept': $('#dept-id').val(),
+                        'sec': $('#sec-id').val(),
+                        'graduation_year': $('#year-id').val(),
+                        'sem':$('#sem-id').val()
 
                     };
                     $.ajax({
@@ -266,11 +410,11 @@
             });
         });
     function save_subject(){
-        // var sub_ame = $('#subjectname').val();
-        // var subcode  =$('#subjectcode').val();
-        // var subteach = $('#subjectteacher').val();
-        // var cred = $('#credits').val();
+        var authkey = localStorage.getItem('authkey');
+        var faculty_id = localStorage.getItem('faculty_id');
         var data = {
+            'faculty_id':faculty_id,
+            'authkey':authkey,
             'subject_name' : $('#subjectname').val(),
             'subjectcode' :$('#subjectcode').val(),
             'subjectteacher' :$('#subjectteacher').val(),
@@ -422,24 +566,24 @@
                         <div class="assignclass__selectyear">
                             <select id="year-id" class="year">
                                 <option value="none" selected hidden>Select year</option>
-                                <option value="2020">2020</option>
+                                <!-- <option value="2020">2020</option>
                                 <option value="2021">2021</option>
-                                <option value="2022">2022</option>
+                                <option value="2022">2022</option> -->
                             </select>
                         </div>
                         <div class="assignclass__selectsection">
                             <select id="sem-id" class="section">
                                 <option value="none" selected hidden>Select sem</option>
-                                <option value="2">2</option>
+                                <!-- <option value="2">2</option>
                                 <option value="4">4</option>
-                                <option value="6">6</option>
+                                <option value="6">6</option> -->
                             </select>
                         </div>
                         <div class="assignclass__selectsection">
                             <select id="sec-id" class="section">
                                 <option value="none" selected hidden>Select section</option>
-                                <option value="a">A section</option>
-                                <option value="b">B section</option>
+                                <!-- <option value="a">A section</option>
+                                <option value="b">B section</option> -->
                             </select>
                         </div>
                     </div>

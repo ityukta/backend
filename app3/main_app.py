@@ -130,6 +130,15 @@ def add_subject_ajax():
     print(response)
     return jsonify(response)
 
+@APP.route('/get_year_sem_sec', methods=['POST'])
+def get_year_sem_sec():
+    """This endpoint is to get all class information accordingly"""
+    data = request.get_json()
+    print(data)
+    response = dbop.get_year_sem_sec(data)
+    print(response)
+    return jsonify(response)
+
 if __name__ == '__main__':
     APP.run(debug=True, threaded=True)
     APP.run()
