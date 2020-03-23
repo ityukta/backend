@@ -25,7 +25,7 @@ def create_fresh_database():
             gender TEXT NULL,
             marital_status TEXT NULL,
             address TEXT NULL,
-            teacher_picture BLOB NULL,
+            teacher_picture TEXT NULL,
             designation TEXT NULL,
             association_with_institution TEXT NULL,
             deleted BOOLEAN DEFAULT(FALSE),
@@ -50,10 +50,18 @@ def create_fresh_database():
             FOREIGN KEY(faculty_id) REFERENCES Faculty(faculty_id) ON DELETE CASCADE
         )
     """
-
+    create_invited_talks_table = """
+        CREATE TABLE IF NOT EXISTS InvitedTalks(
+            invited_talk_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            invited_talk_details TEXT NOT NULL,
+            faculty_id INTEGER NOT NULL,
+            FOREIGN KEY(faculty_id) REFERENCES Faculty(faculty_id) ON DELETE CASCADE
+        )
+    """
     create_workshops_table = """
         CREATE TABLE IF NOT EXISTS Workshops(
             workshop_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            workshop_type TEXT NOT NULL,
             workshop_details TEXT NOT NULL,
             faculty_id INTEGER NOT NULL,
             FOREIGN KEY(faculty_id) REFERENCES Faculty(faculty_id) ON DELETE CASCADE
@@ -236,6 +244,7 @@ def create_fresh_database():
     conn.execute(create_class_table)
     conn.execute(create_student_table)
     conn.execute(create_subject_table)
+    conn.execute(create_invited_talks_table)
     conn.execute(create_fcs_table)
     conn.execute(create_fcss_table)
     conn.execute(create_attendance_table)
@@ -318,12 +327,75 @@ def update_faculty_details(data):
                 insert_education_details_query = """
                     INSERT INTO FacultyQualification(degree, branch, institution, percentage, graduation_year, university, faculty_id) VALUES(?, ?, ?, ?, ?, ?, ?)
                 """
-                c.execute(insert_education_details_query, (degree, branch, educational_institution, percentage, year_of_passing, university, inp_faculty_id))
+                c.execute(insert_education_details_query, (degree, branch, educational_institution,
+                                                           percentage, year_of_passing, university, inp_faculty_id))
         elif attrs == 'work_experience':
-            work_experience
+            work_experience_data = data[attrs]
+            for each_work_experience in work_experience_data:
+                designation = each_work_experience['designation']
+                organization = each_work_experience['organization']
+                duration = each_work_experience['duration']
+                insert_work_experience_details_query = """
+                    INSERT INTO WorkExperience(designation, organzation, duration, faculty_id) VALUES (?, ?, ?, ?)
+                """
+                c.execute(insert_work_experience_details_query,
+                          (designation, organization, duration, inp_faculty_id))
+        elif attrs == "publications":
+            publication_data = data[attrs]
+            for each_publication in publication_data:
+                pub_details = each_publication['publication_details']
+                insert_publication_details_query = """
+                    INSERT INTO Publications(publication_details, faculty_id) VALUES (?, ?)
+                """
+                c.execute(insert_publication_details_query,
+                          (pub_details, inp_faculty_id))
+        elif attrs == "papers":
+            papers_data = data[attrs]
+            for each_paper in papers_data:
+                paper_details = each_paper['paper_details']
+                insert_paper_details_query = """
+                    INSERT INTO ResearchPaper(research_paper_details, faculty_id) VALUES (?, ?)
+                """
+                c.execute(insert_paper_details_query,
+                          (paper_details, inp_faculty_id))
+        elif attrs == "invitedtalks":
+            invitedtalks_data = data[attrs]
+            for each_invited_talk in invitedtalks_data:
+                invited_talk_details = each_invited_talk['invited_talk_details']
+                insert_into_invited_talks_query = """
+                    INSERT INTO InvitedTalks(invited_talk_details, faculty_id) VALUES (? ,?)
+                """
+                c.execute(insert_into_invited_talks_query, (invited_talk_details, inp_faculty_id))
+        elif attrs == "sessions":
+            session_chair_data = data[attrs]
+            for each_session_chair in session_chair_data:
+                session_chair_details = each_session_chair['session_details']
+                insert_into_session_query = """
+                    INSERT INTO SessionChair(session_chair_details, faculty_id) VALUES (?, ?)
+                """
+                c.execute(insert_into_session_query, (session_chair_details, inp_faculty_id))
+        elif attrs == "workshops":
+            workshop_data = data[attrs]
+            for each_workshop in workshop_data:
+                workshop_type = each_workshop['workshop_type']
+                workshop_details = each_workshop['workshop_description']
+                insert_workshop_details_query = """
+                    INSERT INTO Workshops(workshop_type, workshop_details, faculty_id) VALUES (?, ?, ?)
+                """
+                c.execute(insert_workshop_details_query, (workshop_type, workshop_details, inp_faculty_id))
+        elif attrs == "area_of_specialisation":
+            specialisation_data = data[attrs]
+            for each_specialisation in specialisation_data:
+                specialisation_details = each_specialisation['specialisation_details']
+                insert_specialisation_details_query = """
+                    INSERT INTO AreaOfSpecialisation(specialisation_details, faculty_id) VALUES (?, ?)
+                """
+                c.execute(insert_specialisation_details_query, (specialisation_details, inp_faculty_id))
+
     conn.commit()
     response = {"msg": "successful"}
     return response
+
 
 def validate_login(data):
     """ Function to validate initial register"""
@@ -507,7 +579,7 @@ def add_class(data):
     print(f_data)
     try:
         c.execute(create_new_class_query,
-                    (data['sem'], data['sec'], current_year, data['department'], f_data[0]))
+                  (data['sem'], data['sec'], current_year, data['department'], f_data[0]))
         c.execute(add_faculty_type_query, ("C", f_data[0]))
         conn.commit()
         response = {"status_message": "successful",
@@ -516,4 +588,3 @@ def add_class(data):
         response = {"status_message": "Unsuccessful",
                     "status_code": 301, "data": str(E)}
     return response
-    

@@ -60,8 +60,8 @@ def final_register_ajax():
     data = request.get_json()
     print(data)
     print(data['teacher_picture'])
-    # response = dbop.update_faculty_details(data)
-    response = {"msg" :"success"}
+    response = dbop.update_faculty_details(data)
+    # response = {"msg" :"success"}
     return jsonify(response)
 
 @APP.route('/login', methods = ['POST'])

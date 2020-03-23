@@ -105,6 +105,18 @@
       `;
       $('.register2__research_publications_container').append(t);
     }
+
+    function addspecialisation() {
+      var count = $('.register2__area_of_specialisation__container > div.register2__area_of_specialisation__details').length;
+      var t = `
+      <div class="register2__area_of_specialisation__details displayflexcol marginbottom04" id="`+ (count + 1) + `">
+        <h3> Specialisation - `+ (count + 1) + `</h3>
+              <label for="specialisation">Specialisation</label>
+              <input type="text" class="register2__area_of_specialisation__input" id="specialisation" />
+            </div>
+      `;
+      $('.register2__area_of_specialisation__container').append(t);
+    }
     function addpaper() {
       var count = $('.register2__research_papers_container > div.register2__research__papers__details').length;
       var t = `
@@ -177,7 +189,7 @@
       var designation = $('#designation').find(':selected').text();
       var specialization = $('#specialize').val();
       var dateofjoining = $('#date').val();
-      var association = $('#associaiton').find(":Selected").text();
+      var association = $('#association').find(":Selected").text();
       var phone = $('#phone').val();
       var experience = $('#exp').val();
       var teacherimage_data = b64;
@@ -186,7 +198,7 @@
       // teacherimage_file = document.querySelector('#teacherimg').files[0]
       // img = getBase64(teacherimage_file);
       // console.log(img);
-      
+
       console.log(teacherimage_data);
       var education = [];
       var len_edu = $('.register2__education__degree__container > div.register2__education__degrees').length;
@@ -208,6 +220,17 @@
         };
         education.push(data);
       }
+      var areaofspecialisation = []
+      var len_areaofspecialisation = $('.register2__area_of_specialisation__container > div.register2__area_of_specialisation__details').length;
+      for (i = 0; i < len_areaofspecialisation; i++) {
+        temp = '.register2__area_of_specialisation__container';
+        specialisation = $(temp + " #" + (i + 1) + " .register2__area_of_specialisation__input").val();
+        data = {
+          'specialisation_details': specialisation
+        };
+        areaofspecialisation.push(data);
+      }
+
       var workexperience = []
       var len_work_experience = $('.register2__workexp__container > div.register2__workexp__details').length;
       for (i = 0; i < len_work_experience; i++) {
@@ -235,8 +258,8 @@
       }
 
       var papers = [];
-      var len_papers = $('.register2__research_papers_container > div.register2__research__publications__details').length;
-      for (i = 0; i < len_papers; I++) {
+      var len_papers = $('.register2__research_papers_container > div.register2__research__papers__details').length;
+      for (i = 0; i < len_papers; i++) {
         temp = '.register2__research_papers_container';
         paper = $(temp + " #" + (i + 1) + " .register2__research__papers__input").val();
         data = {
@@ -290,7 +313,7 @@
         'email_id': email,
         'department': department,
         'designation': designation,
-        // 'specialization': specialization,
+        'area_of_specialisation': areaofspecialisation,
         'date_of_joining': dateofjoining,
         'association_with_institution': association,
         'phone': phone,
@@ -401,6 +424,15 @@
           </div>
 
         </div>
+        <div class="register2__area_of_specialisation">
+          <h3 class="register2__area_of_specialisation__title">Add Specialisation</h3>
+          <button class="register2__area_of_specialisation__button plus-button" onclick="addspecialisation()">
+            <i class="fa fa-plus fa-2x"></i>
+          </button>
+          <div class="register2__area_of_specialisation__container">
+
+          </div>
+        </div>
         <div class="register2__workexp">
           <h3 class="register2__workexp__title">Add workexperience</h3>
           <button class="register2__workexp__button plus-button" onclick="addworkexperience()">
@@ -486,14 +518,15 @@
 </body>
 <script>
   var input = document.getElementById('teacherimg');
-    input.onchange = function () {
-      var file = input.files[0],
-        reader = new FileReader();
-      reader.onloadend = function () {
-        b64 = reader.result.replace(/^data:.+;base64,/, '');
-        console.log(b64);
-      };
-      reader.readAsDataURL(file);
+  input.onchange = function () {
+    var file = input.files[0],
+      reader = new FileReader();
+    reader.onloadend = function () {
+      b64 = reader.result.replace(/^data:.+;base64,/, '');
+      console.log(b64);
     };
+    reader.readAsDataURL(file);
+  };
 </script>
+
 </html>
