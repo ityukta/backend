@@ -40,7 +40,10 @@ def add_class_view():
 def attendance_view():
     """ url to attendance"""
     return render_template('html/dayattendance.html')
-
+@APP.route('/assignteacher',methods=['GET'])
+def subjectteacher_view():
+    "url to add subject teacher"
+    return render_template('html/subjectteacher.html')
 # Endpoints
 
 
@@ -109,6 +112,32 @@ def add_class_ajax():
     print(response)
     return jsonify(response)
 
+@APP.route('/getfcs', methods=['POST'])
+def get_subjectteacher_details_ajax():
+    """This endpoint is to add new class into the database"""
+    data = request.get_json()
+    print(data)
+    response = dbop.get_subjectteacher_details(data)
+    print(response)
+    return jsonify(response)
+
+@APP.route('/addsubject', methods=['POST'])
+def add_subject_ajax():
+    """This endpoint is to add new subject into the database"""
+    data = request.get_json()
+    print(data)
+    response = dbop.add_subject(data)
+    print(response)
+    return jsonify(response)
+
+@APP.route('/get_year_sem_sec', methods=['POST'])
+def get_year_sem_sec():
+    """This endpoint is to get all class information accordingly"""
+    data = request.get_json()
+    print(data)
+    response = dbop.get_year_sem_sec(data)
+    print(response)
+    return jsonify(response)
 
 if __name__ == '__main__':
     APP.run(debug=True, threaded=True)

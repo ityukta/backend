@@ -15,11 +15,11 @@ let main=()=>{
         console.log( document.querySelector('.modal'));
        document.querySelector('.modal').classList.toggle('modal__dispnone'); 
     });*/
-    document.querySelectorAll('.assignclass__add__pic').forEach(ele=>{
-        ele.addEventListener('click',(e)=>{
-        document.querySelector('.modal').classList.toggle('modal__dispnone'); 
-        })
-    })
+    // document.querySelectorAll('.assignclass__add__pic').forEach(ele=>{
+    //     ele.addEventListener('click',(e)=>{
+    //     document.querySelector('.modal').classList.toggle('modal__dispnone'); 
+    //     })
+    // })
 }
 main();
 
