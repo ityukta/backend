@@ -153,6 +153,14 @@ def get_student_details_ajax():
     print(response)
     return jsonify(response)
 
+@APP.route('/addstudent', methods=['POST'])
+def add_student_ajax():
+    """This endpoint is used to add new student data"""
+    data = request.get_json()
+    print(data)
+    response = dbop.add_student(data)
+    print(response)
+    return jsonify(response)
 if __name__ == '__main__':
     APP.run(debug=True, threaded=True)
     APP.run()

@@ -798,13 +798,13 @@ def get_student_details(data):
         student_data = {
             "student_id" : student_id,
             "student_name" : each_student_detail[0][1],
-            "student_usn" : each_student_detail[0][1],
+            "student_usn" : each_student_detail[0][2],
             "subjects_enrolled" : enrolled_subjects
         }
         final_student_details.append(student_data)
     print()
     print("final details", final_student_details)
-    return {"msg": "success", "data": {"student_details" :final_student_details, "subject_details": subject_details}}
+    return {"status_message": "success", "status_code" : 200, "data": {"student_details" :final_student_details, "subject_details": subject_details}}
 
     # student_details_query = """
     #     SELECT Fcss.student_id, name, usn FROM Fcss, Student WHERE fcs_id = ? AND Fcss.student_id = Student.student_id
@@ -813,3 +813,52 @@ def get_student_details(data):
     # for each_fcs_detail in fcs_details:
     #     fcs_id = each_fcs_detail['fcs_id']
     #     student_details = c.execute(student_details_query, (fcs_id, )).fetchall()
+def add_student(data):
+    """function to add student"""
+    conn = sql.connect('database.db')
+    print(data)
+    check_authkey_query = """
+        SELECT *FROM LoginAuthKey WHERE authkey = ? AND faculty_id = ? AND DELETED = 0
+    """
+    c = conn.cursor()
+    _ = c.execute(check_authkey_query,
+                  (data['authkey'], data['faculty_id'])).fetchone()
+    if _ is None:
+        response = {"status_message": "Unauthorized access",
+                    "status_code": 404, "data": "Invalid Authkey provided"}
+        return response
+    get_class_id_query = """
+            SELECT class_id FROM Class WHERE sem = ? and sec = ? and graduation_year=? and department = ?
+        """
+    class_data = c.execute(get_class_id_query, (data['sem'], data['sec'], data['year'], data['department'])).fetchone()
+    if class_data is None:
+        response = {"statusmessage": "Error",
+                    "status_code": 501, "data": "class not found"}
+        return response
+    class_id = class_data[0]
+    get_fcs_id_query = """
+        SELECT fcs_id FROM Fcs WHERE class_id = ? AND subject_id = ?
+    """
+    fcs_ids = []
+    for each_subject_id in data['enrolled_subjects']:
+        fcs_id_res = c.execute(get_fcs_id_query, (class_id, each_subject_id)).fetchone()
+        if fcs_id_res is None:
+            response = {"statusmessage": "Error",
+                    "status_code": 501, "data": "subject and class IDs invalid"}
+            return response
+        fcs_ids.append(fcs_id_res[0])
+    insert_student_query = """
+        INSERT INTO Student(name, usn, batch, class_id, blood_group, father_name, phone_no, parent_mail, permanent_address, current_address, c10th_res, c12th_res, student_picture) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    """
+    c.execute(insert_student_query, (data['name'], data['usn'], data['year'], class_id, data['blood_group'], data['fathername'], data['contact_no'], data['email_id'], data['permanent_address'], data['current_address'], data['c10_res'], data['c12_res'], data['picture']))
+
+    student_id = c.lastrowid
+
+    insert_fcss_query = """
+        INSERT INTO Fcss(fcs_id, student_id) VALUES (?, ?)
+    """
+    for fcs_id in fcs_ids:
+        c.execute(insert_fcss_query, (fcs_id, student_id))
+    conn.commit()
+
+    return {"msg" :"success"}

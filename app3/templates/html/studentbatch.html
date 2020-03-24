@@ -7,9 +7,22 @@
     <title>Document</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css"
+        integrity="sha256-+N4/V/SbAFiW1MPBCXnfnP9QSN3+Keu+NlB+0ev/YKQ=" crossorigin="anonymous" />
     <link rel="stylesheet" href="{{ url_for('static', filename = 'sass/main.css') }}" type="text/css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <style>
+        .displaynone {
+            display: none;
+        }
+
+        .studentbatch__details__table {
+            width: 100%;
+
+        }
+    </style>
     <script>
+        var subject_id_list = [], b64;
         $(document).ready(function () {
             var faculty_id = localStorage.getItem('faculty_id');
             var authkey = localStorage.getItem('authkey');
@@ -51,10 +64,10 @@
                 });
             });
             $('#year-id').change(function () {
-                if($('#year-id').val() != "Select year"){
+                if ($('#year-id').val() != "Select year") {
                     $('#sem-id').removeAttr('disabled');
                 }
-                else{
+                else {
                     $('#sem-id').attr('disabled', true);
                     $('#sec-id').attr('disabled', true);
                     $('#submit-student-search').attr('disabled', true);
@@ -83,11 +96,11 @@
                     }
                 });
             });
-            $('#sem-id').change(function(){
-                if($('#sem-id').val() != "Select sem"){
+            $('#sem-id').change(function () {
+                if ($('#sem-id').val() != "Select sem") {
                     $('#sec-id').removeAttr('disabled');
                 }
-                else{
+                else {
                     $('#sec-id').attr('disabled', true);
                     $('#submit-student-search').attr('disabled', true);
                 }
@@ -117,16 +130,16 @@
                     }
                 });
             });
-            $('#sec-id').change(function(){
+            $('#sec-id').change(function () {
                 console.log($('#sec-id').val());
-                if($('#dept-id').val() != "Select branch" && $('#year-id').val() != "Select year" && $('#sem-id').val() != "Select sem" && $('#sec-id').val() != "Select section"){
+                if ($('#dept-id').val() != "Select branch" && $('#year-id').val() != "Select year" && $('#sem-id').val() != "Select sem" && $('#sec-id').val() != "Select section") {
                     $('#submit-student-search').removeAttr("disabled");
                 }
-                else{
+                else {
                     $('#submit-student-search').attr('disabled', true);
                 }
             });
-            
+
             // $.ajax({
             //     type: "POST",
             //     url: "getclass",
@@ -139,7 +152,7 @@
             //     }
             // })
         });
-        function submitstudentsearch(){
+        function submitstudentsearch() {
             var department = $('#dept-id').val();
             var year = $('#year-id').val();
             var sem = $('#sem-id').val();
@@ -147,23 +160,97 @@
             var faculty_id = localStorage.getItem('faculty_id');
             var authkey = localStorage.getItem('authkey');
             var d = {
-                'authkey' : authkey,
-                'faculty_id' : faculty_id,
-                'department' : department,
-                'year' : year,
-                'sem' : sem,
-                'sec' : sec 
+                'authkey': authkey,
+                'faculty_id': faculty_id,
+                'department': department,
+                'year': year,
+                'sem': sem,
+                'sec': sec
             };
             $.ajax({
                 type: "POST",
-                    url: "get_student_details",
-                    dataType: 'Json',
-                    contentType: 'application/json',
-                    data: JSON.stringify(d),
-                    processData: false,
-                    success: function(ret_obj){
-                        console.log(ret_obj);
+                url: "get_student_details",
+                dataType: 'Json',
+                contentType: 'application/json',
+                data: JSON.stringify(d),
+                processData: false,
+                success: function (ret_obj) {
+                    console.log(ret_obj);
+                    if (ret_obj['status_code'] == 200) {
+                        temp = "";
+                        for (i = 0; i < ret_obj['data']['subject_details'].length; i++) {
+                            subject_id_list.push(ret_obj['data']['subject_details'][i]['subject_id']);
+                            $('.studentbatch__details__table__heading tr').append('<th id="studentbatch__details__subject__' + ret_obj['data']['subject_details'][i]['subject_id'] + '">' + ret_obj['data']['subject_details'][i]['subject_name'] + '</th>');
+                            temp +='<div class="studentbatch__add__subject">';
+                            temp += '<input type="checkbox" id="subject_'+ret_obj['data']['subject_details'][i]['subject_id']+'" class="studentbatch__add__subject_'+ret_obj['data']['subject_details'][i]['subject_id']+'__input inputcommom">';
+
+                            temp += '<label for="subject_'+ret_obj['data']['subject_details'][i]['subject_id']+'">'+ret_obj['data']['subject_details'][i]['subject_name']+'</label>';
+                            temp += '</div>';
+                        }
+                        $('.studentbatch__add__subjects__container').html(temp);
+                        final_table_data = "";
+                        for (i = 0; i < ret_obj['data']['student_details'].length; i++) {
+                            enrolled_subjects_list = []
+                            d = '<tr id = "' + ret_obj['data']['student_details'][i]['student_id'] + '">';
+                            d += '<td>' + (i + 1) + '</td>';
+                            d += '<td>' + ret_obj['data']['student_details'][i]['student_name'] + '</td>';
+                            d += '<td>' + ret_obj['data']['student_details'][i]['student_usn'] + '</td>';
+                            for (j = 0; j < ret_obj['data']['student_details'][i]['subjects_enrolled'].length; j++){
+                                enrolled_subjects_list.push(ret_obj['data']['student_details'][i]['subjects_enrolled'][j]['subject_id']);
+                            }
+                            for(j=0;j<subject_id_list.length;j++){
+                                if(enrolled_subjects_list.includes(subject_id_list[j])){
+                                    d += '<td><i class="fa fa-check"></i></td>';
+                                }
+                                else{
+                                    d += '<td><i class="fa fa-times"></i></td>';
+                                }
+                            }
+                            d += '</td>';
+                            final_table_data += d;
+                        }
+                        $('.studentbatch__details__table__body').html(final_table_data);
+                        $('.studentbatch__details').toggleClass('displaynone');
                     }
+                }
+            });
+        }
+        function addstudent(){
+            enrolled_subjects = [];
+            for(i=0;i<subject_id_list.length;i++){
+                if($('#subject_'+subject_id_list[i]).is(':checked')){
+                    enrolled_subjects.push(subject_id_list[i]);
+                }
+            }
+            var d ={
+                'authkey' : localStorage.getItem('authkey'),
+                'faculty_id' : localStorage.getItem('faculty_id'),
+                'name' : $('.studentbatch__add__name__input').val(),'usn' : $('.studentbatch__add__usn__input').val(),
+                'blood_group' : $('.studentbatch__add__bloodgroup__input').val(),
+                'fathername' : $('.studentbatch__add__fathername__input').val(),
+                'contact_no' : $('.studentbatch__add__parentcontact__input').val(),
+                'email_id' : $('.studentbatch__add__parentemail__input').val(),
+                'permanent_address' : $('.studentbatch__add__permanentaddress__input').val(),
+                'current_address' : $('.studentbatch__add__currentaddress__input').val(),
+                'c10_res' : $('.studentbatch__add__sslc__input').val(),
+                'c12_res' : $('.studentbatch__add__puc__input').val(),
+                'picture' : b64,
+                'sem' :$('#sem-id').val(),
+                'sec' : $('#sec-id').val(),
+                'department' : $('#dept-id').val(),
+                'year': $('#year-id').val(),
+                'enrolled_subjects' : enrolled_subjects
+            };
+            console.log(d);
+            $.ajax({
+                type: "POST",
+                url: "addstudent",
+                dataType : "Json",
+                contentType :"application/json",
+                data: JSON.stringify(d),
+                success: function(ret_obj){
+                    console.log(ret_obj);
+                }
             });
         }
     </script>
@@ -203,6 +290,14 @@
                                     <label for="usn">USN:</label>
                                     <input type="text" id="usn" class="studentbatch__add__usn__input inputcommon">
                                 </div>
+                                <!-- <div class="studentbatch__add__batch formcommon">
+                                    <label for="batch">Batch:</label>
+                                    <input type="number" id="batch" class="studentbatch__add__batch__input inputcommon">
+                                </div> -->
+                                <div class="studentbatch__add__bloodgroup formcommon">
+                                    <label for="blood_group">Blood Group:</label>
+                                    <input type="text" id="blood_group" class="studentbatch__add__bloodgroup__input inputcommon">
+                                </div>
                                 <div class="studentbatch__add__fathername formcommon">
                                     <label for="fathername">Father Name:</label>
                                     <input type="text" id="name"
@@ -212,6 +307,11 @@
                                     <label for="contact">Parent/Guardian Contact number:</label>
                                     <input type="text" id="contact"
                                         class="studentbatch__add__parentcontact__input inputcommon">
+                                </div>
+                                <div class="studentbatch__add__parentemail formcommon">
+                                    <label for="parent_email">Parent/Guardian Email ID:</label>
+                                    <input type="text" id="parent_email"
+                                        class="studentbatch__add__parentemail__input inputcommon">
                                 </div>
                                 <div class="studentbatch__add__permanentaddress formcommon">
                                     <label for="permanentaddress">Permanentaddress:</label>
@@ -223,7 +323,7 @@
                                     <textarea id="currentaddress" cols="30" rows="3"
                                         class="studentbatch__add__currentaddress__input inputcommon"></textarea>
                                 </div>
-                                <div class="studentbatch__add__hobbies formcommon">
+                                <!-- <div class="studentbatch__add__hobbies formcommon">
                                     <label for="hobbies">Hobbies:</label>
                                     <input type="text" id="hobbies"
                                         class="studentbatch__add__parentcontact__input inputcommon">
@@ -236,25 +336,34 @@
                                 <div class="studentbatch__add__career formcommon">
                                     <label for="career">Career aspirations:</label>
                                     <input type="text" id="career" class="studentbatch__add__career__input inputcommon">
-                                </div>
+                                </div> -->
                                 <div class="studentbatch__add__sslc formcommon">
                                     <label for="sslc">10th results(%):</label>
                                     <input type="number" id="sslc" class="studentbatch__add__sslc__input inputcommon">
                                 </div>
                                 <div class="studentbatch__add__puc formcommon">
                                     <label for="puc">2nd puc results(%):</label>
-                                    <input type="number" id="puc" class="studentbatch__add__sslc__input inputcommon">
+                                    <input type="number" id="puc" class="studentbatch__add__puc__input inputcommon">
                                 </div>
-                                <div class="studentbatch__add__diploma formcommon">
+                                <!-- <div class="studentbatch__add__diploma formcommon">
                                     <label for="diploma">Diploma results(%):</label>
                                     <input type="number" id="diploma"
                                         class="studentbatch__add__sslc__input inputcommon">
+                                </div> -->
+                                <div class="studentbatch__add__picture formcommon">
+                                    <label for="picture"></label>
+                                    <input type="file" id="picture" class="studentbatch__add__picture__input inputcommom">
+                                </div>
+                                <div class="studentbatch__add__subjects__container">
+                                    <div class="studentbatch__add__subject">
+                                        <input type="checkbox" id="subject1" class="studentbatch__add__subject1__input inputcommom">
+                                    <label for="subject1">Subject 1</label>
+                                    </div>                                    
                                 </div>
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Save changes</button>
+                            <button type="button" class="btn btn-primary" onclick="addstudent()">Submit</button>
                         </div>
                     </div>
                 </div>
@@ -264,7 +373,7 @@
         <div class="assignclass__selectclass">
             <div class="assignclass__selectdept">
                 <select class="dept" id="dept-id">
-                    <option value="" selected>Select branch </option>
+                    <option value="" selected>Select branch</option>
                     <option value="CSE">CSE</option>
                     <option value="ISE">ISE</option>
                     <option value="ECE">ECE</option>
@@ -318,19 +427,23 @@
                 </div>
             </div>
         </div> -->
-    <table id="student-data-table">
-        <thead>
-            <th>Sl. No</th>
-            <th>Name</th>
-            <th>USN</th>
-            <th>Sub 1</th>
-        </thead>
-        <tbody>
-            <tr>
-                <td></td>
-            </tr>
-        </tbody>
-    </table>
+        <div class="studentbatch__details displaynone">
+            <table class="studentbatch__details__table">
+                <thead class="studentbatch__details__table__heading">
+                    <th>Sl. No</th>
+                    <th>Name</th>
+                    <th>USN</th>
+                </thead>
+                <tbody class="studentbatch__details__table__body">
+                    <tr>
+                        <td>1</td>
+                        <td>Amey Aditya Achar J</td>
+                        <td>1rn17is009</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
     </div>
 
 
@@ -345,5 +458,16 @@
         integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
         crossorigin="anonymous"></script>
 </body>
-
+<script>
+    var input = document.getElementById('picture');
+    input.onchange = function () {
+      var file = input.files[0],
+        reader = new FileReader();
+      reader.onloadend = function () {
+        b64 = reader.result.replace(/^data:.+;base64,/, '');
+        console.log(b64);
+      };
+      reader.readAsDataURL(file);
+    };
+  </script>
 </html>
