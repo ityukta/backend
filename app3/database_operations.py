@@ -790,8 +790,9 @@ def get_student_details(data):
     student_details = c.execute(student_details_query, [i['fcs_id'] for i in fcs_details]).fetchall()
     print("Student", student_details)
     final_student_details = []
-    for student_id, order_iter in itertools.groupby(student_details, lambda x: x[0]):
+    for student_id, order_iter in itertools.groupby(sorted(student_details, key = lambda x: x[0]), lambda x: x[0]):
         each_student_detail = list(order_iter)
+        print(each_student_detail)
         enrolled_subjects = list()
         for i in each_student_detail:
             enrolled_subjects.append({"subject_id": i[3], "subject_name" : i[4]})
