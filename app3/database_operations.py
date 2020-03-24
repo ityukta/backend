@@ -5,6 +5,7 @@ import sqlite3 as sql
 import string
 import random
 import datetime
+import itertools
 
 
 def create_fresh_database():
@@ -366,7 +367,8 @@ def update_faculty_details(data):
                 insert_into_invited_talks_query = """
                     INSERT INTO InvitedTalks(invited_talk_details, faculty_id) VALUES (? ,?)
                 """
-                c.execute(insert_into_invited_talks_query, (invited_talk_details, inp_faculty_id))
+                c.execute(insert_into_invited_talks_query,
+                          (invited_talk_details, inp_faculty_id))
         elif attrs == "sessions":
             session_chair_data = data[attrs]
             for each_session_chair in session_chair_data:
@@ -374,7 +376,8 @@ def update_faculty_details(data):
                 insert_into_session_query = """
                     INSERT INTO SessionChair(session_chair_details, faculty_id) VALUES (?, ?)
                 """
-                c.execute(insert_into_session_query, (session_chair_details, inp_faculty_id))
+                c.execute(insert_into_session_query,
+                          (session_chair_details, inp_faculty_id))
         elif attrs == "workshops":
             workshop_data = data[attrs]
             for each_workshop in workshop_data:
@@ -383,7 +386,8 @@ def update_faculty_details(data):
                 insert_workshop_details_query = """
                     INSERT INTO Workshops(workshop_type, workshop_details, faculty_id) VALUES (?, ?, ?)
                 """
-                c.execute(insert_workshop_details_query, (workshop_type, workshop_details, inp_faculty_id))
+                c.execute(insert_workshop_details_query,
+                          (workshop_type, workshop_details, inp_faculty_id))
         elif attrs == "area_of_specialisation":
             specialisation_data = data[attrs]
             for each_specialisation in specialisation_data:
@@ -391,7 +395,8 @@ def update_faculty_details(data):
                 insert_specialisation_details_query = """
                     INSERT INTO AreaOfSpecialisation(specialisation_details, faculty_id) VALUES (?, ?)
                 """
-                c.execute(insert_specialisation_details_query, (specialisation_details, inp_faculty_id))
+                c.execute(insert_specialisation_details_query,
+                          (specialisation_details, inp_faculty_id))
 
     conn.commit()
     response = {"msg": "successful"}
@@ -530,7 +535,7 @@ def get_all_class_details(data):
             zip([cur[0] for cur in c_data_keys], c_data[i]))
         teacher_id = c_data[i]['classteacher_id']
         get_teacher_data = """
-            SELECT name FROM faculty WHERE faculty_id = ?
+            SELECT name, teacher_picture FROM faculty WHERE faculty_id = ?
         """
         f_data = c.execute(get_teacher_data, (teacher_id, )).fetchone()
         f_data = dict(
@@ -589,8 +594,7 @@ def add_class(data):
         response = {"status_message": "Unsuccessful",
                     "status_code": 301, "data": str(E)}
     return response
-<<<<<<< HEAD
-=======
+
 
 def get_subjectteacher_details(data):
     conn = sql.connect('database.db')
@@ -608,20 +612,22 @@ def get_subjectteacher_details(data):
         SELECT *FROM Class WHERE department = ? and sec = ? and graduation_year =? and sem = ?
 
     """
-    class_id_details = c.execute(get_class_id_query,(data['dept'],data['sec'],data['graduation_year'],data['sem'])).fetchone()
+    class_id_details = c.execute(
+        get_class_id_query, (data['dept'], data['sec'], data['graduation_year'], data['sem'])).fetchone()
     if class_id_details is None:
         response = {"statusmessage": "Error",
-                "status_code": 501, "data": "class not found"}
+                    "status_code": 501, "data": "class not found"}
         return response
     get_fcs_details_query = """ 
         SELECT *FROM Fcs WHERE class_id= ?
     """
     print(class_id_details)
 
-    fcs_data= c.execute(get_fcs_details_query,(class_id_details[0],)).fetchall()
+    fcs_data = c.execute(get_fcs_details_query,
+                         (class_id_details[0],)).fetchall()
     if fcs_data is None:
         response = {"statusmessage": "Error",
-                "status_code": 501, "data": "class not found"}
+                    "status_code": 501, "data": "class not found"}
         return response
 
     print(fcs_data)
@@ -632,24 +638,26 @@ def get_subjectteacher_details(data):
             SELECT *FROM Subject WHERE subject_id = ?
         """
     res = []
-    for fcs in fcs_data: 
-        faculty_name = c.execute(get_faculty_query,(fcs[1],)).fetchone()
+    for fcs in fcs_data:
+        faculty_name = c.execute(get_faculty_query, (fcs[1],)).fetchone()
         print(faculty_name)
 
-        subject_details = c.execute(get_subject_details_query,(fcs[3],)).fetchone()
+        subject_details = c.execute(
+            get_subject_details_query, (fcs[3],)).fetchone()
         print(subject_details)
-        if faculty_name is None  or subject_details is None:
+        if faculty_name is None or subject_details is None:
             response = {"statusmessage": "Error",
-                    "status_code": 501, "data": "class not found"}
+                        "status_code": 501, "data": "class not found"}
             return response
         res.append({
-            'sem' : class_id_details[1] , 'name':faculty_name[0] , 'subject_name' : subject_details[1] , 
-            'subject_code': subject_details[2] , 'credits':subject_details[3] , 'teacher_picture':faculty_name[1], 
-            'faculty_id':fcs[1]
-            })
+            'sem': class_id_details[1], 'name': faculty_name[0], 'subject_name': subject_details[1],
+            'subject_code': subject_details[2], 'credits': subject_details[3], 'teacher_picture': faculty_name[1],
+            'faculty_id': fcs[1]
+        })
     response = {"status_message": "successful",
-                    "status_code": 200, "data": res}
+                "status_code": 200, "data": res}
     return response
+
 
 def add_subject(data):
     conn = sql.connect('database.db')
@@ -664,10 +672,9 @@ def add_subject(data):
                     "status_code": 404, "data": "Invalid Authkey provided"}
         return response
 
-   
     get_class_id_query = """
             SELECT class_id FROM Class WHERE sem = ? and sec = ? and graduation_year=? and department = ?
-        """  
+        """
     add_subject_details = """
         INSERT INTO Subject(subject_name,subject_code,credits) VALUES(?,?,?)
     """
@@ -675,26 +682,26 @@ def add_subject(data):
         SELECT subject_id FROM Subject WHERE subject_code = ?
     """
     add_fcs_query = """
-            INSERT INTO Fcs(faculty_id,class_id,subject_id) VALUES(?,?,?)
+            INSERT INTO Fcs(faculty_id,class_id,subject_id, section) VALUES(?,?,?, ?)
     """
-    c_id = c.execute(get_class_id_query,(data['sem'],data['sec'],data['year'],data['dept'])).fetchone()
+    c_id = c.execute(get_class_id_query,
+                     (data['sem'], data['sec'], data['year'], data['dept'])).fetchone()
     print(c_id)
 
-
-
-    c.execute(add_subject_details,(data['subject_name'],data['subjectcode'],data['credits']))
+    c.execute(add_subject_details,
+              (data['subject_name'], data['subjectcode'], data['credits']))
     conn.commit()
 
-    s_id = c.execute(get_subject_id_query,(data['subjectcode'],)).fetchone()
+    s_id = c.execute(get_subject_id_query, (data['subjectcode'],)).fetchone()
     print(s_id)
     if c_id is None or s_id is None:
         response = {"statusmessage": "Error",
                     "status_code": 501, "data": "class not found"}
         return response
-    c.execute(add_fcs_query,(data['subjectteacher'],c_id[0],s_id[0]))
+    c.execute(add_fcs_query, (data['subjectteacher'], c_id[0], s_id[0], data['sec']))
     conn.commit()
     response = {"status_message": "successful",
-                    "status_code": 200, "data": "successfully added"}
+                "status_code": 200, "data": "successfully added"}
     return response
 
 
@@ -712,40 +719,97 @@ def get_year_sem_sec(data):
                     "status_code": 404, "data": "Invalid Authkey provided"}
         return response
     param = list(data.keys())
-     
+
     if 'department' in param and 'year' not in param and 'sem' not in param:
         get_all_year = """ 
-            SELECT graduation_year FROM Class WHERE department = ?
+            SELECT DISTINCT(graduation_year) FROM Class WHERE department = ?
         """
-        year = c.execute(get_all_year,(data['department'],)).fetchall()
+        year = c.execute(get_all_year, (data['department'],)).fetchall()
         # print(year,"year")
         response = {"status_message": "successful",
                     "status_code": 200, "data": year}
         return response
     elif 'department' in param and 'year' in param and 'sem' not in param:
         get_all_sem = """ 
-            SELECT sem FROM Class WHERE department = ? and graduation_year = ?
+            SELECT DISTINCT(sem) FROM Class WHERE department = ? and graduation_year = ?
         """
-        sem = c.execute(get_all_sem,(data['department'],data['year'])).fetchall()
+        sem = c.execute(
+            get_all_sem, (data['department'], data['year'])).fetchall()
         # print(sem,"sem")
         response = {"status_message": "successful",
                     "status_code": 200, "data": sem}
         return response
     elif 'department' in param and 'year' in param and 'sem' in param:
         get_all_sec = """ 
-            SELECT sec FROM Class WHERE department = ? and graduation_year = ? and sem = ?
+            SELECT DISTINCT(sec) FROM Class WHERE department = ? and graduation_year = ? and sem = ?
         """
-        sec = c.execute(get_all_sec,(data['department'],data['year'],data['sem'])).fetchall()
+        sec = c.execute(
+            get_all_sec, (data['department'], data['year'], data['sem'])).fetchall()
         # print(sec,"section")
         response = {"status_message": "successful",
                     "status_code": 200, "data": sec}
         return response
 
 
+def get_student_details(data):
+    conn = sql.connect('database.db')
+    print(data)
+    check_authkey_query = """
+        SELECT *FROM LoginAuthKey WHERE authkey = ? AND faculty_id = ? AND DELETED = 0
+    """
+    c = conn.cursor()
+    _ = c.execute(check_authkey_query,
+                  (data['authkey'], data['faculty_id'])).fetchone()
+    if _ is None:
+        response = {"status_message": "Unauthorized access",
+                    "status_code": 404, "data": "Invalid Authkey provided"}
+        return response
+    get_class_id_query = """
+            SELECT class_id FROM Class WHERE sem = ? and sec = ? and graduation_year=? and department = ?
+        """
+    class_data = c.execute(get_class_id_query, (data['sem'], data['sec'], data['year'], data['department'])).fetchone()
 
+    if class_data is None:
+        response = {"statusmessage": "Error",
+                    "status_code": 501, "data": "class not found"}
+        return response
+    class_id = class_data[0]
+    get_fcs_ids_query = """
+        SELECT Fcs.fcs_id, subject_name, Fcs.subject_id FROM Fcs, Subject WHERE class_id = ? AND Fcs.subject_id = Subject.subject_id
+    """
 
-
+    fcs_details = c.execute(get_fcs_ids_query, (class_id, )).fetchall()
+    subject_details = [{"subject_id" : i[2], "subject_name": i[1]} for i in fcs_details]
+    for i in range(len(fcs_details)):
+        fcs_details[i] = dict(
+            zip([cur[0] for cur in c.description], fcs_details[i]))
+    print("FCS details", fcs_details)
     
+    student_details_query = """
+        SELECT Fcss.student_id, name, usn, Subject.subject_id, subject_name FROM Fcss, Student, Fcs, Subject WHERE Fcss.student_id = Student.student_id AND Fcs.fcs_id = Fcss.fcs_id AND Fcs.subject_id = Subject.subject_id AND Fcss.fcs_id IN (""" + ", ".join(['?' for i in subject_details]) + """ ) """
+    student_details = c.execute(student_details_query, [i['fcs_id'] for i in fcs_details]).fetchall()
+    print("Student", student_details)
+    final_student_details = []
+    for student_id, order_iter in itertools.groupby(student_details, lambda x: x[0]):
+        each_student_detail = list(order_iter)
+        enrolled_subjects = list()
+        for i in each_student_detail:
+            enrolled_subjects.append({"subject_id": i[3], "subject_name" : i[4]})
+        student_data = {
+            "student_id" : student_id,
+            "student_name" : each_student_detail[0][1],
+            "student_usn" : each_student_detail[0][1],
+            "subjects_enrolled" : enrolled_subjects
+        }
+        final_student_details.append(student_data)
+    print()
+    print("final details", final_student_details)
+    return {"msg": "success", "data": {"student_details" :final_student_details, "subject_details": subject_details}}
 
-    
->>>>>>> 6aff5169cc84e66b3a6c4464dbf2d091c109f7e6
+    # student_details_query = """
+    #     SELECT Fcss.student_id, name, usn FROM Fcss, Student WHERE fcs_id = ? AND Fcss.student_id = Student.student_id
+    # """
+    # complete_student_details = []
+    # for each_fcs_detail in fcs_details:
+    #     fcs_id = each_fcs_detail['fcs_id']
+    #     student_details = c.execute(student_details_query, (fcs_id, )).fetchall()

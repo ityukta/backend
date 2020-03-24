@@ -44,6 +44,11 @@ def attendance_view():
 def subjectteacher_view():
     "url to add subject teacher"
     return render_template('html/subjectteacher.html')
+
+@APP.route('/addstudent', methods=['GET'])
+def add_student_view():
+    """ URL to add or view students"""
+    return render_template('html/studentbatch.html')
 # Endpoints
 
 
@@ -136,6 +141,15 @@ def get_year_sem_sec():
     data = request.get_json()
     print(data)
     response = dbop.get_year_sem_sec(data)
+    print(response)
+    return jsonify(response)
+
+@APP.route('/get_student_details', methods=['POST'])
+def get_student_details_ajax():
+    """This endpoint is to get list of student, in a particular class"""
+    data = request.get_json()
+    print(data)
+    response = dbop.get_student_details(data)
     print(response)
     return jsonify(response)
 

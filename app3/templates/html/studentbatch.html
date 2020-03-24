@@ -7,7 +7,7 @@
     <title>Document</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <link rel="stylesheet" href="../sass/main.css" type="text/css">
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'sass/main.css') }}" type="text/css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script>
         $(document).ready(function () {
@@ -17,6 +17,116 @@
                 "authkey": localStorage.getItem("authkey"),
                 "faculty_id": localStorage.getItem("faculty_id")
             };
+
+            $('#dept-id').change(function () {
+                if ($('#dept-id').val() != "Select branch") {
+                    $('#year-id').removeAttr('disabled');
+                }
+                else {
+                    $('#year-id').attr('disabled', true);
+                    $('#sem-id').attr('disabled', true);
+                    $('#sec-id').attr('disabled', true);
+                    $('#submit-student-search').attr('disabled', true);
+                }
+                var d = {
+                    'authkey': localStorage.getItem('authkey'),
+                    'faculty_id': localStorage.getItem('faculty_id'),
+                    'department': $('#dept-id').val()
+                };
+                $.ajax({
+                    type: "POST",
+                    url: "get_year_sem_sec",
+                    dataType: 'Json',
+                    contentType: 'application/json',
+                    data: JSON.stringify(d),
+                    processData: false,
+                    success: function (ret_obj) {
+                        console.log(ret_obj);
+                        var d = "<option selected>Select year</option>";
+                        for (i = 0; i < (ret_obj['data']).length; i++) {
+                            d += `'<option value="` + ret_obj['data'][i]['0'] + `">` + ret_obj['data'][i]['0'] + `</option>'`;
+                        }
+                        $('#year-id').html(d);
+                    }
+                });
+            });
+            $('#year-id').change(function () {
+                if($('#year-id').val() != "Select year"){
+                    $('#sem-id').removeAttr('disabled');
+                }
+                else{
+                    $('#sem-id').attr('disabled', true);
+                    $('#sec-id').attr('disabled', true);
+                    $('#submit-student-search').attr('disabled', true);
+                }
+                var d = {
+                    'authkey': localStorage.getItem('authkey'),
+                    'faculty_id': localStorage.getItem('faculty_id'),
+                    'department': $('#dept-id').val(),
+                    'year': $('#year-id').val()
+                };
+                $.ajax({
+                    type: "POST",
+                    url: "get_year_sem_sec",
+                    dataType: 'Json',
+                    contentType: 'application/json',
+
+                    data: JSON.stringify(d),
+                    processData: false,
+                    success: function (ret_obj) {
+                        console.log(ret_obj);
+                        var d = "<option selected>Select sem</option>";
+                        for (i = 0; i < (ret_obj['data']).length; i++) {
+                            d += `'<option value="` + ret_obj['data'][i]['0'] + `">` + ret_obj['data'][i]['0'] + `</option>'`;
+                        }
+                        $('#sem-id').html(d);
+                    }
+                });
+            });
+            $('#sem-id').change(function(){
+                if($('#sem-id').val() != "Select sem"){
+                    $('#sec-id').removeAttr('disabled');
+                }
+                else{
+                    $('#sec-id').attr('disabled', true);
+                    $('#submit-student-search').attr('disabled', true);
+                }
+                var d = {
+                    'authkey': localStorage.getItem('authkey'),
+                    'faculty_id': localStorage.getItem('faculty_id'),
+                    'department': $('#dept-id').val(),
+                    'year': $('#year-id').val(),
+                    'sem': $('#sem-id').val()
+                };
+                $.ajax({
+                    type: "POST",
+                    url: "get_year_sem_sec",
+                    dataType: 'Json',
+                    contentType: 'application/json',
+
+                    data: JSON.stringify(d),
+                    processData: false,
+                    success: function (ret_obj) {
+                        console.log(ret_obj);
+
+                        var d = "<option selected>Select section</option>";
+                        for (i = 0; i < (ret_obj['data']).length; i++) {
+                            d += `'<option value="` + ret_obj['data'][i]['0'] + `">` + ret_obj['data'][i]['0'] + ` - Section </option>'`;
+                        }
+                        $('#sec-id').html(d);
+                    }
+                });
+            });
+            $('#sec-id').change(function(){
+                console.log($('#sec-id').val());
+                if($('#dept-id').val() != "Select branch" && $('#year-id').val() != "Select year" && $('#sem-id').val() != "Select sem" && $('#sec-id').val() != "Select section"){
+                    $('#submit-student-search').removeAttr("disabled");
+                }
+                else{
+                    $('#submit-student-search').attr('disabled', true);
+                }
+            });
+            
             // $.ajax({
             //     type: "POST",
             //     url: "getclass",
@@ -29,6 +139,33 @@
             //     }
             // })
         });
+        function submitstudentsearch(){
+            var department = $('#dept-id').val();
+            var year = $('#year-id').val();
+            var sem = $('#sem-id').val();
+            var sec = $('#sec-id').val();
+            var faculty_id = localStorage.getItem('faculty_id');
+            var authkey = localStorage.getItem('authkey');
+            var d = {
+                'authkey' : authkey,
+                'faculty_id' : faculty_id,
+                'department' : department,
+                'year' : year,
+                'sem' : sem,
+                'sec' : sec 
+            };
+            $.ajax({
+                type: "POST",
+                    url: "get_student_details",
+                    dataType: 'Json',
+                    contentType: 'application/json',
+                    data: JSON.stringify(d),
+                    processData: false,
+                    success: function(ret_obj){
+                        console.log(ret_obj);
+                    }
+            });
+        }
     </script>
 </head>
 
@@ -37,7 +174,7 @@
     <div class="studentbatch">
         <div class="studentbatch__add">
             <div class="studentbatch__add__batch">
-                <button class="search-btn studentbatch__add__batch__btn">Add batch</button>
+                <button class="search-btn studentbatch__add__batch__btn" disabled>Add batch</button>
             </div>
 
             <!-- Button trigger modal -->
@@ -123,7 +260,45 @@
                 </div>
             </div>
         </div>
-        <div class="studentbatch__details">
+
+        <div class="assignclass__selectclass">
+            <div class="assignclass__selectdept">
+                <select class="dept" id="dept-id">
+                    <option value="" selected>Select branch </option>
+                    <option value="CSE">CSE</option>
+                    <option value="ISE">ISE</option>
+                    <option value="ECE">ECE</option>
+                    <option value="EEE">EEE</option>
+                </select>
+            </div>
+            <div class="assignclass__selectyear">
+                <select id="year-id" class="year" disabled>
+                    <option value="none" selected hidden>Select year</option>
+                    <!-- <option value="2020">2020</option>
+                    <option value="2021">2021</option>
+                    <option value="2022">2022</option> -->
+                </select>
+            </div>
+            <div class="assignclass__selectsection">
+                <select id="sem-id" class="section" disabled>
+                    <option value="none" selected hidden>Select sem</option>
+                    <!-- <option value="2">2</option>
+                    <option value="4">4</option>
+                    <option value="6">6</option> -->
+                </select>
+            </div>
+            <div class="assignclass__selectsection">
+                <select id="sec-id" class="section" disabled>
+                    <option value="none" selected hidden>Select section</option>
+                    <!-- <option value="a">A section</option>
+                    <option value="b">B section</option> -->
+                </select>
+            </div>
+            <button id="submit-student-search" disabled onclick="submitstudentsearch()">Submit</button>
+        </div>
+
+
+        <!-- <div class="studentbatch__details">
             <div class="studentbatch__details__heading">2 sem A section ISE</div>
             <div class="studentbatch__details__batch">
                 <div class="studentbatch__details__tablehead">
@@ -142,17 +317,27 @@
                     <div class="studentbatch__details__student__name">Mehul</div>
                 </div>
             </div>
-        </div>
+        </div> -->
+    <table id="student-data-table">
+        <thead>
+            <th>Sl. No</th>
+            <th>Name</th>
+            <th>USN</th>
+            <th>Sub 1</th>
+        </thead>
+        <tbody>
+            <tr>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
     </div>
 
 
 
 
 
-    <script src="../js/modal.js"></script>
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
-        crossorigin="anonymous"></script>
+    <script src="{{ url_for('static', filename='js/modal.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
         integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
         crossorigin="anonymous"></script>

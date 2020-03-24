@@ -10,6 +10,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css"
         integrity="sha256-+N4/V/SbAFiW1MPBCXnfnP9QSN3+Keu+NlB+0ev/YKQ=" crossorigin="anonymous" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <style>
+        .modal{
+            z-index: 1000;
+        }
+    </style>
     <script>
         $(document).ready(function () {
             var authkey = localStorage.getItem('authkey');
@@ -29,10 +34,11 @@
                     console.log(ret_obj);
                     var class_data = ret_obj['data'];
                     for (i = 0; i < class_data.length; i++) {
-                        temp = '.assignclass__' + class_data[i]['sem'] + '__' + class_data[i]['sec'] + " " + ".assignclass__add"
+                        temp = '.assignclass__' + class_data[i]['sem'] + '__' + class_data[i]['sec'] + " " + ".assignclass__add";
                         $(temp).addClass('assignclass__addshownone');
-                        temp = '.assignclass__' + class_data[i]['sem'] + '__' + class_data[i]['sec'] + " " + ".assignclass__teacher-pic"
+                        temp = '.assignclass__' + class_data[i]['sem'] + '__' + class_data[i]['sec'] + " " + ".assignclass__teacher-pic";
                         $(temp).addClass('assignclass__picshow');
+                        $(temp + " .assignclass__teacher-img").attr('src', 'data:image/jpg;base64, '+class_data[i]['details']['teacher_picture']);
                         temp = '.assignclass__' + class_data[i]['sem'] + '__' + class_data[i]['sec'] + " " + ".assignclass__teacherdetails"
                         $(temp).addClass('assignclass__detailshow');
                         $(temp + " .assignclass__teachername").text('Name: ' + class_data[i]['details']['name']);
@@ -73,7 +79,8 @@
             });
         });
         function openmodal(sem, sec) {
-            $('.modal').toggleClass('modal_dispnone');
+            console.log('changed');
+            $('.modal').toggleClass('modal__dispnone');
             $('.modal #sem').val(sem);
             $('.modal #sec').val(sec);
         }
@@ -224,10 +231,10 @@
                             </div>
                             <div class="assignclass__teacher-pic ">
                                 <!--Add assignclass__picshow to display teacher picture-->
-                                <img src="{{ url_for('static', filename = 'images/user-3.jpg') }}" alt=""
-                                    class="assignclass__teacher-img">
+                                <img src="" alt=""
+                                    class="assignclass__teacher-img" height="50" width="50">
                             </div>
-                            <div class="">
+                            <div class="assignclass__teacherdetails">
                                 <!--Add assignclass__detailshow to display teacher details-->
                                 <p class="assignclass__teachername">Name: John doe</p>
                                 <p class="assignclass__teacherid">Teacher id: 1rs18is001</p>
@@ -245,7 +252,7 @@
                                 <i class="fa fa-ellipsis-v fa-1x"></i>
                             </div>
                             <div class="assignclass__teacher-pic">
-                                <img src="{{ url_for('static', filename = 'images/user-3.jpg') }}" alt=""
+                                <img src=""  height="50" width="50" alt=""
                                     class="assignclass__teacher-img">
                             </div>
                             <div class="assignclass__teacherdetails">
@@ -267,7 +274,7 @@
                                 <i class="fa fa-ellipsis-v fa-1x"></i>
                             </div>
                             <div class="assignclass__teacher-pic">
-                                <img src="{{ url_for('static', filename = 'images/user-3.jpg') }}" alt=""
+                                <img src=""  height="50" width="50" alt=""
                                     class="assignclass__teacher-img">
                             </div>
                             <div class="assignclass__teacherdetails">
@@ -287,7 +294,7 @@
                                 <i class="fa fa-ellipsis-v fa-1x"></i>
                             </div>
                             <div class="assignclass__teacher-pic">
-                                <img src="{{ url_for('static', filename = 'images/user-3.jpg') }}" alt=""
+                                <img src=""  height="50" width="50" alt=""
                                     class="assignclass__teacher-img">
                             </div>
                             <div class="assignclass__teacherdetails">
@@ -309,7 +316,7 @@
                                 <i class="fa fa-ellipsis-v fa-1x"></i>
                             </div>
                             <div class="assignclass__teacher-pic">
-                                <img src="{{ url_for('static', filename = 'images/user-3.jpg') }}" alt=""
+                                <img src=""  height="50" width="50" alt=""
                                     class="assignclass__teacher-img">
                             </div>
                             <div class="assignclass__teacherdetails">
@@ -329,7 +336,7 @@
                                 <i class="fa fa-ellipsis-v fa-1x"></i>
                             </div>
                             <div class="assignclass__teacher-pic">
-                                <img src="{{ url_for('static', filename = 'images/user-3.jpg') }}" alt=""
+                                <img src=""  height="50" width="50" alt=""
                                     class="assignclass__teacher-img">
                             </div>
                             <div class="assignclass__teacherdetails">
