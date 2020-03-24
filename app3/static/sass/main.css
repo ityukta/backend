@@ -81,6 +81,10 @@ body {
   margin-bottom: 0.8rem;
 }
 
+.marginbottom1 {
+  margin-bottom: 1rem;
+}
+
 .marginbottom04 {
   margin-bottom: 0.4rem;
 }
@@ -241,8 +245,18 @@ body {
         height: 50%;
     }
 }*/
+.plus-button {
+  border-radius: 100%;
+  padding: 0.6rem;
+  border: 1px solid #cfcfcf;
+}
+
 .plus-button:hover {
   cursor: pointer;
+}
+
+.plus-button:focus {
+  outline: none;
 }
 
 @media screen and (max-width: 991px) {
@@ -804,6 +818,7 @@ body {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+  background-color: white;
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
@@ -812,12 +827,16 @@ body {
           align-items: center;
   border: 1px solid #cfcfcf;
   padding: 1rem;
+  /*&__specialize {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgb(207, 207, 207);
+    padding: 0.6rem;
+  }*/
 }
 
 .register2__profile {
   width: 45vw;
-  border: 1px solid #cfcfcf;
-  padding: 0.6rem;
 }
 
 .register2__profile__heading {
@@ -843,6 +862,8 @@ body {
 }
 
 .register2__name {
+  -webkit-box-shadow: 0 2px 10px #6b6b6b;
+          box-shadow: 0 2px 10px #6b6b6b;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -852,9 +873,18 @@ body {
           flex-direction: column;
   border: 1px solid #cfcfcf;
   padding: 0.6rem;
+}
+
+.register2__name__input {
+  margin-top: 10px;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #cfcfcf;
 }
 
 .register2__email {
+  -webkit-box-shadow: 0 2px 10px #6b6b6b;
+          box-shadow: 0 2px 10px #6b6b6b;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -864,9 +894,18 @@ body {
           flex-direction: column;
   border: 1px solid #cfcfcf;
   padding: 0.6rem;
+}
+
+.register2__email__input {
+  margin-top: 10px;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #cfcfcf;
 }
 
 .register2__department {
+  -webkit-box-shadow: 0 2px 10px #6b6b6b;
+          box-shadow: 0 2px 10px #6b6b6b;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -878,7 +917,16 @@ body {
   padding: 0.6rem;
 }
 
+.register2__department__input {
+  margin-top: 10px;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #cfcfcf;
+}
+
 .register2__designation {
+  -webkit-box-shadow: 0 2px 10px #6b6b6b;
+          box-shadow: 0 2px 10px #6b6b6b;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -890,18 +938,8 @@ body {
 }
 
 .register2__qualification {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  border: 1px solid #cfcfcf;
-  padding: 0.6rem;
-}
-
-.register2__specialize {
+  -webkit-box-shadow: 0 2px 10px #6b6b6b;
+          box-shadow: 0 2px 10px #6b6b6b;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -914,6 +952,8 @@ body {
 }
 
 .register2__date {
+  -webkit-box-shadow: 0 2px 10px #6b6b6b;
+          box-shadow: 0 2px 10px #6b6b6b;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -925,6 +965,8 @@ body {
 }
 
 .register2__association {
+  -webkit-box-shadow: 0 2px 10px #6b6b6b;
+          box-shadow: 0 2px 10px #6b6b6b;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -936,6 +978,8 @@ body {
 }
 
 .register2__phone {
+  -webkit-box-shadow: 0 2px 10px #6b6b6b;
+          box-shadow: 0 2px 10px #6b6b6b;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -945,9 +989,18 @@ body {
           flex-direction: column;
   border: 1px solid #cfcfcf;
   padding: 0.6rem;
+}
+
+.register2__phone__input {
+  margin-top: 10px;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #cfcfcf;
 }
 
 .register2__exp {
+  -webkit-box-shadow: 0 2px 10px #6b6b6b;
+          box-shadow: 0 2px 10px #6b6b6b;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -959,7 +1012,16 @@ body {
   padding: 0.6rem;
 }
 
+.register2__exp__input {
+  margin-top: 10px;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #cfcfcf;
+}
+
 .register2__teacherimage {
+  -webkit-box-shadow: 0 2px 10px #6b6b6b;
+          box-shadow: 0 2px 10px #6b6b6b;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -971,6 +1033,8 @@ body {
 }
 
 .register2__address {
+  -webkit-box-shadow: 0 2px 10px #6b6b6b;
+          box-shadow: 0 2px 10px #6b6b6b;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -980,6 +1044,13 @@ body {
           flex-direction: column;
   border: 1px solid #cfcfcf;
   padding: 0.6rem;
+}
+
+.register2__address__input {
+  margin-top: 10px;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #cfcfcf;
 }
 
 .register2__talks__details {
@@ -1009,6 +1080,8 @@ body {
 }
 
 .register2__education {
+  -webkit-box-shadow: 0 2px 10px #6b6b6b;
+          box-shadow: 0 2px 10px #6b6b6b;
   border: 1px solid #cfcfcf;
   padding: 0.6rem;
   display: -webkit-box;
@@ -1034,9 +1107,57 @@ body {
 
 .register2__education__degrees {
   padding: 0.3rem;
+  border: 1px solid #cfcfcf;
+  padding: 0.6rem;
+  border-radius: 5px;
+  margin-top: 5px;
+}
+
+.register2__education__degrees__input {
+  margin-top: 10px;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #cfcfcf;
+}
+
+.register2__education__institution__input {
+  margin-top: 10px;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #cfcfcf;
+}
+
+.register2__education__branch__input {
+  margin-top: 10px;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #cfcfcf;
+}
+
+.register2__education__percentage__input {
+  margin-top: 10px;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #cfcfcf;
+}
+
+.register2__education__passing__input {
+  margin-top: 10px;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #cfcfcf;
+}
+
+.register2__education__university__input {
+  margin-top: 10px;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #cfcfcf;
 }
 
 .register2__area_of_specialisation {
+  -webkit-box-shadow: 0 2px 10px #6b6b6b;
+          box-shadow: 0 2px 10px #6b6b6b;
   border: 1px solid #cfcfcf;
   padding: 0.6rem;
   display: -webkit-box;
@@ -1057,7 +1178,22 @@ body {
           justify-content: space-between;
 }
 
+.register2__area_of_specialisation__details {
+  border: 1px solid #cfcfcf;
+  padding: 0.6rem;
+  margin-top: 10px;
+}
+
+.register2__area_of_specialisation__input {
+  margin-top: 10px;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #cfcfcf;
+}
+
 .register2__workexp {
+  -webkit-box-shadow: 0 2px 10px #6b6b6b;
+          box-shadow: 0 2px 10px #6b6b6b;
   border: 1px solid #cfcfcf;
   padding: 0.6rem;
   display: -webkit-box;
@@ -1081,7 +1217,49 @@ body {
           justify-content: space-between;
 }
 
+.register2__workexp__details {
+  border: 1px solid #cfcfcf;
+  padding: 0.6rem;
+  margin-top: 10px;
+}
+
+.register2__workexp__designation {
+  margin-top: 5px;
+}
+
+.register2__workexp__designation__input {
+  margin-top: 10px;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #cfcfcf;
+}
+
+.register2__workexp__organization {
+  margin-top: 5px;
+}
+
+.register2__workexp__organization__input {
+  margin-top: 10px;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #cfcfcf;
+}
+
+.register2__workexp__duration {
+  margin-top: 5px;
+}
+
+.register2__workexp__duration__input {
+  margin-top: 10px;
+  padding: 5px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  border: 1px solid #cfcfcf;
+}
+
 .register2__research {
+  -webkit-box-shadow: 0 2px 10px #6b6b6b;
+          box-shadow: 0 2px 10px #6b6b6b;
   border: 1px solid #cfcfcf;
   padding: 0.6rem;
   -ms-grid-column: 1;
@@ -1099,6 +1277,22 @@ body {
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
+}
+
+.register2__research__publications__input {
+  margin-top: 10px;
+  padding: 5px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  border: 1px solid #cfcfcf;
+}
+
+.register2__research__publications__details {
+  margin-top: 10px;
+  padding: 5px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  border: 1px solid #cfcfcf;
 }
 
 .register2__research__publications__cont {
@@ -1131,7 +1325,25 @@ body {
           justify-content: space-between;
 }
 
+.register2__research__papers__details {
+  margin-top: 10px;
+  padding: 5px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  border: 1px solid #cfcfcf;
+}
+
+.register2__research__papers__input {
+  margin-top: 10px;
+  padding: 5px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  border: 1px solid #cfcfcf;
+}
+
 .register2__talks {
+  -webkit-box-shadow: 0 2px 10px #6b6b6b;
+          box-shadow: 0 2px 10px #6b6b6b;
   border: 1px solid #cfcfcf;
   padding: 0.6rem;
   display: -webkit-box;
@@ -1155,7 +1367,25 @@ body {
           justify-content: space-between;
 }
 
+.register2__talks__input {
+  margin-top: 10px;
+  padding: 5px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  border: 1px solid #cfcfcf;
+}
+
+.register2__talks__details {
+  margin-top: 10px;
+  padding: 5px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  border: 1px solid #cfcfcf;
+}
+
 .register2__session {
+  -webkit-box-shadow: 0 2px 10px #6b6b6b;
+          box-shadow: 0 2px 10px #6b6b6b;
   border: 1px solid #cfcfcf;
   padding: 0.6rem;
   display: -webkit-box;
@@ -1179,7 +1409,25 @@ body {
           justify-content: space-between;
 }
 
+.register2__session__input {
+  margin-top: 10px;
+  padding: 5px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  border: 1px solid #cfcfcf;
+}
+
+.register2__session__details {
+  margin-top: 10px;
+  padding: 5px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  border: 1px solid #cfcfcf;
+}
+
 .register2__workshop {
+  -webkit-box-shadow: 0 2px 10px #6b6b6b;
+          box-shadow: 0 2px 10px #6b6b6b;
   border: 1px solid #cfcfcf;
   padding: 0.6rem;
   display: -webkit-box;
@@ -1198,6 +1446,30 @@ body {
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
+}
+
+.register2__workshop__details {
+  margin-top: 10px;
+  padding: 5px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  border: 1px solid #cfcfcf;
+}
+
+.register2__workshop__input_dropdown {
+  margin-top: 10px;
+  padding: 5px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  border: 1px solid #cfcfcf;
+}
+
+.register2__workshop__input_text {
+  margin-top: 10px;
+  padding: 5px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  border: 1px solid #cfcfcf;
 }
 
 .register2__submit {
@@ -1223,11 +1495,22 @@ body {
 }
 
 .register2__personal__dob {
+  -webkit-box-shadow: 0 2px 10px #6b6b6b;
+          box-shadow: 0 2px 10px #6b6b6b;
   border: 1px solid #cfcfcf;
   padding: 0.6rem;
 }
 
+.register2__personal__dob__input {
+  margin-top: 10px;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #cfcfcf;
+}
+
 .register2__personal__gender {
+  -webkit-box-shadow: 0 2px 10px #6b6b6b;
+          box-shadow: 0 2px 10px #6b6b6b;
   border: 1px solid #cfcfcf;
   padding: 0.6rem;
 }
@@ -1235,6 +1518,8 @@ body {
 .register2__personal__marital {
   border: 1px solid #cfcfcf;
   padding: 0.6rem;
+  -webkit-box-shadow: 0 2px 10px #6b6b6b;
+          box-shadow: 0 2px 10px #6b6b6b;
 }
 
 .content {
