@@ -351,16 +351,17 @@
 <body>
   <div class="register2">
     <div class="register2__profile">
+      <h1 class="register2__profile__heading marginbottom06">Register</h1>
       <div action="" class="register2__forms">
-        <div class="register2__name">
+        <div class="register2__name marginbottom06">
           <label for="name">Name</label>
           <input type="text" class="register2__name__input" id="name" />
         </div>
-        <div class="register2__email">
+        <div class="register2__email marginbottom06">
           <label for="email">Email</label>
           <input type="email" class="register2__email__input" id="email" />
         </div>
-        <div class="register2__department">
+        <div class="register2__department marginbottom06">
           <label for="department">Department</label>
           <input type="text" id="department" class="register2__department__input">
           <!-- <select id="department" >
@@ -372,7 +373,7 @@
           <label for="qualification"><span class="labels">Qualification</span></label>
           <textarea id="qualification" cols="30" rows="3" class="register2__qualification__input"></textarea>
         </div> -->
-        <div class="register2__designation">
+        <div class="register2__designation marginbottom06">
           <label for="designation">Designation</label>
           <select id="designation" class="register2__designation__input">
             <option value="Professor">Professor</option>
@@ -380,15 +381,15 @@
             <option value="Assistant Professor">Assistant Professor</option>
           </select>
         </div>
-        <div class="register2__specialize">
+        <div class="register2__specialize marginbottom06">
           <label for="specialize">Area of specialization</label>
           <textarea id="specialize" class="register2__specialize__input" cols="30" rows="3"></textarea>
         </div>
-        <div class="register2__date">
+        <div class="register2__date marginbottom06">
           <label for="date">Date of joining</label>
           <input type="date" class="register2__date__input" id="date" />
         </div>
-        <div class="register2__association">
+        <div class="register2__association marginbottom06">
           <label for="association">Association with instituion</label>
           <select id="association" class="register2__association__input">
             <option value="Regular">Regular</option>
@@ -397,96 +398,112 @@
             <option value="Contract">Contract</option>
           </select>
         </div>
-        <div class="register2__phone">
+        <div class="register2__phone marginbottom06">
           <label for="phone">Phone number</label>
           <input type="text" class="register2__phone__input" id="phone" />
         </div>
-        <div class="register2__exp">
+        <div class="register2__exp marginbottom06">
           <label for="exp">Experience in years</label>
           <input type="number" class="register2__exp__input" id="exp" />
         </div>
 
-        <div class="register2__teacherimage">
+        <div class="register2__teacherimage marginbottom06">
           <label for="teacherimg">Upload Image</label>
           <input type="file" id="teacherimg" class="register2__teacherimage__input">
         </div>
-        <div class="register2__address">
+        <div class="register2__address marginbottom06">
           <label for="address">Enter address</label>
           <input type="text" id="address" class="register2__address__input">
         </div>
-        <div class="register2__education">
-          <h3 class="register2__education__title">Add education</h3>
-          <button class="register2__education__button plus-button" onclick="addneweducation()">
-            <i class="fa fa-plus fa-2x"></i>
-          </button>
+        <div class="register2__education marginbottom06">
+          <div class="register2__education__container">
+            <h3 class="register2__education__title">Add education</h3>
+            <button class="register2__education__button plus-button" onclick="addneweducation()">
+              <i class="fa fa-plus fa-2x"></i>
+            </button>
+          </div>
           <div class="register2__education__degree__container">
 
           </div>
 
         </div>
-        <div class="register2__area_of_specialisation">
-          <h3 class="register2__area_of_specialisation__title">Add Specialisation</h3>
-          <button class="register2__area_of_specialisation__button plus-button" onclick="addspecialisation()">
-            <i class="fa fa-plus fa-2x"></i>
-          </button>
+        <div class="register2__area_of_specialisation marginbottom06">
+          <div class="register2__area_of_specialisation__cont">
+            <h3 class="register2__area_of_specialisation__title">Add Specialisation</h3>
+            <button class="register2__area_of_specialisation__button plus-button" onclick="addspecialisation()">
+              <i class="fa fa-plus fa-2x"></i>
+            </button>
+          </div>
           <div class="register2__area_of_specialisation__container">
 
           </div>
         </div>
-        <div class="register2__workexp">
-          <h3 class="register2__workexp__title">Add workexperience</h3>
+        <div class="register2__workexp marginbottom06">
+          <div class="register2__workexp__cont">
+            <h3 class="register2__workexp__title">Add workexperience</h3>
           <button class="register2__workexp__button plus-button" onclick="addworkexperience()">
             <i class="fa fa-plus fa-2x"></i>
           </button>
+          </div>
           <div class="register2__workexp__container">
           </div>
         </div>
-        <div class="register2__research">
-          <div class="register2__research__publications">
-            <h3 class="register2__research__pubhead">Add publications</h3>
-            <button class="register2__research__pubbutton plus-button marginbottom04" onclick="addpublications()">
-              <i class="fa fa-plus fa-2x"></i>
-            </button>
+        <div class="register2__research marginbottom06">
+          <div class="register2__research__publications marginbottom06">
+            <div class="register2__research__publications__cont">
+              <h3 class="register2__research__pubhead">Add publications</h3>
+              <button class="register2__research__pubbutton plus-button marginbottom04" onclick="addpublications()">
+                <i class="fa fa-plus fa-2x"></i>
+              </button>
+            </div>
             <div class="register2__research_publications_container">
 
             </div>
 
           </div>
           <div class="register2__research__papers">
-            <h4 class="register2__research__paperhead">Add papers</h4>
-            <button class="register2__research__paperbutton plus-button marginbottom04" onclick="addpaper()">
-              <i class="fa fa-plus fa-2x"></i>
-            </button>
+            <div class="register2__research__papers__cont">
+              <h4 class="register2__research__paperhead">Add papers</h4>
+              <button class="register2__research__paperbutton plus-button marginbottom04" onclick="addpaper()">
+                <i class="fa fa-plus fa-2x"></i>
+              </button>
+            </div>
             <div class="register2__research_papers_container">
 
             </div>
           </div>
         </div>
-        <div class="register2__talks">
-          <h3 class="register2__talks__talkhead">Add invited talks</h3>
-          <button class="register2__talks__talkbutton plus-button marginbottom04" onclick="addinvitedtalks()">
-            <i class="fa fa-plus fa-2x"></i>
-          </button>
+        <div class="register2__talks marginbottom06">
+          <div class="register2__talks__cont">
+            <h3 class="register2__talks__talkhead">Add invited talks</h3>
+            <button class="register2__talks__talkbutton plus-button marginbottom04" onclick="addinvitedtalks()">
+              <i class="fa fa-plus fa-2x"></i>
+            </button>
+          </div>
           <div class="register2__talks_container">
 
           </div>
         </div>
-        <div class="register2__session">
-          <h3 class="register2__session__sessionhead">Add session chairs</h3>
-          <button class="register2__session__sessionbutton plus-button marginbottom04" onclick="addsession()">
-            <i class="fa fa-plus fa-2x"></i>
-          </button>
+        <div class="register2__session marginbottom06">
+          <div class="register2__session__cont">
+            <h3 class="register2__session__sessionhead">Add session chairs</h3>
+            <button class="register2__session__sessionbutton plus-button marginbottom04" onclick="addsession()">
+              <i class="fa fa-plus fa-2x"></i>
+            </button>
+          </div>
           <div class="register2__session__container">
 
           </div>
         </div>
-        <div class="register2__workshop">
-          <h3 class="register2__workshop__workshophead">
-            Add workshop/Seminar/Fdp
-          </h3>
-          <button class="register2__workshop__workshopbutton plus-button marginbottom04" onclick="addworkshop()">
-            <i class="fa fa-plus fa-2x"></i>
-          </button>
+        <div class="register2__workshop marginbottom06">
+          <div class="register2__workshop__cont">
+            <h3 class="register2__workshop__workshophead">
+              Add workshop/Seminar/Fdp
+            </h3>
+            <button class="register2__workshop__workshopbutton plus-button marginbottom04" onclick="addworkshop()">
+              <i class="fa fa-plus fa-2x"></i>
+            </button>
+          </div>
           <div class="register2__workshop__container">
 
           </div>
@@ -502,7 +519,7 @@
             <input type="radio" value="female" name="gend" class="register2__personal__gender__input" />female
             <input type="radio" value="transgender" name="gend" class="register2__personal__gender__input" />transgender
           </div>
-          <div class="register2__personal__marital">
+          <div class="register2__personal__marital marginbottom06">
             <label for="marital" class="fontheavy ">Marital Status</label>
             <input type="radio" value="Married" name="marital"
               class="register2__personal__marital__input marginleft3" />Married
