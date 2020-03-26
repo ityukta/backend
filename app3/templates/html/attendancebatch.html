@@ -12,9 +12,296 @@
     crossorigin="anonymous"
   />
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  
+<script>
+    $(document).ready(function(){
+        var faculty_id = localStorage.getItem('faculty_id');
+        var authkey = localStorage.getItem('authkey');
+        var data = {
+            "authkey": localStorage.getItem("authkey"),
+            "faculty_id": localStorage.getItem("faculty_id")
+        };
+        $('#dept-id').change(function(){
+            if ($('#dept-id').val() != "Select branch") {
+                $('#year-id').removeAttr('disabled');
+                var d = {
+                    'authkey': localStorage.getItem('authkey'),
+                    'faculty_id': localStorage.getItem('faculty_id'),
+                    'department': $('#dept-id').val()
+                };
+                $.ajax({
+                    type: "POST",
+                    url: "get_year_sem_sec",
+                    dataType: 'Json',
+                    contentType: 'application/json',
+                    data: JSON.stringify(d),
+                    processData: false,
+                    success: function (ret_obj) {
+                        console.log(ret_obj);
+                        var d = "<option selected>Select year</option>";
+                        for (i = 0; i < (ret_obj['data']).length; i++) {
+                            d += `'<option value="` + ret_obj['data'][i]['0'] + `">` + ret_obj['data'][i]['0'] + `</option>'`;
+                        }
+                        $('#year-id').html(d);
+                    }
+                });
+            }
+            else {
+                $('#year-id').attr('disabled', true);
+                $('#sem-id').attr('disabled', true);
+                $('#sec-id').attr('disabled', true);
+                $('#subject-id').attr('disabled', true);
+                $('#submit-attendance-search').attr('disabled', true);
+            }
+        });
+        $('#year-id').change(function(){
+            if ($('#year-id').val() != "Select year") {
+                $('#sem-id').removeAttr('disabled');
+                var d = {
+                    'authkey': localStorage.getItem('authkey'),
+                    'faculty_id': localStorage.getItem('faculty_id'),
+                    'department': $('#dept-id').val(),
+                    'year': $('#year-id').val()
+                };
+                $.ajax({
+                    type: "POST",
+                    url: "get_year_sem_sec",
+                    dataType: 'Json',
+                    contentType: 'application/json',
+
+                    data: JSON.stringify(d),
+                    processData: false,
+                    success: function (ret_obj) {
+                        console.log(ret_obj);
+                        var d = "<option selected>Select sem</option>";
+                        for (i = 0; i < (ret_obj['data']).length; i++) {
+                            d += `'<option value="` + ret_obj['data'][i]['0'] + `">` + ret_obj['data'][i]['0'] + `</option>'`;
+                        }
+                        $('#sem-id').html(d);
+                    }
+                });
+            }
+            else {
+                $('#sem-id').attr('disabled', true);
+                $('#sec-id').attr('disabled', true);
+                $('#subject-id').attr('disabled', true);
+                $('#submit-attendance-search').attr('disabled', true);
+            }
+        });
+
+        $('#sem-id').change(function(){
+            if ($('#sem-id').val() != "Select sem") {
+                $('#sec-id').removeAttr('disabled');
+                var d = {
+                    'authkey': localStorage.getItem('authkey'),
+                    'faculty_id': localStorage.getItem('faculty_id'),
+                    'department': $('#dept-id').val(),
+                    'year': $('#year-id').val(),
+                    'sem': $('#sem-id').val()
+                };
+                $.ajax({
+                    type: "POST",
+                    url: "get_year_sem_sec",
+                    dataType: 'Json',
+                    contentType: 'application/json',
+
+                    data: JSON.stringify(d),
+                    processData: false,
+                    success: function (ret_obj) {
+                        console.log(ret_obj);
+
+                        var d = "<option selected>Select section</option>";
+                        for (i = 0; i < (ret_obj['data']).length; i++) {
+                            d += `'<option value="` + ret_obj['data'][i]['0'] + `">` + ret_obj['data'][i]['0'] + ` - Section </option>'`;
+                        }
+                        $('#sec-id').html(d);
+                    }
+                });
+            }
+            else {
+                $('#sec-id').attr('disabled', true);
+                $('#subject-id').attr('disabled', true);
+                $('#submit-attendance-search').attr('disabled', true);
+            }
+        });
+
+        $('#sec-id').change(function(){
+            if($('#sec-id').val() != "Select section"){
+                $('#subject-id').removeAttr('disabled');
+                var d = {
+                    'authkey': localStorage.getItem('authkey'),
+                    'faculty_id': localStorage.getItem('faculty_id'),
+                    'department': $('#dept-id').val(),
+                    'year': $('#year-id').val(),
+                    'sem': $('#sem-id').val(),
+                    'sec' : $('#sec-id').val()
+                };
+                $.ajax({
+                    type: "POST",
+                    url: "get_year_sem_sec",
+                    dataType: 'Json',
+                    contentType: 'application/json',
+                    data: JSON.stringify(d),
+                    processData: false,
+                    success: function (ret_obj) {
+                        console.log(ret_obj);
+
+                        var d = "<option selected>Select Subject</option>";
+                        for (i = 0; i < (ret_obj['data']).length; i++) {
+                            d += `'<option value="` + ret_obj['data'][i]['subject_name'] + `-`+ret_obj['data'][i]['subject_id']+`">` + ret_obj['data'][i]['subject_name'] + `</option>'`;
+                        }
+                        $('#subject-id').html(d);
+                    }
+                });
+            }
+            else{
+                $('#subject-id').attr('disabled', true);
+                $('#submit-attendance-search').attr('disabled', true);
+            }
+        });
+
+        $('#subject-id').change(function(){
+            $('#submit-attendance-search').removeAttr('disabled');
+        });
+    });
+
+    function submit_get_attendance(){
+        subject_selected = $('#subject-id').val();
+        var d = {
+            'authkey': localStorage.getItem('authkey'),
+            'faculty_id': localStorage.getItem('faculty_id'),
+            'department': $('#dept-id').val(),
+            'year': $('#year-id').val(),
+            'sem': $('#sem-id').val(),
+            'sec' : $('#sec-id').val(),
+            'subject_name': subject_selected.split("-")[0],
+            'subject_id': subject_selected.split("-")[1]
+        };
+        $.ajax({
+            type: "POST",
+            url: "get_student_attendance_details",
+            dataType: 'Json',
+            contentType: 'application/json',
+            data: JSON.stringify(d),
+            processData: false,
+            success: function (ret_obj) {
+                console.log(ret_obj);
+                if(ret_obj['status_code'] == 200){
+                    table_data = "";
+                    for(i=0;i<ret_obj['data'].length ;i++){
+                        table_data += '<tr id="student-"'+ret_obj['data'][i]['student_id']+'">';
+                        table_data += '<td class="attendance__modal__form__sl_no">'+(i+1)+'</td>';
+                        table_data += '<td class="attendance__modal__form__name">'+ret_obj['data'][i]['name']+'</td>';
+                        table_data += '<td class="attendance__modal__form__usn">'+ret_obj['data'][i]['usn']+'</td>';
+                        table_data += '<td class="attendance__modal__form__attendance"><input type="checkbox" checked></td>';
+                        table_data += '</tr>';
+                    }
+                    $('.student__names__table__tbody').html(table_data);
+                }
+            }
+        });
+        $('.attendance__details').toggleClass('displaynone');
+
+    }
+    function submitattendancedetails(){
+        var len = $('.student__names__table__tbody > tr').length;
+        $('.student__names__table__tbody > tr').each(function(){
+            console.log($(this).text());
+            var $chkbox = $(this).find('input[type="checkbox"]');
+            var status = $chkbox.prop('checked');
+            console.log(status);
+        });
+    }
+</script>
+
+<style>
+    .displaynone{
+        display: none;
+    }
+    /* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto; /* 15% from the top and centered */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 60%; /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button */
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+#student__names__table{
+    width: 100%;
+    margin-top: 40px;
+}
+#student__names__table td{
+    text-align: center;
+}
+</style>
 </head>
 <body>
+
+<!-- The Modal -->
+<div id="myModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h3>Add Attendance</h3>
+    <div class="attendance__modal__form__container">
+        <div class="attendance__modal__form">
+            <label for="attendance__hour">Hour Number</label>
+            <input type="number" id="attendance__hour">
+        </div>
+    </div>
+    <div class="student_details">
+        <table id="student__names__table">
+            <thead>
+                <tr>
+                    <th>Sl.No</th>
+                    <th>Name</th>
+                    <th>USN</th>
+                    <th>P/A</th>
+                </tr>
+            </thead>
+            <tbody class="student__names__table__tbody">
+                <!-- <tr>
+                    <td>1</td>
+                    <td>Amey</td>
+                    <td>1rn</td>
+                    <td><input type="checkbox" checked>1</td>
+                </tr> -->
+            </tbody>
+        </table>
+        <button id="submit-attendance-button" onclick="submitattendancedetails()"> Submit</button>
+    </div>
+  </div>
+
+</div>
     <div class="container">
         <header class="header">
             <img src="{{ url_for('static', filename = 'images/logo.jpg') }}" alt="" class="header__collegelogo">
@@ -79,23 +366,65 @@
             <div class="content">
                 <div class="attendance">
                     <div class="attendance__year">
-                        <select  id="" class="attendance__year__sem">
+                        <div class="attendance__selectdept">
+                            <select class="attendance__selectdept__select" id="dept-id">
+                                <option value="" selected>Select branch</option>
+                                <option value="CSE">CSE</option>
+                                <option value="ISE">ISE</option>
+                                <option value="ECE">ECE</option>
+                                <option value="EEE">EEE</option>
+                            </select>
+                        </div>
+                        <div class="attendance__selectyear">
+                            <select id="year-id" class="attendance__selectyear__select" disabled>
+                                <option value="none" selected >Select year</option>
+                                <!-- <option value="2020">2020</option>
+                                <option value="2021">2021</option>
+                                <option value="2022">2022</option> -->
+                            </select>
+                        </div>
+
+                        <div class="attendance__selectsection">
+                            <select id="sem-id" class="attendance__selectsection__select" disabled>
+                                <option value="none" selected >Select sem</option>
+                                <!-- <option value="2">2</option>
+                                <option value="4">4</option>
+                                <option value="6">6</option> -->
+                            </select>
+                        </div>
+
+                        <div class="attendance__selectsection">
+                            <select id="sec-id" class="aattendance__selectsection__select" disabled>
+                                <option value="none" selected>Select section</option>
+                                <!-- <option value="a">A section</option>
+                                <option value="b">B section</option> -->
+                            </select>
+                        </div>
+
+                        <div class="attendance__selectsubject">
+                            <select id="subject-id" class="attendance__selectsubject__select" disabled>
+                                <option value="none">Select Subject</option>
+                            </select>
+                        </div>
+                        <button id="submit-attendance-search" onclick="submit_get_attendance()" disabled>Submit</button>
+                        <!-- <select  id="" class="attendance__year__sem">
                             <option value="2nd sem">2nd sem</option>
                             <option value="4th sem">4th sem</option>
                             <option value="6th sem">6th sem</option>
                             <option value="8th sem">8th sem</option>
-                        </select>
-                        <select  id="" class="attendance__year__section">
+                        </select> -->
+                        <!-- <select  id="" class="attendance__year__section">
                             <option value="A">A section</option>
                             <option value="B">B section</option>
-                        </select>
-                        <select  id="" class="attendance__year__month">
+                        </select> -->
+                        <!-- <select  id="" class="attendance__year__month">
                             <option value="January">January</option>
                             <option value="February">February</option>
                             <option value="March">March</option>
-                        </select>
+                        </select> -->
                     </div>
-                    <div class="attendance__details">
+                    <div class="attendance__details displaynone">
+                        <button id="add_attendance_button">Add Attendance</button>
                         <table class="attendance__table">
                             <tr class="attendance__table__heading">
                                 <th>slno</th>
@@ -207,4 +536,30 @@
     </div>
     <script src="../js/sample.js"></script>
 </body>
+<script>
+    var modal = document.getElementById("myModal");
+
+// Get the button that opens the modal
+var btn = document.getElementById("add_attendance_button");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks on the button, open the modal
+btn.onclick = function() {
+  modal.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+  modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+</script>
 </html>

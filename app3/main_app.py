@@ -39,7 +39,7 @@ def add_class_view():
 @APP.route('/addattendance', methods=['GET'])
 def attendance_view():
     """ url to attendance"""
-    return render_template('html/dayattendance.html')
+    return render_template('html/attendancebatch.html')
 @APP.route('/assignteacher',methods=['GET'])
 def subjectteacher_view():
     "url to add subject teacher"
@@ -160,6 +160,14 @@ def add_student_ajax():
     print(data)
     response = dbop.add_student(data)
     print(response)
+    return jsonify(response)
+
+@APP.route('/get_student_attendance_details', methods=['POST'])
+def get_student_attendance_details_ajax():
+    """This endpoint get stusdents details based on subject"""
+    data = request.get_json()
+    print(data)
+    response = dbop.get_student_attendance_details(data)
     return jsonify(response)
 if __name__ == '__main__':
     APP.run(debug=True, threaded=True)
