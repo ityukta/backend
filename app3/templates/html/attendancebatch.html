@@ -199,7 +199,46 @@
                 }
             }
         });
-        $('.attendance__details').toggleClass('displaynone');
+        $.ajax({
+            type: "POST",
+            url: "get_attendance_details",
+            dataType: 'Json',
+            contentType: 'application/json',
+            data: JSON.stringify(d),
+            processData: false,
+            success: function (ret_obj) {
+                console.log(ret_obj);
+                var table_heading = `
+                <th>slno</th>
+                <th>name</th>
+                <th>USN</th>
+                `;
+                for(i=1;i<=ret_obj['data']['no_of_days']; i++){
+                    table_heading += '<th>'+i+'</th>';
+                }
+                $('.attendance__table__heading').html(table_heading);
+                var table_data = "";
+                for(i=0;i<ret_obj['data']['student_details'].length; i++){
+                    table_data += '<tr class="attendance__table__odd attendance__table__row">';
+                table_data += '<td>'+(i+1)+'</td>';
+                table_data += '<td>'+ret_obj['data']['student_details'][i][1]+'</td>';
+                table_data += '<td>'+ret_obj['data']['student_details'][i][0]+'</td>';
+                for(j=0;j<ret_obj['data']['attendance_matrix'][i].length; j++){
+                    if(ret_obj['data']['attendance_matrix'][i][j] == -1){
+                        table_data += '<td><i class="fa fa-minus"></i></td>';
+                    }
+                    else if(ret_obj['data']['attendance_matrix'][i][j] == 1){
+                        table_data += '<td><i class="fa fa-check"></i></td>';
+                    }else{
+                        table_data += '<td><i class="fa fa-times"></i></td>';
+                    }
+                }
+                    table_data += '</tr>';
+                }
+                $('.attendance__table tbody').html(table_data);
+            }
+        });
+        $('.attendance__details').removeClass('displaynone');
 
     }
     function submitattendancedetails(){
@@ -461,108 +500,15 @@
                     <div class="attendance__details displaynone">
                         <button id="add_attendance_button">Add Attendance</button>
                         <table class="attendance__table">
-                            <tr class="attendance__table__heading">
-                                <th>slno</th>
-                                <th>name</th>
-                                <th>1</th>
-                                <th>2</th>
-                                <th>3</th>
-                                <th>4</th>
-                                <th>5</th>
-                                <th>6</th>
-                                <th>7</th>
-                                <th>8</th>
-                                <th>9</th>
-                                <th>10</th>
-                                <th>11</th>
-                                <th>12</th>
-                                <th>13</th>
-                                <th>14</th>
-                                <th>15</th>
-                                <th>16</th>
-                                <th>17</th>
-                                <th>18</th>
-                                <th>19</th>
-                                <th>20</th>
-                                <th>21</th>
-                                <th>22</th>
-                                <th>23</th>
-                                <th>24</th>
-                                <th>25</th>
-                                <th>26</th>
-                                <th>27</th>
-                                <th>28</th>
-                                <th>29</th>
-                                <th>30</th>
-                            </tr>
-                            <tr class="attendance__table__odd attendance__table__row">
-                                <td>1</td>
-                                <td>rahul</td>
-                                <td><i class="fa fa-check"></i></td>
-                                <td><i class="fa fa-minus"></i></td>
-                                <td><i class="fa fa-check"></i></td>
-                                <td><i class="fa fa-times"></i></td>
-                                <td><i class="fa fa-check"></i></td>
-                                <td><i class="fa fa-times"></i></td>
-                                <td><i class="fa fa-check"></i></td>
-                                <td><i class="fa fa-times"></i></td>
-                                <td><i class="fa fa-check"></i></td>
-                                <td><i class="fa fa-times"></i></td>
-                                <td><i class="fa fa-check"></i></td>
-                                <td><i class="fa fa-times"></i></td>
-                                <td><i class="fa fa-check"></i></td>
-                                <td><i class="fa fa-times"></i></td>
-                                <td><i class="fa fa-check"></i></td>
-                                <td><i class="fa fa-times"></i></td>
-                                <td><i class="fa fa-check"></i></td>
-                                <td><i class="fa fa-times"></i></td>
-                                <td><i class="fa fa-check"></i></td>
-                                <td><i class="fa fa-times"></i></td>
-                                <td><i class="fa fa-check"></i></td>
-                                <td><i class="fa fa-times"></i></td>
-                                <td><i class="fa fa-check"></i></td>
-                                <td><i class="fa fa-times"></i></td>
-                                <td><i class="fa fa-check"></i></td>
-                                <td><i class="fa fa-times"></i></td>
-                                <td><i class="fa fa-check"></i></td>
-                                <td><i class="fa fa-times"></i></td>
-                                <td><i class="fa fa-check"></i></td>
-                                <td><i class="fa fa-times"></i></td>
-                            </tr>
-                            <tr class="attendance__table__odd attendance__table__row">
-                                <td>2</td>
-                                <td>mahesh</td>
-                                <td><i class="fa fa-check"></i></td>
-                                <td><i class="fa fa-times"></i></td>
-                                <td><i class="fa fa-check"></i></td>
-                                <td><i class="fa fa-times"></i></td>
-                                <td><i class="fa fa-check"></i></td>
-                                <td><i class="fa fa-times"></i></td>
-                                <td><i class="fa fa-check"></i></td>
-                                <td><i class="fa fa-times"></i></td>
-                                <td><i class="fa fa-check"></i></td>
-                                <td><i class="fa fa-times"></i></td>
-                                <td><i class="fa fa-check"></i></td>
-                                <td><i class="fa fa-times"></i></td>
-                                <td><i class="fa fa-check"></i></td>
-                                <td><i class="fa fa-times"></i></td>
-                                <td><i class="fa fa-check"></i></td>
-                                <td><i class="fa fa-times"></i></td>
-                                <td><i class="fa fa-check"></i></td>
-                                <td><i class="fa fa-times"></i></td>
-                                <td><i class="fa fa-check"></i></td>
-                                <td><i class="fa fa-times"></i></td>
-                                <td><i class="fa fa-check"></i></td>
-                                <td><i class="fa fa-times"></i></td>
-                                <td><i class="fa fa-check"></i></td>
-                                <td><i class="fa fa-times"></i></td>
-                                <td><i class="fa fa-check"></i></td>
-                                <td><i class="fa fa-times"></i></td>
-                                <td><i class="fa fa-check"></i></td>
-                                <td><i class="fa fa-times"></i></td>
-                                <td><i class="fa fa-check"></i></td>
-                                <td><i class="fa fa-times"></i></td>
-                            </tr>
+                            <thead>
+                                <tr class="attendance__table__heading">
+                                    <th>slno</th>
+                                    <th>name</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                            
                         </table>
                     </div>
                 </div>

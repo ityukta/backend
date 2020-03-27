@@ -6,6 +6,8 @@ import string
 import random
 import datetime
 import itertools
+import calendar
+import helper
 
 
 def create_fresh_database():
@@ -993,6 +995,81 @@ def add_student_attendance(data):
         """
     for each_student in student_data:
         c.execute(add_attendance_query, (each_student['fcss_id'], data['data']['hour_no'], todays_date, each_student['attendance']))
+        if not each_student['attendance']:
+            get_phoneno_mail_query = """
+                SELECT Student.phone_no, Student.parent_mail FROM Student, Fcss WHERE Fcss.fcss_id = ? AND Fcss.student_id = Student.student_id
+            """
+            st_data = c.execute(get_phoneno_mail_query, (each_student['fcss_id'], )).fetchone()
+            phone_no, emailid = st_data
+            helper.sendsms(phone_no, data['data']['hour_no'])
+            helper.main(emailid, data['data']['hour_no'])
     conn.commit()
     response = {"msg":"success"}
+    return response
+
+def get_attendance_details(data):
+    conn = sql.connect('database.db')
+    print(data)
+    check_authkey_query = """
+        SELECT *FROM LoginAuthKey WHERE authkey = ? AND faculty_id = ? AND DELETED = 0
+    """
+    c = conn.cursor()
+    _ = c.execute(check_authkey_query,
+                  (data['authkey'], data['faculty_id'])).fetchone()
+    if _ is None:
+        response = {"status_message": "Unauthorized access",
+                    "status_code": 404, "data": "Invalid Authkey provided"}
+        return response
+    params = data.keys()
+    find_month = None
+    if 'attendance_month' in params:
+        find_month = data['attendance_month']
+    else:
+        find_month = datetime.date.today().month
+    get_class_id_query = """
+            SELECT class_id FROM Class WHERE sem = ? and sec = ? and graduation_year=? and department = ?
+        """
+    class_data = c.execute(
+        get_class_id_query, (data['sem'], data['sec'], data['year'], data['department'])).fetchone()
+
+    if class_data is None:
+        response = {"statusmessage": "Error",
+                    "status_code": 501, "data": "class not found"}
+        return response
+    class_id = class_data[0]
+    get_fcs_ids_query = """
+        SELECT Fcs.fcs_id FROM Fcs WHERE class_id = ? AND subject_id = ?
+    """
+
+    fcs_details = c.execute(get_fcs_ids_query, (class_id, data['subject_id'])).fetchone()  
+    if fcs_details is None:
+        response = {"statusmessage": "Error",
+                    "status_code": 501, "data": "fcs not found"}
+        return response
+    fcs_details = fcs_details[0]
+    get_attendance_detail = """
+        SELECT Student.name, Student.usn, Attendance.status, strftime('%d', Attendance.date) FROM Fcss, Student, Attendance WHERE Student.student_id = Fcss.student_id AND Attendance.fcss_id = Fcss.fcss_id AND Fcss.fcs_id = ? AND strftime('%m', Attendance.date) = ?
+    """
+    attendance_data = c.execute(get_attendance_detail, (fcs_details, str(find_month).zfill(2))).fetchall()
+    print(attendance_data)
+    now = datetime.datetime.now()
+    no_of_days = calendar.monthrange(now.year, find_month)[1]
+    usn_hash_map = sorted(list(set([(i[1],i[0]) for i in attendance_data])))
+    no_of_rows = len(usn_hash_map)
+    attendance_matrix = [[-1 for i in range(no_of_days)] for j in range(no_of_rows)]
+    print(no_of_days, no_of_rows)
+    for i in range(len(attendance_data)):
+        print(int(attendance_data[i][3]))
+        if attendance_data[i][2] == 1:
+            attendance_matrix[usn_hash_map.index((attendance_data[i][1], attendance_data[i][0]))][int(attendance_data[i][3])-1] = 1
+        else:
+            attendance_matrix[usn_hash_map.index((attendance_data[i][1], attendance_data[i][0]))][int(attendance_data[i][3])-1] = 0
+    for i in attendance_matrix:
+        print(i)
+    return_data = {
+        "student_details" : usn_hash_map,
+        "no_of_days" : no_of_days,
+        "attendance_matrix" : attendance_matrix
+    }
+    response = {"msg":"success", 'data': return_data}
     return response

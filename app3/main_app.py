@@ -178,6 +178,13 @@ def add_student_attendance_ajax():
     response = dbop.add_student_attendance(data)
     return jsonify(response)
 
+@APP.route('/get_attendance_details', methods=['POST'])
+def get_attendance_details_ajax():
+    """This endpoint is used to get student attendance"""
+    data = request.get_json()
+    print(data)
+    response = dbop.get_attendance_details(data)
+    return jsonify(response)
 if __name__ == '__main__':
     APP.run(debug=True, threaded=True)
     APP.run()
