@@ -188,7 +188,7 @@
                 if(ret_obj['status_code'] == 200){
                     table_data = "";
                     for(i=0;i<ret_obj['data'].length ;i++){
-                        table_data += '<tr id="student-"'+ret_obj['data'][i]['student_id']+'">';
+                        table_data += '<tr id="student-'+ret_obj['data'][i]['student_id']+'">';
                         table_data += '<td class="attendance__modal__form__sl_no">'+(i+1)+'</td>';
                         table_data += '<td class="attendance__modal__form__name">'+ret_obj['data'][i]['name']+'</td>';
                         table_data += '<td class="attendance__modal__form__usn">'+ret_obj['data'][i]['usn']+'</td>';
@@ -203,12 +203,47 @@
 
     }
     function submitattendancedetails(){
-        var len = $('.student__names__table__tbody > tr').length;
+        var final_data = [];
         $('.student__names__table__tbody > tr').each(function(){
-            console.log($(this).text());
-            var $chkbox = $(this).find('input[type="checkbox"]');
-            var status = $chkbox.prop('checked');
-            console.log(status);
+            var name = $(".attendance__modal__form__name", this).text();
+            var usn = $(".attendance__modal__form__usn", this).text();
+            var chbox = $('.attendance__modal__form__attendance', this).find('input[type="checkbox"]').is(":checked");
+            var student_id = $(this).attr('id');
+            student_id = student_id.split("-")[1];
+            d = {
+                'student_id': student_id,
+                'name' : name,
+                'usn' : usn,
+                'attendance': chbox
+            };
+            final_data.push(d);
+        });
+        subject_selected = $('#subject-id').val();
+        temp = {
+            'department': $('#dept-id').val(),
+            'year': $('#year-id').val(),
+            'sem': $('#sem-id').val(),
+            'sec' : $('#sec-id').val(),
+            'subject_name': subject_selected.split("-")[0],
+            'subject_id': subject_selected.split("-")[1],
+            'hour_no' : $('.attendance__modal__form #attendance__hour').val(),
+            'student_data': final_data
+        };
+        d = {
+            'authkey': localStorage.getItem('authkey'),
+            'faculty_id': localStorage.getItem('faculty_id'),
+            'data': temp
+        };
+        $.ajax({
+            type: "POST",
+            url: "add_student_attendance",
+            dataType: 'Json',
+            contentType: 'application/json',
+            data: JSON.stringify(d),
+            processData: false,
+            success: function(ret_obj){
+                console.log(ret_obj);
+            }
         });
     }
 </script>
@@ -464,7 +499,7 @@
                                 <td>1</td>
                                 <td>rahul</td>
                                 <td><i class="fa fa-check"></i></td>
-                                <td><i class="fa fa-times"></i></td>
+                                <td><i class="fa fa-minus"></i></td>
                                 <td><i class="fa fa-check"></i></td>
                                 <td><i class="fa fa-times"></i></td>
                                 <td><i class="fa fa-check"></i></td>

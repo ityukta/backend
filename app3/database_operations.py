@@ -940,3 +940,59 @@ def get_student_attendance_details(data):
     print(student_data)
     response = {"status_code": 200, "status_message":"successful", "data": student_data}
     return response
+
+def add_student_attendance(data):
+    conn = sql.connect('database.db')
+    print(data)
+    check_authkey_query = """
+        SELECT *FROM LoginAuthKey WHERE authkey = ? AND faculty_id = ? AND DELETED = 0
+    """
+    c = conn.cursor()
+    _ = c.execute(check_authkey_query,
+                  (data['authkey'], data['faculty_id'])).fetchone()
+    if _ is None:
+        response = {"status_message": "Unauthorized access",
+                    "status_code": 404, "data": "Invalid Authkey provided"}
+        return response
+    get_class_id_query = """
+            SELECT class_id FROM Class WHERE sem = ? and sec = ? and graduation_year=? and department = ?
+        """
+    class_data = c.execute(
+        get_class_id_query, (data['data']['sem'], data['data']['sec'], data['data']['year'], data['data']['department'])).fetchone()
+
+    if class_data is None:
+        response = {"statusmessage": "Error",
+                    "status_code": 501, "data": "class not found"}
+        return response
+    class_id = class_data[0]
+    get_fcs_ids_query = """
+        SELECT Fcs.fcs_id FROM Fcs WHERE class_id = ? AND subject_id = ?
+    """
+
+    fcs_details = c.execute(get_fcs_ids_query, (class_id, data['data']['subject_id'])).fetchone()  
+    if fcs_details is None:
+        response = {"statusmessage": "Error",
+                    "status_code": 501, "data": "fcs not found"}
+        return response
+    fcs_details = fcs_details[0]
+    student_data = data['data']['student_data']
+    for i in range(len(student_data)):
+        get_fcss_id_query = """
+            SELECT fcss_id FROM Fcss WHERE fcs_id = ? AND student_id = ?
+        """
+        fcss_id = c.execute(get_fcss_id_query, (fcs_details, student_data[i]['student_id'])).fetchone()
+        if fcss_id is None:
+            response = {"statusmessage": "Error",
+                    "status_code": 501, "data": "fcss not found"}
+            return response
+        fcss_id = fcss_id[0]
+        student_data[i]['fcss_id'] = fcss_id
+    todays_date = datetime.date.today()
+    add_attendance_query = """
+            INSERT INTO Attendance(fcss_id, hour, date, status) VALUES (?, ?, ? , ?)
+        """
+    for each_student in student_data:
+        c.execute(add_attendance_query, (each_student['fcss_id'], data['data']['hour_no'], todays_date, each_student['attendance']))
+    conn.commit()
+    response = {"msg":"success"}
+    return response
