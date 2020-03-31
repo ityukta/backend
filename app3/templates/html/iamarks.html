@@ -11,7 +11,19 @@
       integrity="sha256-+N4/V/SbAFiW1MPBCXnfnP9QSN3+Keu+NlB+0ev/YKQ="
       crossorigin="anonymous"
     />
-    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script>
+        
+    </script>
+    <style>
+        .add__assessment__test__set div{ 
+            margin-top: 5px;
+            margin-bottom: 5px; 
+        }
+        .add__assessment__display__none{
+            display: none;
+        }
+    </style>
 </head>
 <body>
 
@@ -159,8 +171,78 @@
                     </div> 
                 </div>
             </div>
+
+            <div class="add__assessment__container">
+                <div class="add__assessment__test__set">
+                    <div class="add__assessment__input__group">
+                        <label for="test_type_1">Choose Type</label>
+                        <select name="test_type_1" id="test_type_1">
+                            <option value="Select">Select an option</option>
+                            <option value="Internal Assessment">Internal Assessment</option>
+                            <option value="Quiz">Quiz</option>
+                            <option value="Assignments">Assignments</option>
+                            <option value="Projects">Projects</option>
+                        </select>
+                    </div>
+                    <div class="add__assessment__input__group">
+                        <label for="test_eval_type_1">Choose Evaluation Type</label>
+                        <select name="test_eval_type_1" id="test_eval_type_1">
+                            <option value="Select">Select an option</option>
+                            <option value="Descriptive">Descriptive</option>
+                            <option value="Consolidated">Consolidated</option>
+                        </select>
+                    </div>
+                    <div class="add__assessment__test__details add__assessment__display__none">
+                        <div class="add__assessment__input__group">
+                            <label for="test_title_1">enter test Title</label><br>
+                            <input type="text" name="test_title_1" id="test_title_1">
+                        </div>
+                        <h3>Add question paper Pattern</h3>
+                        <div class="add__assessment__questions__container">
+                            <div class="add__assessment__questions__set">
+                                <div class="add__assessment__input__group">
+                                    <label for="marks_validator_1">Must answer</label>
+                                    <select name="marks_validator_1" id="marks_validator_1">
+                                        <option value="Any 1">Any 1</option>
+                                    </select>
+                                </div>
+                                <div class="add__assessment__question__group" >
+                                    <div class="add__assessment__input__group" style="display: inline-block;">
+                                        <label for="question_no_1">Question No.</label>
+                                        <input type="number" name="question_no_1" id="question_no_1">
+                                    </div>
+                                    <div class="add__assessment__input__group" style="display: inline-block;">
+                                        <label for="max_marks_1">Max Marks</label>
+                                        <input type="number" name="max_marks_1" id="max_marks_1">
+                                    </div>
+                                    <div class="add__assessment__input__group" style="display: inline-block;">
+                                        <label for="no_of_subquestions">No of sub questions</label>
+                                        <input type="number" name="no_of_subquestions" id="no_of_subquestions">
+                                    </div>
+                                    <div class="add__assessment__subquestion__container">
+                                        <div class="add__assessment__input__group" style="display: inline;">
+                                            <input type="number" placeholder="max Marks for a.">
+                                        </div>
+                                        <div class="add__assessment__input__group" style="display: inline;">
+                                            <input type="number" placeholder="max Marks for b.">
+                                        </div>
+                                        <div class="add__assessment__input__group" style="display: inline;">
+                                            <input type="number" placeholder="max Marks for c.">
+                                        </div>
+                                    </div>
+                                </div>
+                                <button onclick="addoroption()">Add Or option</button>
+                            </div>
+                            <button onclick="addmorequestions()">
+                                Add More questions
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <button onclick="addmoretests()">Add more tests</button>
+            </div>
         </section>
-        <div class="modal">    <!--modal__dispnone is a class to hide the modal from the page-->
+        <div class="modal modal__dispnone">    <!--modal__dispnone is a class to hide the modal from the page-->
             <div class="modal__body">
                <div class="close-btn"><i class="fa fa-times fa-2x"></i></div>
                <div class="marks-entry">
@@ -277,7 +359,7 @@
             </div>
         </div>
     </div>
-<script src="../js/openassess.js"></script>
+<!-- <script src="{{url_for('static', filename = 'js/openassess.js') }}"></script> -->
 </body>
 </html>
 

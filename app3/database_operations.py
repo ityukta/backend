@@ -230,8 +230,10 @@ def create_fresh_database():
         CREATE TABLE IF NOT EXISTS Test_res(
             testres_id INTEGER PRIMARY KEY AUTOINCREMENT,
             fcss_id INTEGER NOT NULL,
+            test_id INTEGER NOT NULL,
             marks BLOB NOT NULL,
-            FOREIGN KEY(fcss_id) REFERENCES Fcss(fcss_id) ON DELETE SET NULL
+            FOREIGN KEY(fcss_id) REFERENCES Fcss(fcss_id) ON DELETE SET NULL,
+            FOREIGN KEY(test_id) REFERENCES Tests(test_id) ON DELETE SET NULL
         )
     """
     conn.execute(create_faculty_table)

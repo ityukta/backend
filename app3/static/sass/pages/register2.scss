@@ -1,145 +1,29 @@
 .register2 {
   display: flex;
-  background-color: white;
   justify-content: center;
   align-items: center;
-  border: 1px solid rgb(207, 207, 207);
+  border: 1px solid $color-border;
   padding: 1rem;
-  
   &__profile {
-   width: 45vw;
-  
-   &__heading{
-     display: flex;
-     justify-content: center;
-   }
   }
   &__forms {
-    /*display: grid;
+    display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-gap: 1rem;*/
-    display: flex;
-    flex-direction: column;
-  }
-  &__name{
-    box-shadow: 0 2px 10px rgb(107, 107, 107);
-    display: flex;
-    flex-direction: column;
-    border: 1px solid rgb(207, 207, 207);
-    padding: 0.6rem;
-    &__input{
-      margin-top: 10px;
-      padding: 5px;
-      border-radius: 5px;
-      border: 1px solid rgb(207, 207, 207);
-    }
-  }
-  &__email{
-    box-shadow: 0 2px 10px rgb(107, 107, 107);
-    display: flex;
-    flex-direction: column;
-    border: 1px solid rgb(207, 207, 207);
-    padding: 0.6rem;
-    &__input{
-      margin-top: 10px;
-      padding: 5px;
-      border-radius: 5px;
-      border: 1px solid rgb(207, 207, 207);
-    }
+    grid-gap: 1rem;
   }
   &__department {
-    box-shadow: 0 2px 10px rgb(107, 107, 107);
-    //align-self: center;
-    display: flex;
-    flex-direction: column;
-    border: 1px solid rgb(207, 207, 207);
-    padding: 0.6rem;
-    &__input{
-      margin-top: 10px;
-      padding: 5px;
-      border-radius: 5px;
-      border: 1px solid rgb(207, 207, 207);
-    }
-  }
-  &__designation{
-    box-shadow: 0 2px 10px rgb(107, 107, 107);
-    display: flex;
-    justify-content: space-between;
-    border: 1px solid rgb(207, 207, 207);
-    padding: 0.6rem;
+    align-self: center;
   }
   &__qualification {
-    box-shadow: 0 2px 10px rgb(107, 107, 107);
     display: flex;
     flex-direction: column;
-    border: 1px solid rgb(207, 207, 207);
-    padding: 0.6rem;
   }
-  /*&__specialize {
+  &__specialize {
     display: flex;
     flex-direction: column;
-    border: 1px solid rgb(207, 207, 207);
-    padding: 0.6rem;
-  }*/
-  &__date{
-    box-shadow: 0 2px 10px rgb(107, 107, 107);
-    display: flex;
-    justify-content: space-between;
-    border: 1px solid rgb(207, 207, 207);
-    padding: 0.6rem;
   }
-  &__association{
-    box-shadow: 0 2px 10px rgb(107, 107, 107);
-    display: flex;
-    justify-content: space-between;
-    border: 1px solid rgb(207, 207, 207);
-    padding: 0.6rem;
-  }
-  &__phone{
-    box-shadow: 0 2px 10px rgb(107, 107, 107);
-    display: flex;
-    flex-direction: column;
-    border: 1px solid rgb(207, 207, 207);
-    padding: 0.6rem;
-    &__input{
-      margin-top: 10px;
-      padding: 5px;
-      border-radius: 5px;
-      border: 1px solid rgb(207, 207, 207);
-    }
-  }
-  &__exp{
-    box-shadow: 0 2px 10px rgb(107, 107, 107);
-    display: flex;
-    flex-direction: column;
-    border: 1px solid rgb(207, 207, 207);
-    padding: 0.6rem;
-    &__input{
-      margin-top: 10px;
-      padding: 5px;
-      border-radius: 5px;
-      border: 1px solid rgb(207, 207, 207);
-    }
-  }
-  &__teacherimage{
-    box-shadow: 0 2px 10px rgb(107, 107, 107);
-    display: flex;
-    justify-content: space-between;
-    border: 1px solid rgb(207, 207, 207);
-    padding: 0.6rem;
-  }
-  &__address{
-    box-shadow: 0 2px 10px rgb(107, 107, 107);
-    display: flex;
-    flex-direction: column;
-    border: 1px solid rgb(207, 207, 207);
-    padding: 0.6rem;
-    &__input{
-      margin-top: 10px;
-      padding: 5px;
-      border-radius: 5px;
-      border: 1px solid rgb(207, 207, 207);
-    }
+  &__designation {
+    align-self: center;
   }
   &__talks {
     &__details {
@@ -155,274 +39,22 @@
     }
   }
   &__education {
-    box-shadow: 0 2px 10px rgb(107, 107, 107);
-    border: 1px solid rgb(207, 207, 207);
-    padding: 0.6rem;
-    display: flex;
-    flex-direction: column;
-    &__container{
-      display: flex;
-      justify-content: space-between;
-    }
     &__degrees {
       padding: 0.3rem;
-      border: 1px solid rgb(207, 207, 207);
-      padding: 0.6rem;
-      border-radius: 5px;
-      margin-top: 5px;
-      &__input{
-        margin-top: 10px;
-        padding: 5px;
-        border-radius: 5px;
-        border: 1px solid rgb(207, 207, 207);
-      }
-    }
-    &__institution{
-      &__input{
-        margin-top: 10px;
-        padding: 5px;
-        border-radius: 5px;
-        border: 1px solid rgb(207, 207, 207);
-      }
-    }
-    &__branch{
-      &__input{
-        margin-top: 10px;
-        padding: 5px;
-        border-radius: 5px;
-        border: 1px solid rgb(207, 207, 207);
-      }
-    }
-    &__percentage{
-      &__input{
-        margin-top: 10px;
-        padding: 5px;
-        border-radius: 5px;
-        border: 1px solid rgb(207, 207, 207);
-      }
-    }
-    &__passing{
-      &__input{
-        margin-top: 10px;
-        padding: 5px;
-        border-radius: 5px;
-        border: 1px solid rgb(207, 207, 207);
-      }
-    }
-    &__university{
-      &__input{
-        margin-top: 10px;
-        padding: 5px;
-        border-radius: 5px;
-        border: 1px solid rgb(207, 207, 207);
-      }
     }
     grid-column: 1/3;
   }
-  &__area_of_specialisation{
-    box-shadow: 0 2px 10px rgb(107, 107, 107);
-    border: 1px solid rgb(207, 207, 207);
-    padding: 0.6rem;
-    display: flex;
-    flex-direction: column;
-    &__cont{
-      display: flex;
-      justify-content: space-between;
-    }
-    &__details{
-      border: 1px solid rgb(207, 207, 207);
-      padding: 0.6rem;
-      margin-top: 10px;
-    }
-    &__input{
-      margin-top: 10px;
-      padding: 5px;
-      border-radius: 5px;
-      border: 1px solid rgb(207, 207, 207);
-    }
-  }
   &__workexp {
-    box-shadow: 0 2px 10px rgb(107, 107, 107);
-    border: 1px solid rgb(207, 207, 207);
-    padding: 0.6rem;
-    display: flex;
-    flex-direction: column;
-    &__cont{
-      display: flex;
-      justify-content: space-between;
-    }
-    &__details{
-      border: 1px solid rgb(207, 207, 207);
-      padding: 0.6rem;
-      margin-top: 10px;
-    }
-    &__designation{
-      margin-top: 5px;
-      &__input{
-        margin-top: 10px;
-        padding: 5px;
-        border-radius: 5px;
-        border: 1px solid rgb(207, 207, 207);
-      }
-    }
-    &__organization{
-      margin-top: 5px;
-      &__input{
-        margin-top: 10px;
-        padding: 5px;
-        border-radius: 5px;
-        border: 1px solid rgb(207, 207, 207);
-      }
-    }
-    &__duration{
-      margin-top: 5px;
-      &__input{
-        margin-top: 10px;
-        padding: 5px;
-        margin-bottom: 10px;
-        border-radius: 5px;
-        border: 1px solid rgb(207, 207, 207);
-      }
-    }
     grid-column: 1/3;
   }
   &__research {
-    box-shadow: 0 2px 10px rgb(107, 107, 107);
-    border: 1px solid rgb(207, 207, 207);
-    padding: 0.6rem;
-    &__publications{
-      border: 1px solid rgb(207, 207, 207);
-      padding: 0.6rem;
-      display: flex;
-      flex-direction: column;
-      &__input{
-        margin-top: 10px;
-        padding: 5px;
-        margin-bottom: 10px;
-        border-radius: 5px;
-        border: 1px solid rgb(207, 207, 207);
-      }
-      &__details{
-        margin-top: 10px;
-        padding: 5px;
-        margin-bottom: 10px;
-        border-radius: 5px;
-        border: 1px solid rgb(207, 207, 207);
-      }
-      &__cont{
-        display: flex;
-        justify-content: space-between;
-      }
-    }
-    &__papers{
-      border: 1px solid rgb(207, 207, 207);
-      padding: 0.6rem;
-      display: flex;
-      flex-direction: column;
-      &__cont{
-        display: flex;
-        justify-content: space-between;
-      }
-      &__details{
-        margin-top: 10px;
-        padding: 5px;
-        margin-bottom: 10px;
-        border-radius: 5px;
-        border: 1px solid rgb(207, 207, 207);
-      }
-      &__input{
-        margin-top: 10px;
-        padding: 5px;
-        margin-bottom: 10px;
-        border-radius: 5px;
-        border: 1px solid rgb(207, 207, 207);
-      }
-    }
     grid-column: 1/3;
   }
   &__talks {
-    box-shadow: 0 2px 10px rgb(107, 107, 107);
-    border: 1px solid rgb(207, 207, 207);
-    padding: 0.6rem;
-    display: flex;
-    flex-direction: column;
-    &__cont{
-      display: flex;
-      justify-content: space-between;
-    }
-    &__input{
-      margin-top: 10px;
-      padding: 5px;
-      margin-bottom: 10px;
-      border-radius: 5px;
-      border: 1px solid rgb(207, 207, 207);
-    }
-    &__details{
-      margin-top: 10px;
-      padding: 5px;
-      margin-bottom: 10px;
-      border-radius: 5px;
-      border: 1px solid rgb(207, 207, 207);
-    }
     grid-column: 1/3;
   }
   &__session {
-    box-shadow: 0 2px 10px rgb(107, 107, 107);
-    border: 1px solid rgb(207, 207, 207);
-    padding: 0.6rem;
-    display: flex;
-    flex-direction: column;
-    &__cont{
-      display: flex;
-      justify-content: space-between;
-    }
-    &__input{
-      margin-top: 10px;
-      padding: 5px;
-      margin-bottom: 10px;
-      border-radius: 5px;
-      border: 1px solid rgb(207, 207, 207);
-    }
-    &__details{
-      margin-top: 10px;
-      padding: 5px;
-      margin-bottom: 10px;
-      border-radius: 5px;
-      border: 1px solid rgb(207, 207, 207);
-    }
     grid-column: 1/3;
-  }
-  &__workshop{
-    box-shadow: 0 2px 10px rgb(107, 107, 107);
-    border: 1px solid rgb(207, 207, 207);
-    padding: 0.6rem;
-    display: flex;
-    flex-direction: column;
-    &__cont{
-      display: flex;
-      justify-content: space-between;
-    }
-    &__details{
-      margin-top: 10px;
-      padding: 5px;
-      margin-bottom: 10px;
-      border-radius: 5px;
-      border: 1px solid rgb(207, 207, 207);
-    }
-    &__input_dropdown{
-      margin-top: 10px;
-      padding: 5px;
-      margin-bottom: 10px;
-      border-radius: 5px;
-      border: 1px solid rgb(207, 207, 207);
-    }
-    &__input_text{
-      margin-top: 10px;
-      padding: 5px;
-      margin-bottom: 10px;
-      border-radius: 5px;
-      border: 1px solid rgb(207, 207, 207);
-    }
   }
 
   &__submit {
@@ -438,29 +70,6 @@
     }
   }
   &__personal {
-    &__dob{
-      box-shadow: 0 2px 10px rgb(107, 107, 107);
-      border: 1px solid rgb(207, 207, 207);
-      padding: 0.6rem;
-      &__input{
-        margin-top: 10px;
-        padding: 5px;
-        border-radius: 5px;
-        border: 1px solid rgb(207, 207, 207);
-      }
-    }
-    &__gender{
-      box-shadow: 0 2px 10px rgb(107, 107, 107);
-      border: 1px solid rgb(207, 207, 207);
-      padding: 0.6rem;
-    
-    }
-    &__marital{
-      border: 1px solid rgb(207, 207, 207);
-      padding: 0.6rem;
-      box-shadow: 0 2px 10px rgb(107, 107, 107);
-     
-    }
     grid-column: 1/3;
   }
 }
