@@ -132,8 +132,8 @@ def createMessageWithAttachment(
 
 
 def main(to, hour):
-    # to = "adithyakaushik326@gmail.com"
-    sender = "ameyaditya.j@gmail.com"
+    
+    sender = "ameyj@gmail.com"
     subject = "Your ward was Absent"
     msgHtml = f"Your ward was absent for Hour:{hour}.<br>Please ask him/her to be regular"
     msgPlain = f"Your ward was absent for Hour:{hour}.\nPlease ask him/her to be regular"

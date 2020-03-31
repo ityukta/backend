@@ -49,6 +49,11 @@ def subjectteacher_view():
 def add_student_view():
     """ URL to add or view students"""
     return render_template('html/studentbatch.html')
+
+@APP.route('/iamarks',methods = ['GET'])
+def add_iamarks_view():
+    """URL to add or view iamarks"""
+    return render_template('html/iamarks.html')
 # Endpoints
 
 
@@ -79,6 +84,7 @@ def login_ajax():
     print(data)
     response = dbop.validate_login(data)
     print(response)
+    print("hello tresting")
     return jsonify(response)
 
 @APP.route('/getdetails', methods = ['POST'])

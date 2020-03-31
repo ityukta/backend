@@ -17,6 +17,10 @@
     </style>
     <script>
         $(document).ready(function () {
+            var pic = localStorage.getItem("teacher_picture");
+            console.log(pic);
+            var img = ` <img src="data:image/jpg;base64, `+ pic + `" alt="" class="header__logout__img" >`
+            $('.header__logout__pic').html(img);
             var authkey = localStorage.getItem('authkey');
             var faculty_id = localStorage.getItem('faculty_id');
             var data = {

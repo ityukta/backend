@@ -14,6 +14,10 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script>
     $(document).ready(function(){
+        var pic = localStorage.getItem("teacher_picture");
+        console.log(pic);
+        var img = ` <img src="data:image/jpg;base64, `+ pic + `" alt="" class="header__logout__img" >`
+        $('.header__logout__pic').html(img);
         var faculty_id = localStorage.getItem('faculty_id');
         var authkey = localStorage.getItem('authkey');
         var data = {

@@ -12,7 +12,15 @@
       integrity="sha256-+N4/V/SbAFiW1MPBCXnfnP9QSN3+Keu+NlB+0ev/YKQ="
       crossorigin="anonymous"
     />
-    
+    <script>
+        $(document).ready(function()
+        {
+            var pic = localStorage.getItem("teacher_picture");
+            console.log(pic);
+            var img = ` <img src="data:image/jpg;base64, `+ pic + `" alt="" class="header__logout__img" >`
+            $('.header__logout__pic').html(img);
+        })
+    </script>
 </head>
 <body> 
     <div class="container">
@@ -34,7 +42,7 @@
                 <div class="header__logout">
                     <div class="header__logout__group">
                         <div class="header__logout__pic">
-                            <img src="../images/user-3.jpg" alt="" class="header__logout__img">
+                            <!-- <img src="../images/user-3.jpg" alt="" class="header__logout__img"> -->
                         </div>
                         <div class="header__dots"><i class="fa fa-ellipsis-v fa-1x"></i>
                             <ul class="header__logout__list ">   <!--Add header__logout__listshow on click of header__logout__group-->
