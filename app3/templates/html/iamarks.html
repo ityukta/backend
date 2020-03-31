@@ -13,7 +13,11 @@
     />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script>
-        
+        function changedeval(){
+            if($(this).val() == "Descriptive"){
+                $(this).closest('.add__assessment__test__set')
+            }
+        }
     </script>
     <style>
         .add__assessment__test__set div{ 
@@ -186,7 +190,7 @@
                     </div>
                     <div class="add__assessment__input__group">
                         <label for="test_eval_type_1">Choose Evaluation Type</label>
-                        <select name="test_eval_type_1" id="test_eval_type_1">
+                        <select name="test_eval_type_1" id="test_eval_type_1" onchange="changedeval()">
                             <option value="Select">Select an option</option>
                             <option value="Descriptive">Descriptive</option>
                             <option value="Consolidated">Consolidated</option>
