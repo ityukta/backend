@@ -11,14 +11,6 @@
       integrity="sha256-+N4/V/SbAFiW1MPBCXnfnP9QSN3+Keu+NlB+0ev/YKQ="
       crossorigin="anonymous"
     />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script>
-        function changedeval(){
-            if($(this).val() == "Descriptive"){
-                $(this).closest('.add__assessment__test__set')
-            }
-        }
-    </script>
     <style>
         .add__assessment__test__set div{ 
             margin-top: 5px;
@@ -28,6 +20,17 @@
             display: none;
         }
     </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script>
+        function changedeval(id){
+            selector = "#" + id;
+            if($(selector).val() == "Descriptive"){
+                console.log(id);
+                x = $(selector).parent().parent().find('.add__assessment__test__details').toggleClass('add__assessment__display__none');
+                console.log(x);
+            }
+        }
+    </script>
 </head>
 <body>
 
@@ -190,7 +193,7 @@
                     </div>
                     <div class="add__assessment__input__group">
                         <label for="test_eval_type_1">Choose Evaluation Type</label>
-                        <select name="test_eval_type_1" id="test_eval_type_1" onchange="changedeval()">
+                        <select name="test_eval_type_1" id="test_eval_type_1" onchange="changedeval(this.id)">
                             <option value="Select">Select an option</option>
                             <option value="Descriptive">Descriptive</option>
                             <option value="Consolidated">Consolidated</option>
@@ -217,7 +220,7 @@
                                     </div>
                                     <div class="add__assessment__input__group" style="display: inline-block;">
                                         <label for="max_marks_1">Max Marks</label>
-                                        <input type="number" name="max_marks_1" id="max_marks_1">
+                                        <input type="number" name="max_marks_1" id="max_marks_1" value="0">
                                     </div>
                                     <div class="add__assessment__input__group" style="display: inline-block;">
                                         <label for="no_of_subquestions">No of sub questions</label>
