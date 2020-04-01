@@ -1,0 +1,264 @@
+.assignclass {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 1fr;
+      grid-template-columns: 1fr;
+  grid-gap: 2rem;
+}
+
+.assignclass__selectclass {
+  margin: 0 auto;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  width: 50%;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.assignclass__selectdept {
+  width: 10rem;
+}
+
+.assignclass__selectdept .dept {
+  width: 100%;
+  padding: 0.3rem;
+  border-radius: 10px;
+  border: 1px solid #cfcfcf;
+}
+
+.assignclass__selectyear {
+  width: 10rem;
+}
+
+.assignclass__selectyear .year {
+  width: 100%;
+  padding: 0.3rem;
+  border-radius: 10px;
+  border: 1px solid #cfcfcf;
+}
+
+.assignclass__selectsection {
+  width: 10rem;
+}
+
+.assignclass__selectsection .section {
+  width: 100%;
+  padding: 0.3rem;
+  border-radius: 10px;
+  border: 1px solid #cfcfcf;
+}
+
+.assignclass__2 {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 1fr 1fr;
+      grid-template-columns: 1fr 1fr;
+  justify-items: center;
+  text-align: center;
+}
+
+.assignclass__2__a {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  border: 1px solid #cfcfcf;
+  padding: 3rem 4rem;
+  position: relative;
+  border-radius: 5px;
+}
+
+.assignclass__2__b {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  border: 1px solid #cfcfcf;
+  padding: 3rem 4rem;
+  position: relative;
+  border-radius: 5px;
+}
+
+.assignclass__4 {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 1fr 1fr;
+      grid-template-columns: 1fr 1fr;
+  justify-items: center;
+  text-align: center;
+}
+
+.assignclass__4__a {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  border: 1px solid #cfcfcf;
+  padding: 3rem 4rem;
+  position: relative;
+  border-radius: 5px;
+}
+
+.assignclass__4__b {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  border: 1px solid #cfcfcf;
+  padding: 3rem 4rem;
+  position: relative;
+  border-radius: 5px;
+}
+
+.assignclass__6 {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 1fr 1fr;
+      grid-template-columns: 1fr 1fr;
+  justify-items: center;
+  text-align: center;
+}
+
+.assignclass__6__a {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  border: 1px solid #cfcfcf;
+  padding: 3rem 4rem;
+  position: relative;
+  border-radius: 5px;
+}
+
+.assignclass__6__b {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  border: 1px solid #cfcfcf;
+  padding: 3rem 4rem;
+  position: relative;
+  border-radius: 5px;
+}
+
+.assignclass__add {
+  padding: 1rem 2rem;
+}
+
+.assignclass__add__pic {
+  margin: auto;
+  height: 4rem;
+  width: 4rem;
+  border: 1px solid #cfcfcf;
+  border-radius: 50%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.assignclass__add__pic:hover {
+  cursor: pointer;
+}
+
+.assignclass__add__text {
+  margin-top: 1rem;
+}
+
+.assignclass__addshownone {
+  display: none;
+}
+
+.assignclass__dots {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.assignclass__dots:hover {
+  cursor: pointer;
+}
+
+.assignclass__teacher-pic {
+  display: none;
+}
+
+.assignclass__teacher-img {
+  border-radius: 50%;
+  margin-top: -1rem;
+}
+
+.assignclass__teacher-img:hover {
+  cursor: pointer;
+}
+
+.assignclass__picshow {
+  display: block;
+}
+
+.assignclass__teacherdetails {
+  display: none;
+  margin-left: 3rem;
+}
+
+.assignclass__detailshow {
+  display: block;
+}
+
+.assignclass__teachername {
+  margin: 0.4rem 0;
+}
+
+.assignclass__teachername:hover {
+  cursor: pointer;
+}
+
+.assignclass__teacherid {
+  margin: 0.4rem 0;
+}
+
+.assignclass__teacherid:hover {
+  cursor: pointer;
+}
+
+.assignclass__teacherclass {
+  margin: 0.4rem 0;
+}
+/*# sourceMappingURL=assignclass.css.map */

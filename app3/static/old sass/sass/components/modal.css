@@ -19,6 +19,8 @@
           transform: translate(-50%, -50%);
   background-color: white;
   padding: 2rem;
+  width: 60rem;
+  height: 30rem;
   -webkit-animation-name: modalpop;
           animation-name: modalpop;
   -webkit-animation-duration: 0.8s;

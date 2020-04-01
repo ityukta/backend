@@ -1,0 +1,61 @@
+.dayattendance__batch {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: space-evenly;
+      -ms-flex-pack: space-evenly;
+          justify-content: space-evenly;
+}
+
+.dayattendance__batch__sem {
+  border-radius: 5px;
+  border: 1px solid #cfcfcf;
+  padding: 0.4rem;
+}
+
+.dayattendance__batch__sem:hover {
+  cursor: pointer;
+}
+
+.dayattendance__batch__sem:focus {
+  outline: none;
+}
+
+.dayattendance__batch__date {
+  border-radius: 5px;
+  border: 1px solid #cfcfcf;
+  padding: 0.4rem;
+}
+
+.dayattendance__batch__date:hover {
+  cursor: pointer;
+}
+
+.dayattendance__batch__date:focus {
+  outline: none;
+}
+
+.dayattendance__details {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: space-evenly;
+      -ms-flex-pack: space-evenly;
+          justify-content: space-evenly;
+}
+
+.dayattendance__details__table {
+  width: 70vw;
+  border-spacing: 3rem;
+}
+
+.dayattendance__details__table__row {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  width: 100%;
+  padding: 0.5rem;
+}
+/*# sourceMappingURL=dayattendance.css.map */

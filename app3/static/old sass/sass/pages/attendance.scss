@@ -1,0 +1,60 @@
+.attendance{
+
+    width: 100vw;
+    &__year{
+        display: flex;
+        justify-content: space-evenly;
+        margin-bottom: 1rem;
+
+        &__sem{
+            border-radius: 5px;
+            padding: 0.3rem 1rem;
+            &:hover{
+                cursor: pointer;
+            }
+        }
+        &__section{
+            border-radius: 5px;
+            padding: 0.3rem 1rem;
+            &:hover{
+                cursor: pointer;
+            }
+        }
+        &__month{
+            border-radius: 5px;
+            padding: 0.3rem 1rem;
+            &:hover{
+                cursor: pointer;
+            }
+        }
+    }
+    &__details{
+        width: 90vw;
+        position: relative;
+    }
+    &__table{
+       position: absolute;
+       left: 50%;
+       transform: translateX(-50%);
+       width: 100%;
+       border-spacing: 5px;
+       &__heading{
+       
+       }
+       &__row{
+           text-align: center;
+          
+           width: 100%;
+       }
+      
+    }
+}
+td{
+    padding: 5px;
+};
+.fa-check{
+    color: rgb(0, 255, 0);
+}
+.fa-times{
+    color: rgb(179, 0, 0);
+}

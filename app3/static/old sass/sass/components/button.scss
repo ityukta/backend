@@ -1,0 +1,98 @@
+.bluebtn{
+    color: white;
+    background:linear-gradient(to right,$color-bluelight,$color-bluedark);
+    &:hover{
+        cursor: pointer;
+    }
+    &:focus{
+        outline: none;
+    }
+}
+.nav-btn{
+    border: none;
+    background-color: white;
+    &:hover{
+        cursor: pointer;
+    }
+    &:focus
+    {
+        outline: none;
+    }
+}
+.fa{
+    opacity: 0.3;
+}
+.btn-shownone{
+    display: none;
+    
+}
+.search-btn{
+    background-color: rgb(29, 211, 29);
+    border-radius: 7px;
+    border: none;
+    color: white;
+    font-size: 18px;
+    transition: 0.2s;
+    &:hover{
+        cursor: pointer;
+        background-color: rgb(42, 184, 42);
+    }
+    &:focus{
+        outline: none;
+    }
+}
+.pagination{
+    display: flex;
+    justify-content: center;
+    .page-item{
+        //margin-left: 1rem;
+        list-style: none;
+        padding: 0.7rem;
+        border-radius: 5px;
+        border: 1px solid rgb(207, 207, 207);
+        &:hover{
+            cursor: pointer;
+        }
+    }
+    .page-link{
+        text-decoration: none;
+    }
+}
+.close-btn{
+    position: absolute;
+    top:5px;
+    right: 10px;
+    &:hover{
+        cursor: pointer;
+    }
+}
+/*.icon-sbtn{
+    height: 5%;
+    &::before{
+        height: 50%;
+    }
+}*/
+
+@media screen and (max-width:991px)
+{
+    .nav-btn{
+        position: absolute;
+        left:3%;
+    }
+    .btn-shownone{
+        display: block;
+        position: absolute;
+        right:30%;
+        z-index: 10;
+        &:hover{
+            cursor: pointer;
+        }
+    }
+}
+@media screen and (max-width:575px)
+{
+    .btn-shownone{
+        display: none;
+        
+    }
+}
