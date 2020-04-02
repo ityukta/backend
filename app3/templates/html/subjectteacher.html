@@ -355,7 +355,7 @@
             <div class="navbar ">
                 <!--Add show-navbar on click of nav button-->
                 <ul class="nav__ul">
-                    <li class="nav__li"><a href="">home</a> </li>
+                    <li class="nav__li" onclick="window.location.href = 'home' ">home</li>
                     <li class="nav__li teacherli"><a href="" class="teacher">Professor</a> <span></span>
                         <ul class="sub ">
                             <!--Add show on click of teacherli-->
@@ -571,5 +571,6 @@
     </div>
 </body>
 <script src="{{ url_for('static', filename = 'js/sample.js') }}"></script>
+<script src="{{ url_for('static', filename = 'js/nav.js') }}"></script>
 
 </html>
