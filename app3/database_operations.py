@@ -8,6 +8,7 @@ import datetime
 import itertools
 import calendar
 import helper
+import pickle
 
 
 def create_fresh_database():
@@ -1074,4 +1075,141 @@ def get_attendance_details(data):
         "attendance_matrix" : attendance_matrix
     }
     response = {"msg":"success", 'data': return_data}
+    return response
+
+
+def add_question_paper_pattern(data):
+    conn = sql.connect('database.db')
+    print(data)
+    check_authkey_query = """
+        SELECT *FROM LoginAuthKey WHERE authkey = ? AND faculty_id = ? AND DELETED = 0
+    """
+    c = conn.cursor()
+    _ = c.execute(check_authkey_query,
+                  (data['authkey'], data['faculty_id'])).fetchone()
+    if _ is None:
+        response = {"status_message": "Unauthorized access",
+                    "status_code": 404, "data": "Invalid Authkey provided"}
+        return response
+    get_class_id_query = """
+            SELECT class_id FROM Class WHERE sem = ? and sec = ? and graduation_year=? and department = ?
+        """
+    class_data = c.execute(
+        get_class_id_query, (data['sem'], data['sec'], data['year'], data['department'])).fetchone()
+
+    if class_data is None:
+        response = {"statusmessage": "Error",
+                    "status_code": 501, "data": "class not found"}
+        return response
+    class_id = class_data[0]
+    get_fcs_ids_query = """
+        SELECT Fcs.fcs_id FROM Fcs WHERE class_id = ? AND subject_id = ?
+    """
+
+    fcs_details = c.execute(get_fcs_ids_query, (class_id, data['subject_id'])).fetchone()  
+    if fcs_details is None:
+        response = {"statusmessage": "Error",
+                    "status_code": 501, "data": "fcs not found"}
+        return response
+    fcs_id = fcs_details[0]
+    add_test_details_query = """
+        INSERT INTO Tests(fcs_id, test_no, qp_pattern) VALUES(?, 0, ?)
+    """
+    test_data = {
+        "for_whom" : data['for'],
+        "details" : data['q_pattern_data']
+    }
+    binary_test_set_obj = pickle.dumps(test_data)
+    c.execute(add_test_details_query, (fcs_id, binary_test_set_obj))
+    conn.commit()
+    response = {"status_message": "success", "status_code":200}
+    return response
+
+
+def get_student_marks_details(data):
+    conn = sql.connect('database.db')
+    print(data)
+    check_authkey_query = """
+        SELECT *FROM LoginAuthKey WHERE authkey = ? AND faculty_id = ? AND DELETED = 0
+    """
+    c = conn.cursor()
+    _ = c.execute(check_authkey_query,
+                  (data['authkey'], data['faculty_id'])).fetchone()
+    if _ is None:
+        response = {"status_message": "Unauthorized access",
+                    "status_code": 404, "data": "Invalid Authkey provided"}
+        return response
+    get_class_id_query = """
+            SELECT class_id FROM Class WHERE sem = ? and sec = ? and graduation_year=? and department = ?
+        """
+    class_data = c.execute(
+        get_class_id_query, (data['sem'], data['sec'], data['year'], data['department'])).fetchone()
+
+    if class_data is None:
+        response = {"statusmessage": "Error",
+                    "status_code": 501, "data": "class not found"}
+        return response
+    class_id = class_data[0]
+    get_fcs_ids_query = """
+        SELECT Fcs.fcs_id FROM Fcs WHERE class_id = ? AND subject_id = ?
+    """
+
+    fcs_details = c.execute(get_fcs_ids_query, (class_id, data['subject_id'])).fetchone()  
+    if fcs_details is None:
+        response = {"statusmessage": "Error",
+                    "status_code": 501, "data": "fcs not found"}
+        return response
+    fcs_details = fcs_details[0]
+    get_student_details_from_fcss_query = """
+        SELECT Fcss.fcss_id, Fcss.student_id, Student.name, Student.usn FROM Fcss, Student WHERE Fcss.student_id = Student.student_id AND fcs_id = ?
+    """
+    student_data = c.execute(get_student_details_from_fcss_query, (fcs_details, )).fetchall()
+    for i in range(len(student_data)):
+        student_data[i] = dict(zip([cur[0] for cur in c.description], student_data[i]))
+    get_tests_data_query = """
+        SELECT *FROM tests WHERE fcs_id = ?
+    """
+    tests_data = c.execute(get_tests_data_query, (fcs_details, )).fetchall()
+    get_student_results_query = """
+        SELECT *FROM Test_res WHERE fcss_id = ? AND test_id = ?
+    """
+    for i in range(len(tests_data)):
+        tests_data[i] = dict(zip([cur[0] for cur in c.description], tests_data[i]))
+    assessment_counter = 1
+    for each_test_details in tests_data:
+        q_pattern = each_test_details['qp_pattern']
+        q_pattern = pickle.loads(q_pattern)
+        for_whom = q_pattern['for_whom']
+        for each_student in student_data:
+            fcss_id = each_student['fcss_id']
+            student_marks = c.execute(get_student_results_query, (fcss_id, each_test_details['test_id'])).fetchone()
+            if for_whom == 'all' or for_whom == each_student['student_id']:
+                if student_marks is None:
+                    each_student['assessments'] = each_student.get('assessments', [])
+                    # each_student['assessments'][q_pattern['details']['assessment_name']] = None
+                    each_student['assessments'].append({
+                        "fcss_id" : fcss_id,
+                        "data_found": False,
+                        "name" : f'Assessment {assessment_counter}',
+                        "test_id" : each_test_details['test_id'],
+                        "q_pattern": q_pattern['details']
+                    })
+
+                else:
+                    for k in range(len(student_marks)):
+                        student_marks[k] = dict(zip([cur[0] for cur in c.description], student_marks[k]))
+                    student_marks['marks'] = pickle.loads(student_marks['marks'])
+                    each_student['assessments'] = each_student.get('assessments', [])
+                    each_student['assessments'].append({
+                        "fcss_id" : fcss_id,
+                        "data_found": True,
+                        "name" : f'Assessment {assessment_counter}',
+                        "test_id" : each_test_details['test_id'],
+                        "marks": student_marks['marks']
+                    })
+        assessment_counter += 1
+
+    final_data = dict()
+    final_data['student_data'] = student_data
+    response = {"status_code": 200, "status_message":"successful", "data": final_data}
     return response

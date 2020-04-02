@@ -176,6 +176,14 @@ def get_student_attendance_details_ajax():
     response = dbop.get_student_attendance_details(data)
     return jsonify(response)
 
+@APP.route('/get_student_marks_details', methods=['POST'])
+def get_student_marks_details_ajax():
+    """This endpoint get stusdents details based on subject"""
+    data = request.get_json()
+    print(data)
+    response = dbop.get_student_marks_details(data)
+    return jsonify(response)
+
 @APP.route('/add_student_attendance', methods=['POST'])
 def add_student_attendance_ajax():
     """This endpoint is used to add student attendance"""
@@ -190,6 +198,14 @@ def get_attendance_details_ajax():
     data = request.get_json()
     print(data)
     response = dbop.get_attendance_details(data)
+    return jsonify(response)
+
+@APP.route('/add_question_paper_pattern', methods = ['POST'])
+def add_question_paper_pattern_ajax():
+    """This endpoint is to add qPattern"""
+    data = request.get_json()
+    print(data)
+    response = dbop.add_question_paper_pattern(data)
     return jsonify(response)
 if __name__ == '__main__':
     APP.run(debug=True, threaded=True)
