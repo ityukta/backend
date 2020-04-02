@@ -2,8 +2,9 @@
     top:0;
     left:0;
     position: fixed;
-    height: 100vh;
-    width: 100vw;
+   height: 100vh;
+   width: 100vw;
+  
     background-color:rgba(77, 77, 77, 0.3);
     &__dispnone{
         display: none;
@@ -15,8 +16,8 @@
         transform: translate(-50%,-50%);
         background-color: white;
         padding: 2rem;
-        width: 60rem;
-        height: 30rem;
+     //   width: 60rem;
+     //   height: 30rem;
         animation-name:modalpop ;
         animation-duration: 0.8s;
     }

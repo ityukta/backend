@@ -202,17 +202,12 @@
                         table_data += '</tr>';
                     }
                     $('.assesment-table-body').html(table_data);
-                
+                    $('.add__new__assessment__button').removeClass('add__assessment__display__none');
                     }
                 }
             });
 
         };
-        function changedeval(){
-            if($(this).val() == "Descriptive"){
-                $(this).closest('.add__assessment__test__set')
-            }
-        }
     </script>
     <style>
         .add__assessment__test__set div{ 
@@ -222,7 +217,277 @@
         .add__assessment__display__none{
             display: none;
         }
+        .add__assessment__add__assessment{
+            width: 80%;
+            height: 80%;
+            margin-top: 100px;
+            overflow: scroll;
+        }
     </style>
+    <script>
+        function openaddassmodal(){
+            $('.add__assessment__add__assessment').removeClass('modal__dispnone');
+        }
+        function closemodal(){
+            $('.add__assessment__add__assessment').addClass('modal__dispnone');
+        }
+        function changedtype(id){
+            console.log(id);
+            selector = "#" + id;
+            get_eval_type_value = $(selector).closest(".add__assessment__test__set").find(".test__eval__type").val();
+            console.log(get_eval_type_value);
+            if($(selector).val() == "Select" || get_eval_type_value == "Select"){
+                $(selector).parent().parent().find(".add__assessment__descriptive__container").addClass('add__assessment__display__none');
+            }
+            else{
+                $(selector).parent().parent().find('.add__assessment__descriptive__container').removeClass('add__assessment__display__none');
+                $(selector).parent().parent().find('.add__assessment__consolidated__container').addClass('add__assessment__display__none');
+            }
+        }
+        function changedeval(id){
+            selector = "#" + id;
+            get_test_type_value = $(selector).parent().parent().find('.test__type').val();
+            if($(selector).val() == "Descriptive" && get_test_type_value != "Select"){
+                console.log(id);
+                $(selector).parent().parent().find('.add__assessment__descriptive__container').removeClass('add__assessment__display__none');
+                $(selector).parent().parent().find('.add__assessment__consolidated__container').addClass('add__assessment__display__none');
+            }
+            else if($(selector).val() == "Consolidated" && get_test_type_value != "Select"){
+                $(selector).parent().parent().find('.add__assessment__descriptive__container').addClass('add__assessment__display__none');
+                $(selector).parent().parent().find('.add__assessment__consolidated__container').removeClass('add__assessment__display__none');
+            }
+            else{
+                $(selector).parent().parent().find('.add__assessment__descriptive__container').addClass('add__assessment__display__none');
+                $(selector).parent().parent().find('.add__assessment__consolidated__container').addClass('add__assessment__display__none');
+            }
+        }
+        function changednoofquestions(id){
+            selector = "#"+ id;
+            changed_value = $(selector).val();
+            max_marks = $(selector).closest('.add__assessment__descriptive__container').find('.max__marks__for__each__question').val();
+            no_of_sub_questions = $(selector).closest('.add__assessment__descriptive__container').find('.max__sub__questions').val();
+
+            sample_table = `
+            <div class="marks-entry__tc ">
+                <div class="marks-entry__td ">Q.No</div>
+            `;
+            for(i=0;i<no_of_sub_questions; i++){
+                sample_table += `<div class="marks-entry__td marks-entry__td_1">`+String.fromCharCode(97 + i)+`</div>`;
+            }
+            sample_table += `<div class="marks-entry__td marks-entry__td_2" >Total</div>`;
+            sample_table += `</div>`;
+            for(i=1;i<=changed_value;i++){
+                temp = `
+                <div class="marks-entry__tc add__assessment__q__pattern__question">
+                    <div class="marks-entry__td">`+(i)+`</div>`;
+                    for(j=0;j<no_of_sub_questions;j++){
+                        temp += `<div class="marks-entry__td"><input type="number" class="number" value="0"></div>`;
+                    }
+                    temp +=`
+                    <div class="marks-entry__td q__pattern__question__total"><input type="number" class="number" value="`+max_marks+`"></div>
+                </div>
+                `;
+                sample_table += temp;
+            }
+            // sample_table += `
+            // <div class="marks-entry__tc marks-entry__tc_border">
+            //     <div class="marks-entry__td">Total</div>
+            //     <div class="marks-entry__td marks-entry__td_3 marks-entry__td_none">&nbsp;</div>
+            //     <div class="marks-entry__td marks-entry__td_none"><input type="number" class="number"></div>
+            //     <div class="marks-entry__td marks-entry__td_3 marks-entry__td_none" >&nbsp;</div>
+            //     <div class="marks-entry__td marks-entry__td_3 marks-entry__td_none">&nbsp;</div>
+            // </div>
+            // `;
+            $(selector).closest('.add__assessment__descriptive__container').find('.marks-entry__table').html(sample_table);
+            console.log('worked');
+        }
+        function changedmaxmarks(id){
+            selector = "#" + id;
+            changed_value = $(selector).val();
+            $(selector).closest('.add__assessment__descriptive__container').find('.marks-entry__table').children('.add__assessment__q__pattern__question').each(function(){
+                x = $(this).find('.q__pattern__question__total input').val(changed_value);
+                console.log(x);
+            });
+            // find('.find('.q__pattern__question__total input')').val(changed_value);
+        }
+        function changedsubquestions(id){
+            selector = "#" + id;
+            changed_value = $(selector).val();
+            no_of_questions = $(selector).closest('.add__assessment__descriptive__container').find('.no_of_questions').val();
+            max_marks = $(selector).closest('.add__assessment__descriptive__container').find('.max__marks__for__each__question').val();
+            final_table = `
+            <div class="marks-entry__tc ">
+                <div class="marks-entry__td ">Q.No</div>
+            `;
+            for(i=0;i<changed_value; i++){
+                final_table += `<div class="marks-entry__td marks-entry__td_1">`+String.fromCharCode(97 + i)+`</div>`;
+            }
+            final_table += `<div class="marks-entry__td marks-entry__td_2" >Total</div>`;
+            final_table += `</div>`;
+            for(i=1;i<=no_of_questions;i++){
+                final_table += `
+                <div class="marks-entry__tc add__assessment__q__pattern__question">
+                    <div class="marks-entry__td">`+i+`</div>
+                `;
+                for(j=0;j<changed_value;j++){
+                    final_table +=`
+                    <div class="marks-entry__td"><input type="number" value="0" class="number"></div>
+                    `;
+                }
+                final_table +=`
+                    <div class="marks-entry__td q__pattern__question__total"><input type="number" class="number" value="`+max_marks+`"></div></div>
+                    `;
+            }
+            console.log(final_table);
+            $(selector).closest('.add__assessment__descriptive__container').find('.marks-entry__table').html(final_table);
+        }
+        function randstr(prefix){
+            return Math.random().toString(36).replace('0.',prefix || '');
+        }
+        function addmoretestset(){
+            append_text = `
+            <div class="add__assessment__test__set">
+                <div class="add__assessment__input__group test__type__input__group">
+                    <label for="test_type_1">Choose Type</label>
+                    <select name="test_type_1" id="`+randstr('test_type_')+`" class="test__type" onchange="changedtype(this.id)">
+                        <option value="Select">Select an option</option>
+                        <option value="Internal Assessment">Internal Test</option>
+                        <option value="Quiz">Quiz</option>
+                        <option value="Assignments">Assignments</option>
+                        <option value="Projects">Projects</option>
+                    </select>
+                </div>
+                <div class="add__assessment__input__group eval__type__input__group">
+                    <label for="test_eval_type_1">Choose Evaluation Type</label>
+                    <select name="test_eval_type_1" id="`+randstr('eval_type_')+`" class = "test__eval__type" onchange="changedeval(this.id)">
+                        <option value="Select">Select an option</option>
+                        <option value="Descriptive">Descriptive</option>
+                        <option value="Consolidated">Consolidated</option>
+                    </select>
+                </div>
+                <div class="add__assessment__descriptive__container descriptive_container_no_1 add__assessment__display__none">
+                    <div class="add__assessment__input__group">
+                            <label for="descriptive_name_1">Enter Name</label>
+                            <input type="text" name="descriptive_name_1"
+                            class="descriptive__name" id="descriptive_name_1">
+                    </div>
+                    <div class="add__assessment__input__group">
+                        <label for="no_of_questions_1">No of questions</label>
+                        <input type="number" name="no_of_questions_1" id="`+randstr('no_of_questions_')+`" class="no_of_questions" value="10" onchange="changednoofquestions(this.id)">
+                    </div>
+                    <div class="add__assessment__input__group">
+                        <label for="max_marks_per_question_1">Max marks for each question</label>
+                        <input type="number" name="max_marks_per_question_1" id="`+randstr('max_marks_')+`" class="max__marks__for__each__question" value="10" onchange="changedmaxmarks(this.id)">
+                    </div>
+                    <div class="add__assessment__input__group">
+                        <label for="max_sub_questions_1">Maximum no. of sub questions</label>
+                        <input type="number" name="max_sub_questions_1" id="`+randstr('max_sub_questions_')+`" class="max__sub__questions" value="2" onchange="changedsubquestions(this.id)">
+                    </div>
+                    <div class="add__assessment__question__paper__pattern__input add__assessment__question__paper__pattern__input_1">
+                        <div class="marks-entry__table">
+
+                            <div class="marks-entry__tc ">
+                                <div class="marks-entry__td ">Q.No</div>
+                                <div class="marks-entry__td marks-entry__td_1">a</div>
+                                <div class="marks-entry__td marks-entry__td_1">b</div>
+                                <div class="marks-entry__td marks-entry__td_2" >Total</div>
+                            </div>
+                            <div class="marks-entry__tc add__assessment__q__pattern__question">
+                                <div class="marks-entry__td">1</div>
+                                <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
+                                <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
+                                <div class="marks-entry__td q__pattern__question__total"><input type="number" class="number" value="10"></div>
+                            </div>
+                            <div class="marks-entry__tc add__assessment__q__pattern__question">
+                                <div class="marks-entry__td">2</div>
+                                <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
+                                <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
+                                <div class="marks-entry__td q__pattern__question__total"><input type="number" class="number" value="10"></div>
+                            </div>
+                            <div class="marks-entry__tc add__assessment__q__pattern__question">
+                                <div class="marks-entry__td">3</div>
+                                <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
+                                <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
+                                <div class="marks-entry__td q__pattern__question__total"><input type="number" class="number" value="10"></div>
+                            </div>
+                            
+                            <div class="marks-entry__tc add__assessment__q__pattern__question">
+                                <div class="marks-entry__td">4</div>
+                                <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
+                                <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
+                                <div class="marks-entry__td q__pattern__question__total"><input type="number" class="number" value="10"></div>
+                            </div>
+                            <div class="marks-entry__tc add__assessment__q__pattern__question">
+                                <div class="marks-entry__td">5</div>
+                                <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
+                                <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
+                                <div class="marks-entry__td q__pattern__question__total"><input type="number" class="number" value="10"></div>
+                            </div>
+                            <div class="marks-entry__tc add__assessment__q__pattern__question">
+                                <div class="marks-entry__td">6</div>
+                                <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
+                                <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
+                                <div class="marks-entry__td q__pattern__question__total"><input type="number" class="number" value="10"></div>
+                            </div>
+                            <div class="marks-entry__tc add__assessment__q__pattern__question">
+                                <div class="marks-entry__td">7</div>
+                                <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
+                                <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
+                                <div class="marks-entry__td q__pattern__question__total"><input type="number" class="number" value="10"></div>
+                            </div>
+                            <div class="marks-entry__tc add__assessment__q__pattern__question">
+                                <div class="marks-entry__td">8</div>
+                                <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
+                                <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
+                                <div class="marks-entry__td q__pattern__question__total"><input type="number" class="number" value="10"></div>
+                            </div>
+                            <div class="marks-entry__tc add__assessment__q__pattern__question">
+                                <div class="marks-entry__td">9</div>
+                                <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
+                                <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
+                                <div class="marks-entry__td q__pattern__question__total"><input type="number" class="number" value="10"></div>
+                            </div>
+                            <div class="marks-entry__tc add__assessment__q__pattern__question">
+                                <div class="marks-entry__td">10</div>
+                                <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
+                                <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
+                                <div class="marks-entry__td q__pattern__question__total"><input type="number" class="number" value="10"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="add__assessment__consolidated__container consolidated__container__no_1 add__assessment__display__none">
+                    <div class="add__assessment__input__group">
+                        <label for="descriptive_name_1">Enter Name</label>
+                            <input type="text" name="consolidated_name_1"
+                            class="consolidated_name" id="consolidated_name_1">
+                    </div>
+                    <div class="marks-entry__extra">
+                        <div class="extra__item">
+                                <div class="item__sub-heading">Max Marks-<input type="number" class="number number__1 consolidated_max_marks_input"></div>
+                        </div>
+                        </div>
+                </div>
+            </div>
+            `;
+            $('.add__assessment__container').append(append_text);
+        }
+        function submitaddqpattern(){
+            no_of_test_sets = $('.add__assessment__container .add__assessment__container').length;
+            console.log(no_of_test_sets);
+            subject_selected = $('#subject-id').val();
+            var d = {
+                'authkey': localStorage.getItem('authkey'),
+                'faculty_id': localStorage.getItem('faculty_id'),
+                'department': $('#dept-id').val(),
+                'year': $('#year-id').val(),
+                'sem': $('#sem-id').val(),
+                'sec' : $('#sec-id').val(),
+                'subject_name': subject_selected.split("-")[0],
+                'subject_id': subject_selected.split("-")[1]
+            };
+        }
+    </script>
 </head>
 <body>
 
@@ -321,7 +586,8 @@
                             </button>
                         
                         </div>
-                        <div class="add__assessment__container">
+                        <button class="add__new__assessment__button" onclick="openaddassmodal()">Add New Assessment</button>
+                        <!-- <div class="add__assessment__container">
                             <div class="add__assessment__test__set">
                                 <div class="add__assessment__input__group">
                                     <label for="test_type_1">Choose Type</label>
@@ -389,7 +655,7 @@
                                 </div>
                             </div>
                             <button onclick="addmoretests()">Add more tests</button>
-                        </div>
+                        </div> -->
                         <table class="ia-container__table">
                            <thead>
                                 <tr class="row" cellspacing=20px cellpadding=20px>
@@ -434,9 +700,343 @@
                     </div> 
                 </div>
             </div>
-
-            
+            <!-- <div class="add__assessment__container">
+                <div class="add__assessment__test__set">
+                    <div class="add__assessment__input__group">
+                        <label for="test_type_1">Choose Type</label>
+                        <select name="test_type_1" id="test_type_1">
+                            <option value="Select">Select an option</option>
+                            <option value="Internal Assessment">Internal Assessment</option>
+                            <option value="Quiz">Quiz</option>
+                            <option value="Assignments">Assignments</option>
+                            <option value="Projects">Projects</option>
+                        </select>
+                    </div>
+                    <div class="add__assessment__input__group">
+                        <label for="test_eval_type_1">Choose Evaluation Type</label>
+                        <select name="test_eval_type_1" id="test_eval_type_1" onchange="changedeval(this.id)">
+                            <option value="Select">Select an option</option>
+                            <option value="Descriptive">Descriptive</option>
+                            <option value="Consolidated">Consolidated</option>
+                        </select>
+                    </div>
+                    <div class="add__assessment__test__details add__assessment__display__none">
+                        <div class="add__assessment__input__group">
+                            <label for="test_title_1">enter test Title</label><br>
+                            <input type="text" name="test_title_1" id="test_title_1">
+                        </div>
+                        <h3>Add question paper Pattern</h3>
+                        <div class="add__assessment__questions__container">
+                            <div class="add__assessment__questions__set">
+                                <div class="add__assessment__input__group">
+                                    <label for="marks_validator_1">Must answer</label>
+                                    <select name="marks_validator_1" id="marks_validator_1">
+                                        <option value="Any 1">Any 1</option>
+                                    </select>
+                                </div>
+                                <div class="add__assessment__question__group" >
+                                    <div class="add__assessment__input__group" style="display: inline-block;">
+                                        <label for="question_no_1">Question No.</label>
+                                        <input type="number" name="question_no_1" id="question_no_1">
+                                    </div>
+                                    <div class="add__assessment__input__group" style="display: inline-block;">
+                                        <label for="max_marks_1">Max Marks</label>
+                                        <input type="number" name="max_marks_1" id="max_marks_1" value="0">
+                                    </div>
+                                    <div class="add__assessment__input__group" style="display: inline-block;">
+                                        <label for="no_of_subquestions">No of sub questions</label>
+                                        <input type="number" name="no_of_subquestions" id="no_of_subquestions">
+                                    </div>
+                                    <div class="add__assessment__subquestion__container">
+                                        <div class="add__assessment__input__group" style="display: inline;">
+                                            <input type="number" placeholder="max Marks for a.">
+                                        </div>
+                                        <div class="add__assessment__input__group" style="display: inline;">
+                                            <input type="number" placeholder="max Marks for b.">
+                                        </div>
+                                        <div class="add__assessment__input__group" style="display: inline;">
+                                            <input type="number" placeholder="max Marks for c.">
+                                        </div>
+                                    </div>
+                                </div>
+                                <button onclick="addoroption()">Add Or option</button>
+                            </div>
+                            <button onclick="addmorequestions()">
+                                Add More questions
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <button onclick="addmoretests()">Add more tests</button>
+            </div> -->
         </section>
+        <div class="modal add__assessment__add__assessment modal__dispnone">    <!--modal__dispnone is a class to hide the modal from the page-->
+            <div class="modal__body">
+               <div class="close-btn" onclick="closemodal()"><i class="fa fa-times fa-2x"></i></div>
+               <div class="marks-entry">
+               <div class="head">
+                   Add Internal Assessment
+               </div>
+               <div class="add__assessment__container">
+                    <div class="add__assessment__test__set">
+                        <div class="add__assessment__input__group test__type__input__group">
+                            <label for="test_type_1">Choose Type</label>
+                            <select name="test_type_1" id="test_type_1_1" class="test__type" onchange="changedtype(this.id)">
+                                <option value="Select">Select an option</option>
+                                <option value="Internal Assessment">Internal Test</option>
+                                <option value="Quiz">Quiz</option>
+                                <option value="Assignments">Assignments</option>
+                                <option value="Projects">Projects</option>
+                            </select>
+                        </div>
+                        <div class="add__assessment__input__group eval__type__input__group">
+                            <label for="test_eval_type_1">Choose Evaluation Type</label>
+                            <select name="test_eval_type_1" id="test_eval_type_1" class = "test__eval__type" onchange="changedeval(this.id)">
+                                <option value="Select">Select an option</option>
+                                <option value="Descriptive">Descriptive</option>
+                                <option value="Consolidated">Consolidated</option>
+                            </select>
+                        </div>
+                        <div class="add__assessment__descriptive__container descriptive_container_no_1 add__assessment__display__none">
+                            <div class="add__assessment__input__group">
+                                    <label for="descriptive_name_1">Enter Name</label>
+                                    <input type="text" name="descriptive_name_1" class="descriptive__name" id="descriptive_name_1">
+                            </div>
+                            <div class="add__assessment__input__group">
+                                <label for="no_of_questions_1">No of questions</label>
+                                <input type="number" name="no_of_questions_1" id="no_of_questions_1" class="no_of_questions" value="10" onchange="changednoofquestions(this.id)">
+                            </div>
+                            <div class="add__assessment__input__group">
+                                <label for="max_marks_per_question_1">Max marks for each question</label>
+                                <input type="number" name="max_marks_per_question_1" id="max_marks_per_question_1" class="max__marks__for__each__question" value="10" onchange="changedmaxmarks(this.id)">
+                            </div>
+                            <div class="add__assessment__input__group">
+                                <label for="max_sub_questions_1">Maximum no. of sub questions</label>
+                                <input type="number" name="max_sub_questions_1" id="max_sub_questions_1" class="max__sub__questions" value="2" onchange="changedsubquestions(this.id)">
+                            </div>
+                            <div class="add__assessment__question__paper__pattern__input add__assessment__question__paper__pattern__input_1">
+                                <div class="marks-entry__table">
+    
+                                    <div class="marks-entry__tc ">
+                                        <div class="marks-entry__td ">Q.No</div>
+                                        <div class="marks-entry__td marks-entry__td_1">a</div>
+                                        <div class="marks-entry__td marks-entry__td_1">b</div>
+                                        <!-- <div class="marks-entry__td marks-entry__td_1">c</div> -->
+                                        <div class="marks-entry__td marks-entry__td_2" >Total</div>
+                                    </div>
+                                    <div class="marks-entry__tc add__assessment__q__pattern__question">
+                                        <div class="marks-entry__td">1</div>
+                                        <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
+                                        <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
+                                        <!-- <div class="marks-entry__td"><input type="number" class="number"></div> -->
+                                        <div class="marks-entry__td q__pattern__question__total"><input type="number" class="number" value="10"></div>
+                                    </div>
+                                    <div class="marks-entry__tc add__assessment__q__pattern__question">
+                                        <div class="marks-entry__td">2</div>
+                                        <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
+                                        <!-- <div class="marks-entry__td"><input type="number" class="number"></div> -->
+                                        <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
+                                        <div class="marks-entry__td q__pattern__question__total"><input type="number" class="number" value="10"></div>
+                                    </div>
+                                    <div class="marks-entry__tc add__assessment__q__pattern__question">
+                                        <div class="marks-entry__td">3</div>
+                                        <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
+                                        <!-- <div class="marks-entry__td"><input type="number" class="number"></div> -->
+                                        <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
+                                        <div class="marks-entry__td q__pattern__question__total"><input type="number" class="number" value="10"></div>
+                                    </div>
+                                    
+                                    <div class="marks-entry__tc add__assessment__q__pattern__question">
+                                        <div class="marks-entry__td">4</div>
+                                        <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
+                                        <!-- <div class="marks-entry__td"><input type="number" class="number"></div> -->
+                                        <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
+                                        <div class="marks-entry__td q__pattern__question__total"><input type="number" class="number" value="10"></div>
+                                    </div>
+                                    <div class="marks-entry__tc add__assessment__q__pattern__question">
+                                        <div class="marks-entry__td">5</div>
+                                        <!-- <div class="marks-entry__td"><input type="number" class="number"></div> -->
+                                        <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
+                                        <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
+                                        <div class="marks-entry__td q__pattern__question__total"><input type="number" class="number" value="10"></div>
+                                    </div>
+                                    <div class="marks-entry__tc add__assessment__q__pattern__question">
+                                        <div class="marks-entry__td">6</div>
+                                        <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
+                                        <!-- <div class="marks-entry__td"><input type="number" class="number"></div> -->
+                                        <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
+                                        <div class="marks-entry__td q__pattern__question__total"><input type="number" class="number" value="10"></div>
+                                    </div>
+                                    <div class="marks-entry__tc add__assessment__q__pattern__question">
+                                        <div class="marks-entry__td">7</div>
+                                        <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
+                                        <!-- <div class="marks-entry__td"><input type="number" class="number"></div> -->
+                                        <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
+                                        <div class="marks-entry__td q__pattern__question__total"><input type="number" class="number" value="10"></div>
+                                    </div>
+                                    <div class="marks-entry__tc add__assessment__q__pattern__question">
+                                        <div class="marks-entry__td">8</div>
+                                        <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
+                                        <!-- <div class="marks-entry__td"><input type="number" class="number"></div> -->
+                                        <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
+                                        <div class="marks-entry__td q__pattern__question__total"><input type="number" class="number" value="10"></div>
+                                    </div>
+                                    <div class="marks-entry__tc add__assessment__q__pattern__question">
+                                        <div class="marks-entry__td">9</div>
+                                        <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
+                                        <!-- <div class="marks-entry__td"><input type="number" class="number"></div> -->
+                                        <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
+                                        <div class="marks-entry__td q__pattern__question__total"><input type="number" class="number" value="10"></div>
+                                    </div>
+                                    <div class="marks-entry__tc add__assessment__q__pattern__question">
+                                        <div class="marks-entry__td">10</div>
+                                        <!-- <div class="marks-entry__td"><input type="number" class="number"></div> -->
+                                        <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
+                                        <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
+                                        <div class="marks-entry__td q__pattern__question__total"><input type="number" class="number" value="10"></div>
+                                    </div>
+                                    <!-- <div class="marks-entry__tc marks-entry__tc_border">
+                                        <div class="marks-entry__td">Total</div>
+                                        <div class="marks-entry__td marks-entry__td_3 marks-entry__td_none">&nbsp;</div>
+                                        <div class="marks-entry__td marks-entry__td_none"><input type="number" class="number"></div>
+                                        <div class="marks-entry__td marks-entry__td_3 marks-entry__td_none" >&nbsp;</div>
+                                        <div class="marks-entry__td marks-entry__td_3 marks-entry__td_none">&nbsp;</div>
+                                    </div> -->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="add__assessment__consolidated__container consolidated__container__no_1 add__assessment__display__none">
+                            <div class="add__assessment__input__group">
+                                <label for="descriptive_name_1">Enter Name</label>
+                                    <input type="text" name="consolidated_name_1" class="consolidated_name"id="consolidated_name_1">
+                            </div>
+                            <div class="marks-entry__extra">
+                                <div class="extra__item">
+                                     <!-- <div class="item__heading">quiz</div> -->
+                                        <!-- <div class="item__sub-heading">Secured-<input type="number" class="number number__1"></div> -->
+                                        <div class="item__sub-heading">Max Marks-<input type="number" class="number number__1 consolidated_max_marks_input"></div>
+                                </div>
+                                <!-- <div class="extra__item">
+                                    <div class="item__heading">Assignment</div>
+                                    <div class="item__sub-heading">Secured-<input type="number" class="number number__1"></div>
+                                    <div class="item__sub-heading">Total-<input type="number" class="number number__1"></div>
+                                 </div> -->
+                             </div>
+                        </div>
+                    </div>
+                    
+               </div>
+               <button class="add__assessment__add__test__set" onclick="addmoretestset()">Add more sub tests</button>
+                <!-- <div class="marks-entry__table">
+    
+                    <div class="marks-entry__tc">
+                        <div class="marks-entry__td ">Q.No</div>
+                        <div class="marks-entry__td marks-entry__td_1">a</div>
+                        <div class="marks-entry__td marks-entry__td_1">b</div>
+                        <div class="marks-entry__td marks-entry__td_1">c</div>
+                        <div class="marks-entry__td marks-entry__td_2" >Total</div>
+                    </div>
+                    <div class="marks-entry__tc">
+                        <div class="marks-entry__td">1</div>
+                        <div class="marks-entry__td"><input type="number" class="number"></div>
+                        <div class="marks-entry__td"><input type="number" class="number"></div>
+                        <div class="marks-entry__td"><input type="number" class="number"></div>
+                        <div class="marks-entry__td"><input type="number" class="number"></div>
+                    </div>
+                    <div class="marks-entry__tc">
+                        <div class="marks-entry__td">2</div>
+                        <div class="marks-entry__td"><input type="number" class="number"></div>
+                        <div class="marks-entry__td"><input type="number" class="number"></div>
+                        <div class="marks-entry__td"><input type="number" class="number"></div>
+                        <div class="marks-entry__td"><input type="number" class="number"></div>
+                    </div>
+                    <div class="marks-entry__tc">
+                        <div class="marks-entry__td">3</div>
+                        <div class="marks-entry__td"><input type="number" class="number"></div>
+                        <div class="marks-entry__td"><input type="number" class="number"></div>
+                        <div class="marks-entry__td"><input type="number" class="number"></div>
+                        <div class="marks-entry__td"><input type="number" class="number"></div>
+                    </div>
+                    
+                    <div class="marks-entry__tc">
+                        <div class="marks-entry__td">4</div>
+                        <div class="marks-entry__td"><input type="number" class="number"></div>
+                        <div class="marks-entry__td"><input type="number" class="number"></div>
+                        <div class="marks-entry__td"><input type="number" class="number"></div>
+                        <div class="marks-entry__td"><input type="number" class="number"></div>
+                    </div>
+                    <div class="marks-entry__tc">
+                        <div class="marks-entry__td">5</div>
+                        <div class="marks-entry__td"><input type="number" class="number"></div>
+                        <div class="marks-entry__td"><input type="number" class="number"></div>
+                        <div class="marks-entry__td"><input type="number" class="number"></div>
+                        <div class="marks-entry__td"><input type="number" class="number"></div>
+                    </div>
+                    <div class="marks-entry__tc">
+                        <div class="marks-entry__td">6</div>
+                        <div class="marks-entry__td"><input type="number" class="number"></div>
+                        <div class="marks-entry__td"><input type="number" class="number"></div>
+                        <div class="marks-entry__td"><input type="number" class="number"></div>
+                        <div class="marks-entry__td"><input type="number" class="number"></div>
+                    </div>
+                    <div class="marks-entry__tc">
+                        <div class="marks-entry__td">7</div>
+                        <div class="marks-entry__td"><input type="number" class="number"></div>
+                        <div class="marks-entry__td"><input type="number" class="number"></div>
+                        <div class="marks-entry__td"><input type="number" class="number"></div>
+                        <div class="marks-entry__td"><input type="number" class="number"></div>
+                    </div>
+                    <div class="marks-entry__tc">
+                        <div class="marks-entry__td">8</div>
+                        <div class="marks-entry__td"><input type="number" class="number"></div>
+                        <div class="marks-entry__td"><input type="number" class="number"></div>
+                        <div class="marks-entry__td"><input type="number" class="number"></div>
+                        <div class="marks-entry__td"><input type="number" class="number"></div>
+                    </div>
+                    <div class="marks-entry__tc">
+                        <div class="marks-entry__td">9</div>
+                        <div class="marks-entry__td"><input type="number" class="number"></div>
+                        <div class="marks-entry__td"><input type="number" class="number"></div>
+                        <div class="marks-entry__td"><input type="number" class="number"></div>
+                        <div class="marks-entry__td"><input type="number" class="number"></div>
+                    </div>
+                    <div class="marks-entry__tc">
+                        <div class="marks-entry__td">10</div>
+                        <div class="marks-entry__td"><input type="number" class="number"></div>
+                        <div class="marks-entry__td"><input type="number" class="number"></div>
+                        <div class="marks-entry__td"><input type="number" class="number"></div>
+                        <div class="marks-entry__td"><input type="number" class="number"></div>
+                    </div>
+                    <div class="marks-entry__tc marks-entry__tc_border">
+                        <div class="marks-entry__td">Total</div>
+                        <div class="marks-entry__td marks-entry__td_3 marks-entry__td_none">&nbsp;</div>
+                        <div class="marks-entry__td marks-entry__td_none"><input type="number" class="number"></div>
+                        <div class="marks-entry__td marks-entry__td_3 marks-entry__td_none" >&nbsp;</div>
+                        <div class="marks-entry__td marks-entry__td_3 marks-entry__td_none">&nbsp;</div>
+                    </div>
+                </div> -->
+                    <!-- <div class="marks-entry__extra">
+                       <div class="extra__item">
+                            <div class="item__heading">quiz</div>
+                            
+                                <div class="item__sub-heading">Secured-<input type="number" class="number number__1"></div>
+                                <div class="item__sub-heading">Total-<input type="number" class="number number__1"></div>
+                           
+                       </div>
+                       <div class="extra__item">
+                            <div class="item__heading">Assignment</div>
+                            <div class="item__sub-heading">Secured-<input type="number" class="number number__1"></div>
+                            <div class="item__sub-heading">Total-<input type="number" class="number number__1"></div>
+                        </div>
+                        
+                    </div> -->
+                    <button class="submit__marks" onclick="submitaddqpattern()">submit</button>
+               </div>
+               
+            </div>
+            
+            </div>
+        </div>
         <div class="modal modal__dispnone">    <!--modal__dispnone is a class to hide the modal from the page-->
             <div class="modal__body">
                <div class="close-btn"><i class="fa fa-times fa-2x"></i></div>
