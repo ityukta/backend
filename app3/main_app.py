@@ -54,6 +54,11 @@ def add_student_view():
 def add_iamarks_view():
     """URL to add or view iamarks"""
     return render_template('html/iamarks.html')
+
+@APP.route('/home',methods = ['GET'])
+def home_page_view():
+    """URL for professor home page """
+    return render_template('html/personalpage.html')
 # Endpoints
 
 
@@ -200,6 +205,7 @@ def get_attendance_details_ajax():
     response = dbop.get_attendance_details(data)
     return jsonify(response)
 
+<<<<<<< HEAD
 @APP.route('/add_question_paper_pattern', methods = ['POST'])
 def add_question_paper_pattern_ajax():
     """This endpoint is to add qPattern"""
@@ -207,6 +213,15 @@ def add_question_paper_pattern_ajax():
     print(data)
     response = dbop.add_question_paper_pattern(data)
     return jsonify(response)
+=======
+@APP.route('/get_complete_faculty_details' , methods = ['POST'])
+def get_faculty_details_view():
+    """This endpoint is used tot get faculty details"""
+    data = request.get_json()
+    response = dbop.get_complete_faculty_details(data)
+    return jsonify(response)
+
+>>>>>>> 1c7fd311f2d70b1858458ade337e76c80d1b669c
 if __name__ == '__main__':
     APP.run(debug=True, threaded=True)
     APP.run()

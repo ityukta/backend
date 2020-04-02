@@ -15,7 +15,6 @@
     <script>
           $(document).ready(function () {
             var pic = localStorage.getItem("teacher_picture");
-           
             var img = ` <img src="data:image/jpg;base64, `+ pic + `" alt="" class="header__logout__img" >`
             $('.header__logout__pic').html(img);
             var faculty_id = localStorage.getItem('faculty_id');
@@ -620,7 +619,7 @@
                 <ul class="nav__ul">
                     <li class="nav__li"><a href="">home</a> </li>
                     <li class="nav__li teacherli"><a href="" class="teacher">Professor</a> <span></span>
-                        <ul class="sub ">
+                        <ul class="sub show">
                             <!--Add show on click of teacherli-->
                             
                             <li class="sub__li" onclick="window.location.href = 'assignclass'">Class teachers</li>
@@ -1241,6 +1240,8 @@
     </div>
 <!-- <script src="{{url_for('static', filename = 'js/openassess.js') }}"></script> -->
 </body>
+<script src="{{ url_for('static', filename = 'js/nav.js') }}"></script>
+<script src="{{ url_for('static', filename = 'js/sample.js') }}"></script>
 </html>
 
 

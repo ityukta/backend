@@ -1076,8 +1076,6 @@ def get_attendance_details(data):
     }
     response = {"msg":"success", 'data': return_data}
     return response
-
-
 def add_question_paper_pattern(data):
     conn = sql.connect('database.db')
     print(data)
@@ -1213,3 +1211,76 @@ def get_student_marks_details(data):
     final_data['student_data'] = student_data
     response = {"status_code": 200, "status_message":"successful", "data": final_data}
     return response
+
+def get_complete_faculty_details(data):
+    conn = sql.connect('database.db')
+    print(data)
+    check_authkey_query = """
+        SELECT *FROM LoginAuthKey WHERE authkey = ? AND faculty_id = ? AND DELETED = 0
+    """
+    c = conn.cursor()
+    _ = c.execute(check_authkey_query,
+                  (data['authkey'], data['faculty_id'])).fetchone()
+    if _ is None:
+        response = {"status_message": "Unauthorized access",
+                    "status_code": 404, "data": "Invalid Authkey provided"}
+        return response
+    get_complete_faculty_details_query = """
+        SELECT * FROM Faculty WHERE faculty_id = ? 
+    """
+    get_area_of_specialisation_query = """
+        SELECT specialisation_details FROM AreaOfSpecialisation Where faculty_id = ?
+    """
+    get_qualification_query = """
+        SELECT * FROM FacultyQualification WHERE faculty_id = ?
+    """
+    get_experience_query = """
+        SELECT * FROM WorkExperience WHERE faculty_id = ?
+    """
+    get_publication_query = """
+        SELECT publication_details FROM Publications WHERE faculty_id = ?
+    """
+    get_paper_query = """
+        SELECT research_paper_details FROM ResearchPaper WHERE faculty_id = ?
+    """
+    get_invited_talk_query = """
+        SELECT invited_talk_details FROM InvitedTalks WHERE  faculty_id = ?
+    """
+    get_session_query = """
+        SELECT session_chair_details FROM SessionChair WHERE faculty_id = ?
+    """
+    get_workshop_details_query = """
+        SELECT workshop_type , workshop_details FROM Workshops WHERE faculty_id = ? 
+    """
+    faculty_details = c.execute(get_complete_faculty_details_query , (data['faculty_id'],)).fetchone()
+    area_of_spec = c.execute(get_area_of_specialisation_query,(data['faculty_id'],)).fetchall()
+    qualification = c.execute(get_qualification_query,(data['faculty_id'],)).fetchall()
+    experience = c.execute(get_experience_query,(data['faculty_id'],)).fetchall()
+    publication = c.execute(get_publication_query,(data['faculty_id'],)).fetchall()
+    paper = c.execute(get_paper_query,(data['faculty_id'],)).fetchall()
+    invited_talks = c.execute(get_invited_talk_query,(data['faculty_id'],)).fetchall()
+    sessions = c.execute(get_session_query,(data['faculty_id'],)).fetchall()
+    workshops = c.execute(get_workshop_details_query,(data['faculty_id'],)).fetchall()
+    area = " ".join([i[0] for i in area_of_spec])
+    paper = [i[0] for i in paper]
+    publication = [i[0] for i in publication]
+    invited_talks = [i[0] for i in invited_talks]
+    sessions = [i[0] for i in sessions]
+    print(invited_talks)
+    print(sessions)
+    print(workshops)
+    response = {
+        'status_code' : 200 ,
+        'status_message' : 'successfull',
+        'data' : {
+            'name' :faculty_details[1],'dept':faculty_details[4],'date_of_joining':faculty_details[6],'dob':faculty_details[8],
+            'phone':faculty_details[5],'email':faculty_details[2],'marital_status':faculty_details[10],
+            'gender' : faculty_details[9],'address':faculty_details[11],'designation':faculty_details[13],
+            'association_with_institute':faculty_details[14],'experience_in_years':faculty_details[7],
+            'area_of_spec' :area, 'qualification' : qualification, 'experience' : experience,
+            'paper':paper , 'publications':publication,'invitedtalks': invited_talks, 'sessions':sessions,
+            "workshops":workshops,
+          }
+    } 
+    return response
+>>>>>>> 1c7fd311f2d70b1858458ade337e76c80d1b669c
