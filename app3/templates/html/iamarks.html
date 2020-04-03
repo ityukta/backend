@@ -182,7 +182,7 @@
             };
             $.ajax({
                 type: "POST",
-                url: "get_student_attendance_details",
+                url: "get_student_marks_details",
                 dataType: 'Json',
                 contentType: 'application/json',
                 data: JSON.stringify(d),
@@ -191,14 +191,24 @@
                     console.log(ret_obj);
                     table_data= "";
                     if(ret_obj['status_code'] == 200){
-                        for(i=0;i<ret_obj['data'].length ;i++){
-                        table_data += '<tr id="student-'+ret_obj['data'][i]['student_id']+'" class ="row">';
-                        table_data += '<td class="data-num">'+ret_obj['data'][i]['usn']+'</td>';
-                        table_data += '<td class="data-name">'+ret_obj['data'][i]['name']+'</td>';
-                        table_data += '<td class="data-test"><a href="#" class="asessment">assess-1</a></td>';
-                        table_data += `<td class="data-test"><a href="#" class="asessment">assess-2</a></td>`;
-                        table_data += `<td class="data-test"><a href="#" class="asessment">assess-3</a></td>`;
-                        table_data += `<td ><button class="add">+</button></td>`;
+                        for(i=0;i<ret_obj['data']['student_data'].length ;i++){
+                        table_data += '<tr id="student-'+ret_obj['data']['student_data'][i]['student_id']+'" class ="row">';
+                        table_data += '<td class="data-num">'+ret_obj['data']['student_data'][i]['usn']+'</td>';
+                        table_data += '<td class="data-name">'+ret_obj['data']['student_data'][i]['name']+'</td>';
+                        table_data += '<td class="data-test">';
+                        for(j=0;j<ret_obj['data']['student_data'][i]['assessments'].length;j++){
+                            if(ret_obj['data']['student_data'][i]['assessments'][j]['data_found'] == true){
+                                table_data += '<button class="assessments__view__marks__button">View marks</button>';
+                            }
+                            else{
+                                table_data += '<button class="assessments__add__marks__button" onclick="openaddmarks()">Add marks</button>';
+                            }
+                        }
+                        table_data += '</td>';
+                        // table_data += '<td class="data-test"><a href="#" class="asessment">assess-1</a></td>';
+                        // table_data += `<td class="data-test"><a href="#" class="asessment">assess-2</a></td>`;
+                        // table_data += `<td class="data-test"><a href="#" class="asessment">assess-3</a></td>`;
+                        table_data += `<td ><button class="add" onclick="addcustompattern(`+ret_obj['data']['student_data'][i]['student_id']+`)">+</button></td>`;
                         table_data += '</tr>';
                     }
                     $('.assesment-table-body').html(table_data);
@@ -226,10 +236,15 @@
     </style>
     <script>
         function openaddassmodal(){
+            $('.submit__marks').attr("onclick", "submitaddqpattern(-1)");
             $('.add__assessment__add__assessment').removeClass('modal__dispnone');
         }
         function closemodal(){
             $('.add__assessment__add__assessment').addClass('modal__dispnone');
+        }
+        function addcustompattern(stud_id){
+            $('.submit__marks').attr("onclick", "submitaddqpattern("+stud_id+")");
+            $('.add__assessment__add__assessment').removeClass('modal__dispnone');
         }
         function changedtype(id){
             console.log(id);
@@ -369,7 +384,7 @@
                     <div class="add__assessment__input__group">
                             <label for="descriptive_name_1">Enter Name</label>
                             <input type="text" name="descriptive_name_1"
-                            class="descriptive__name" id="descriptive_name_1">
+                            class="test__set__name" id="descriptive_name_1">
                     </div>
                     <div class="add__assessment__input__group">
                         <label for="no_of_questions_1">No of questions</label>
@@ -460,7 +475,7 @@
                     <div class="add__assessment__input__group">
                         <label for="descriptive_name_1">Enter Name</label>
                             <input type="text" name="consolidated_name_1"
-                            class="consolidated_name" id="consolidated_name_1">
+                            class="test__set__name" id="consolidated_name_1">
                     </div>
                     <div class="marks-entry__extra">
                         <div class="extra__item">
@@ -472,10 +487,65 @@
             `;
             $('.add__assessment__container').append(append_text);
         }
-        function submitaddqpattern(){
-            no_of_test_sets = $('.add__assessment__container .add__assessment__container').length;
+        function submitaddqpattern(all_or_one){
+            no_of_test_sets = $('.add__assessment__container .add__assessment__test__set').length;
+            var qpattern_data = [];
+            $('.add__assessment__container .add__assessment__test__set').each(function(){
+                test_set_test_type = $(this).find('.test__type').val();
+                test_set_eval_type = $(this).find('.test__eval__type').val();
+                test_set_name = null
+                q_data = null;
+                if(test_set_eval_type == "Descriptive"){
+                    test_set_name = $(this).find('.test__set__name').val();
+                    no_of_questions = $(this).find('.add__assessment__descriptive__container .no_of_questions').val();
+                    max_marks_per_question = $(this).find('.add__assessment__descriptive__container .max__marks__for__each__question').val();
+                    max_sub_questions = $(this).find('.add__assessment__descriptive__container .max__sub__questions').val();
+                    detailed_description = [];
+                    $(this).find('.add__assessment__q__pattern__question').each(function(){
+                        question_no = $(this).find('.marks-entry__td:nth-child(1)').text();
+                        sub_marks_arr = [];
+                        for(i=0;i<max_sub_questions;i++){
+                            sub_que_marks = $(this).find('.marks-entry__td:nth-child('+(i+2)+') input').val();
+                            sub_marks_arr.push(sub_que_marks);
+                        }
+                        max_marks = $(this).find('.q__pattern__question__total input').val();
+                        question_d = {
+                            "question_no": question_no,
+                            "max_marks" : max_marks,
+                            "sub_questions_marks": sub_marks_arr
+                        };
+                        detailed_description.push(question_d);
+                    });
+                    q_data = {
+                        "no_of_questions": no_of_questions,
+                        "max_marks_per_question" : max_marks_per_question,
+                        "no_of_sub_questions": max_sub_questions,
+                        "detailed_description" : detailed_description
+                    };
+                }
+                else if(test_set_eval_type == "Consolidated"){
+                    test_set_name = $(this).find('.add__assessment__consolidated__container .test__set__name').val();
+                    q_data = {
+                        "max_marks" : $(this).find('.add__assessment__consolidated__container .marks-entry__extra .consolidated_max_marks_input').val()
+                    };
+                }
+                test_set_data = {
+                    "test_set_name" : test_set_name,
+                    "test_set_type": test_set_test_type,
+                    "test_set_eval_type":test_set_eval_type,
+                    "questions_details" : q_data
+                };
+                qpattern_data.push(test_set_data);
+            });
             console.log(no_of_test_sets);
             subject_selected = $('#subject-id').val();
+            for_whom = null;
+            if(all_or_one == -1){
+                for_whom = 'all';
+            }
+            else{
+                for_whom = all_or_one
+            }
             var d = {
                 'authkey': localStorage.getItem('authkey'),
                 'faculty_id': localStorage.getItem('faculty_id'),
@@ -484,8 +554,22 @@
                 'sem': $('#sem-id').val(),
                 'sec' : $('#sec-id').val(),
                 'subject_name': subject_selected.split("-")[0],
-                'subject_id': subject_selected.split("-")[1]
+                'subject_id': subject_selected.split("-")[1],
+                'for': for_whom,
+                'q_pattern_data': qpattern_data
             };
+            console.log(d);
+            $.ajax({
+                type: "POST",
+                url: "add_question_paper_pattern",
+                dataType: 'Json',
+                contentType: 'application/json',
+                data: JSON.stringify(d),
+                processData: false,
+                success: function (ret_obj) {
+                    console.log(ret_obj);
+                }
+            });
         }
     </script>
 </head>
@@ -586,7 +670,7 @@
                             </button>
                         
                         </div>
-                        <button class="add__new__assessment__button" onclick="openaddassmodal()">Add New Assessment</button>
+                        <button class="add__new__assessment__button add__assessment__display__none" onclick="openaddassmodal()">Add New Assessment</button>
                         <!-- <div class="add__assessment__container">
                             <div class="add__assessment__test__set">
                                 <div class="add__assessment__input__group">
@@ -661,9 +745,9 @@
                                 <tr class="row" cellspacing=20px cellpadding=20px>
                                     <td class="heading">USN</td>
                                     <td class="heading">Name</td>
-                                    <td class="heading">assessment-1</td>
-                                    <td class="heading">assessment-2</td>
-                                    <td class="heading">assessment-3</td>
+                                    <td class="heading">assessments</td>
+                                    <!-- <td class="heading">assessment-2</td>
+                                    <td class="heading">assessment-3</td> -->
                                     <td class="heading">add</td>
                                 </tr>
                            </thead>
@@ -800,7 +884,7 @@
                         <div class="add__assessment__descriptive__container descriptive_container_no_1 add__assessment__display__none">
                             <div class="add__assessment__input__group">
                                     <label for="descriptive_name_1">Enter Name</label>
-                                    <input type="text" name="descriptive_name_1" class="descriptive__name" id="descriptive_name_1">
+                                    <input type="text" name="descriptive_name_1" class="test__set__name" id="descriptive_name_1">
                             </div>
                             <div class="add__assessment__input__group">
                                 <label for="no_of_questions_1">No of questions</label>
@@ -908,7 +992,7 @@
                         <div class="add__assessment__consolidated__container consolidated__container__no_1 add__assessment__display__none">
                             <div class="add__assessment__input__group">
                                 <label for="descriptive_name_1">Enter Name</label>
-                                    <input type="text" name="consolidated_name_1" class="consolidated_name"id="consolidated_name_1">
+                                    <input type="text" name="consolidated_name_1" class="test__set__name"id="consolidated_name_1">
                             </div>
                             <div class="marks-entry__extra">
                                 <div class="extra__item">
