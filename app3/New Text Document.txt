@@ -1,0 +1,6 @@
+validations
+add batch students - 20% left add subjects and update fcss
+priority based access
+view classwise marks
+
+link and make is beautiful

@@ -332,6 +332,7 @@
         'marital_status': marital_status//,
         // 'first_login' : 0
       };
+      localStorage.setItem("teacher_picture",b64) ;
       console.log(JSON.stringify(final_data));
       $.ajax({
         type: "POST",
@@ -342,6 +343,7 @@
         processData: false,
         success: function (ret_obj) {
           console.log(ret_obj);
+          window.location.href = 'home';
         }
       });
     }

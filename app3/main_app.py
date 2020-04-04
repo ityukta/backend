@@ -59,6 +59,16 @@ def add_iamarks_view():
 def home_page_view():
     """URL for professor home page """
     return render_template('html/personalpage.html')
+
+@APP.route('/teachers',methods = ['GET'])
+def all_teachers_view():
+    """URL for all professors page """
+    return render_template('html/allteachers.html')
+
+@APP.route('/approval', methods = ['GET'])
+def approve_view():
+    """This is the page to approve teachers """
+    return render_template('html/approval.html')   
 # Endpoints
 
 
@@ -86,10 +96,9 @@ def final_register_ajax():
 def login_ajax():
     """This is the ajax endpoint for login"""
     data = request.get_json()
-    print(data)
+   
     response = dbop.validate_login(data)
-    print(response)
-    print("hello tresting")
+    # print(response)
     return jsonify(response)
 
 @APP.route('/getdetails', methods = ['POST'])
@@ -212,6 +221,7 @@ def add_question_paper_pattern_ajax():
     print(data)
     response = dbop.add_question_paper_pattern(data)
     return jsonify(response)
+
 @APP.route('/get_complete_faculty_details' , methods = ['POST'])
 def get_faculty_details_view():
     """This endpoint is used tot get faculty details"""
@@ -225,6 +235,21 @@ def add_student_res_ajax():
     data = request.get_json()
     resonse = dbop.add_student_res(data)
     return jsonify(resonse)
+
+@APP.route('/get_all_faculty' , methods = ['POST'])
+def get_faculty_view():
+    """This endpoint is used get  all faculty """
+    data = request.get_json()
+    response = dbop.get_complete_faculty(data)
+    return jsonify(response)
+
+@APP.route('/approve__decline' , methods = ['POST'])
+def approve__decline__view():
+    """This endpoint is approve or decline a faculty """
+    data = request.get_json()
+    response = dbop.approve__decline(data)
+    return jsonify(response)
+
 if __name__ == '__main__':
     APP.run(debug=True, threaded=True)
     APP.run()
