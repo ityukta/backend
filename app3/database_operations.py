@@ -1164,6 +1164,7 @@ def get_student_marks_details(data):
     student_data = c.execute(get_student_details_from_fcss_query, (fcs_details, )).fetchall()
     for i in range(len(student_data)):
         student_data[i] = dict(zip([cur[0] for cur in c.description], student_data[i]))
+        student_data[i]['assessments'] = []
     get_tests_data_query = """
         SELECT *FROM tests WHERE fcs_id = ?
     """
@@ -1194,8 +1195,7 @@ def get_student_marks_details(data):
                     })
 
                 else:
-                    for k in range(len(student_marks)):
-                        student_marks[k] = dict(zip([cur[0] for cur in c.description], student_marks[k]))
+                    student_marks = dict(zip([cur[0] for cur in c.description], student_marks))
                     student_marks['marks'] = pickle.loads(student_marks['marks'])
                     each_student['assessments'] = each_student.get('assessments', [])
                     each_student['assessments'].append({
@@ -1212,6 +1212,27 @@ def get_student_marks_details(data):
     response = {"status_code": 200, "status_message":"successful", "data": final_data}
     return response
 
+def add_student_res(data):
+    conn = sql.connect('database.db')
+    print(data)
+    check_authkey_query = """
+        SELECT *FROM LoginAuthKey WHERE authkey = ? AND faculty_id = ? AND DELETED = 0
+    """
+    c = conn.cursor()
+    _ = c.execute(check_authkey_query,
+                  (data['authkey'], data['faculty_id'])).fetchone()
+    if _ is None:
+        response = {"status_message": "Unauthorized access",
+                    "status_code": 404, "data": "Invalid Authkey provided"}
+        return response
+    insert_student_result_query = """
+        INSERT INTO Test_res(fcss_id, test_id, marks) VALUES(?, ?, ?)
+    """
+    marks_object = pickle.dumps(data['result_data'])
+    c.execute(insert_student_result_query, (data['fcss_id'], data['test_id'], marks_object))
+    conn.commit()
+    response = {"status_message" : "successful", "status_code" : 200}
+    return response
 def get_complete_faculty_details(data):
     conn = sql.connect('database.db')
     print(data)
@@ -1252,15 +1273,15 @@ def get_complete_faculty_details(data):
     get_workshop_details_query = """
         SELECT workshop_type , workshop_details FROM Workshops WHERE faculty_id = ? 
     """
-    faculty_details = c.execute(get_complete_faculty_details_query , (data['faculty_id'],)).fetchone()
-    area_of_spec = c.execute(get_area_of_specialisation_query,(data['faculty_id'],)).fetchall()
-    qualification = c.execute(get_qualification_query,(data['faculty_id'],)).fetchall()
-    experience = c.execute(get_experience_query,(data['faculty_id'],)).fetchall()
-    publication = c.execute(get_publication_query,(data['faculty_id'],)).fetchall()
-    paper = c.execute(get_paper_query,(data['faculty_id'],)).fetchall()
-    invited_talks = c.execute(get_invited_talk_query,(data['faculty_id'],)).fetchall()
-    sessions = c.execute(get_session_query,(data['faculty_id'],)).fetchall()
-    workshops = c.execute(get_workshop_details_query,(data['faculty_id'],)).fetchall()
+    faculty_details = c.execute(get_complete_faculty_details_query, (data['faculty_id'],)).fetchone()
+    area_of_spec = c.execute(get_area_of_specialisation_query, (data['faculty_id'],)).fetchall()
+    qualification = c.execute(get_qualification_query, (data['faculty_id'],)).fetchall()
+    experience = c.execute(get_experience_query, (data['faculty_id'],)).fetchall()
+    publication = c.execute(get_publication_query, (data['faculty_id'],)).fetchall()
+    paper = c.execute(get_paper_query, (data['faculty_id'],)).fetchall()
+    invited_talks = c.execute(get_invited_talk_query, (data['faculty_id'],)).fetchall()
+    sessions = c.execute(get_session_query, (data['faculty_id'],)).fetchall()
+    workshops = c.execute(get_workshop_details_query, (data['faculty_id'],)).fetchall()
     area = " ".join([i[0] for i in area_of_spec])
     paper = [i[0] for i in paper]
     publication = [i[0] for i in publication]
@@ -1273,14 +1294,26 @@ def get_complete_faculty_details(data):
         'status_code' : 200 ,
         'status_message' : 'successfull',
         'data' : {
-            'name' :faculty_details[1],'dept':faculty_details[4],'date_of_joining':faculty_details[6],'dob':faculty_details[8],
-            'phone':faculty_details[5],'email':faculty_details[2],'marital_status':faculty_details[10],
-            'gender' : faculty_details[9],'address':faculty_details[11],'designation':faculty_details[13],
+            'name' :faculty_details[1],
+            'dept':faculty_details[4],
+            'date_of_joining':faculty_details[6],
+            'dob':faculty_details[8],
+            'phone':faculty_details[5],
+            'email':faculty_details[2],
+            'marital_status':faculty_details[10],
+            'gender' : faculty_details[9],
+            'address':faculty_details[11],
+            'designation':faculty_details[13],
             'association_with_institute':faculty_details[14],'experience_in_years':faculty_details[7],
-            'area_of_spec' :area, 'qualification' : qualification, 'experience' : experience,
-            'paper':paper , 'publications':publication,'invitedtalks': invited_talks, 'sessions':sessions,
+            'area_of_spec' :area, 
+            'qualification' : qualification, 
+            'experience' : experience,
+            'paper':paper,
+            'publications':publication, 
+            'invitedtalks': invited_talks, 
+            'sessions':sessions,
             "workshops":workshops,
           }
     } 
     return response
->>>>>>> 1c7fd311f2d70b1858458ade337e76c80d1b669c
+

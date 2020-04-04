@@ -205,7 +205,6 @@ def get_attendance_details_ajax():
     response = dbop.get_attendance_details(data)
     return jsonify(response)
 
-<<<<<<< HEAD
 @APP.route('/add_question_paper_pattern', methods = ['POST'])
 def add_question_paper_pattern_ajax():
     """This endpoint is to add qPattern"""
@@ -213,7 +212,6 @@ def add_question_paper_pattern_ajax():
     print(data)
     response = dbop.add_question_paper_pattern(data)
     return jsonify(response)
-=======
 @APP.route('/get_complete_faculty_details' , methods = ['POST'])
 def get_faculty_details_view():
     """This endpoint is used tot get faculty details"""
@@ -221,7 +219,12 @@ def get_faculty_details_view():
     response = dbop.get_complete_faculty_details(data)
     return jsonify(response)
 
->>>>>>> 1c7fd311f2d70b1858458ade337e76c80d1b669c
+@APP.route('/add_student_res', methods=['POST'])
+def add_student_res_ajax():
+    """This endpoint is to add student result"""
+    data = request.get_json()
+    resonse = dbop.add_student_res(data)
+    return jsonify(resonse)
 if __name__ == '__main__':
     APP.run(debug=True, threaded=True)
     APP.run()

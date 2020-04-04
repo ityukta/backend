@@ -13,6 +13,8 @@
     />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script>
+        var qp_data = {};
+        var res_data = {};
           $(document).ready(function () {
             var pic = localStorage.getItem("teacher_picture");
             var img = ` <img src="data:image/jpg;base64, `+ pic + `" alt="" class="header__logout__img" >`
@@ -168,6 +170,244 @@
             $('#submit-attendance-search').removeAttr('disabled');
         });
         });
+        function addstudent_marks(fcss_id, test_id){
+            var faculty_id = localStorage.getItem('faculty_id');
+            var authkey = localStorage.getItem('authkey');
+            no_of_res_sets = $('.add__assessment__add__marks__modal .modal__body .add__assessment__res__set').length;
+            var student_res_data = [];
+            $('.add__assessment__add__marks__modal .modal__body .add__assessment__res__set').each(function(){
+                if($(this).find('.marks-entry__table').length > 0){
+                    test_res_type = "Descriptive";
+                    res__set__name = $(this).find('.res__set__test__name').text();
+                    no_of_questions = $(this).find('.marks__table__column').length;
+                    no_of_sub_questions = $(this).find('.sub__question__markers').length;
+                    marks_alloted = []
+                    $(this).find('.marks__table__column').each(function(){
+                        question_no = $(this).find('.marks__column__question__number').text();
+                        sub_question_marks = [];
+                        $(this).find('.sub__question__marks').each(function(){
+                            marks = $(this).find('input').val();
+                            max_marks = null;
+                            if(marks != ""){
+                                max_marks = $(this).text().slice(2);
+                            }
+                            else{
+                                max_marks = 0
+                                marks = 0;
+                            }
+                            sub_question_dict = {
+                                "max_marks" : max_marks,
+                                "marks_secured" : marks
+                            };
+                            sub_question_marks.push(sub_question_dict);
+                        });
+                        total = $(this).find('.total__marks__per__question input').val();
+                        max_question_marks = $(this).find('.total__marks__per__question .max__marks').text().slice(2);
+                        question_dict = {
+                            "question_no" : question_no,
+                            "sub_question_marks" : sub_question_marks,
+                            "max_marks" : max_question_marks,
+                            "total" : total
+                        };
+                        marks_alloted.push(question_dict);
+                    });
+                    final_marks_obtained = $(this).find('.total__marks__for__test__set input').val();
+                    res_set_dict = {
+                        "test_res_type" : test_res_type,
+                        "test_set_name" : res__set__name,
+                        "no_of_questions" : no_of_questions,
+                        "no_of_sub_questions" : no_of_sub_questions,
+                        "marks_data" : marks_alloted,
+                        "total_marks_obtained" : final_marks_obtained
+                    };
+                    student_res_data.push(res_set_dict);
+                }
+                else{
+                    test_res_type = "Consolidated";
+                    res_set_name = $(this).find('.res__set__test__name').text();
+                    marks_secured = $(this).find('.marks__secured input').val();
+                    total_marks = $(this).find('.total__marks input').val();
+                    res_set_dict = {
+                        "test_res_type" : test_res_type,
+                        "test_set_name" : res_set_name,
+                        "max_marks" : total_marks,
+                        "marks_secured" : marks_secured
+                    };
+                    student_res_data.push(res_set_dict);
+                }
+            });
+            console.log(student_res_data);
+            var d = {
+                "faculty_id":faculty_id,
+                "authkey" : authkey,
+                "fcss_id" : fcss_id,
+                "test_id" : test_id,
+                "result_data" : student_res_data
+            };
+            $.ajax({
+                type: "POST",
+                url: "add_student_res",
+                dataType: 'Json',
+                contentType: 'application/json',
+                data: JSON.stringify(d),
+                processData: false,
+                success: function (ret_obj) {
+                    console.log(ret_obj);
+                }
+            });
+        }
+        function openaddmarks(fcss_id, test_id){
+            question_paper_pattern = qp_data[fcss_id][test_id];
+            console.log(question_paper_pattern);
+            temp = `<div class="modal__body">
+                    <div class="close-btn" onclick="closeaddmarks()"><i class="fa fa-times fa-2x"></i></div>
+                    <div class="marks-entry"><div class="head">`+qp_data[fcss_id]["name_"+test_id]+`
+                    </div>`;
+            for(i=0;i<question_paper_pattern.length;i++){
+                if(question_paper_pattern[i]['test_set_eval_type'] == "Descriptive"){
+                    temp +=`
+                    <div class="add__assessment__res__set">
+                    <h3 class="res__set__test__name">`+question_paper_pattern[i]['test_set_name']+`</h3>
+                    <div class="marks-entry__table">
+                        <div class="marks-entry__tc">
+                        <div class="marks-entry__td ">Q.No</div>
+                    `;
+                    for(j=0;j<question_paper_pattern[i]['questions_details']['no_of_sub_questions']; j++){
+                       temp += `<div class="marks-entry__td marks-entry__td_1 sub__question__markers">`+String.fromCharCode(97 + j)+`</div>`; 
+                    }
+                    temp += `
+                    <div class="marks-entry__td marks-entry__td_2" >Total</div>
+                    </div>
+                    `;
+                    for(j=0;j<question_paper_pattern[i]['questions_details']['no_of_questions'];j++){
+                        temp += `<div class="marks-entry__tc marks__table__column"><div class="marks-entry__td marks__column__question__number">`+(j+1)+`</div>`;
+                        for(k=0;k<question_paper_pattern[i]['questions_details']['no_of_sub_questions']; k++){
+                            sub_que_marks = question_paper_pattern[i]['questions_details']['detailed_description'][j]['sub_questions_marks'][k];
+                            if(sub_que_marks == 0){
+                                temp += `<div class="marks-entry__td sub__question__marks"><input type="number" class="number" disabled></div>`;
+                            }
+                            else{
+                                temp += `<div class="marks-entry__td sub__question__marks"><input type="number" class="number changed__input__css__to__width__50" max="`+sub_que_marks+`" value="0"><span class="max__marks">/ `+sub_que_marks+`</span></div>`;
+                            }
+                        }
+                        temp +=`
+                        <div class="marks-entry__td total__marks__per__question"><input type="number" class="number changed__input__css__to__width__50" max="`+question_paper_pattern[i]['questions_details']['detailed_description'][j]['max_marks']+`" value="0" readonly><span class="max__marks">/ `+question_paper_pattern[i]['questions_details']['detailed_description'][j]['max_marks']+`</span></div></div>
+                        `;
+                    }
+                    temp+=`
+                    <div class="marks-entry__tc marks-entry__tc_border">
+                        <div class="marks-entry__td">Total</div>
+                        <div class="marks-entry__td marks-entry__td_3 marks-entry__td_none">&nbsp;</div>
+                        <div class="marks-entry__td marks-entry__td_none total__marks__for__test__set"><input type="number" class="number"></div>
+                        <div class="marks-entry__td marks-entry__td_3 marks-entry__td_none" >&nbsp;</div>
+                        <div class="marks-entry__td marks-entry__td_3 marks-entry__td_none">&nbsp;</div>
+                    </div>
+                    </div>
+                    </div>
+                    </div>
+                    `;
+                    // temp += `</div>`;
+                }
+                else{
+                    temp +=`
+                    <div class="add__assessment__res__set">
+                    <div class="marks-entry__extra">
+                       <div class="extra__item">
+                            <div class="item__heading res__set__test__name">`+question_paper_pattern[i]['test_set_name']+`</div>
+                        
+                            <div class="item__sub-heading marks__secured">Secured-<input type="number" value="0" class="number number__1"></div>
+                            <div class="item__sub-heading total__marks">Total-<input type="number" value="`+question_paper_pattern[i]['questions_details']['max_marks']+`" class="number number__1" readonly></div>
+                        </div>  
+                    </div>
+                    </div>
+                       `;
+
+                }
+            }
+            temp += `<button class="submit__marks" onclick="addstudent_marks(`+fcss_id+`,`+test_id+`)">submit</button></div>
+            `;
+            $('.add__assessment__add__marks__modal').html(temp);
+            $('.add__assessment__add__marks__modal').removeClass('modal__dispnone');
+        }
+        function viewstudentmarks(fcss_id, test_id){
+            student_result = res_data[fcss_id][test_id];
+            console.log(student_result);
+            temp = `
+            <div class="modal view__student__marks__modal">
+            <div class="modal__body">
+                <div class="close-btn" onclick="closeviewmarks()"><i class="fa fa-times fa-2x"></i></div>
+                <div class="head">
+                    `+res_data[fcss_id]["name_"+test_id]+`
+                </div>
+            `;
+            for(i=0;i<student_result.length;i++){
+                if(student_result[i]['test_res_type'] == "Descriptive"){
+                    no_of_questions = student_result[i]['no_of_questions'];
+                    no_of_sub_questions = student_result[i]['no_of_sub_questions'];
+                    total_marks_obtained = student_result[i]['total_marks_obtained'];
+                    temp += `<div class="assessment__res__set">
+                        <h3>`+student_result[i]['test_set_name']+`</h3>
+                        <div class="marks-entry__table">
+                    `;
+                    temp += `<div class="marks-entry__tc">
+                        <div class="marks-entry__td ">Q.No</div>`;
+                    for(j=0;j<no_of_sub_questions;j++){
+                        temp +=`<div class="marks-entry__td marks-entry__td_1">`+String.fromCharCode(j + 97)+`</div>`;
+                    }
+                    temp += `<div class="marks-entry__td marks-entry__td_2" >Total</div>
+                    </div>`;
+                    for(j=0;j<no_of_questions;j++){
+                        temp += `
+                        <div class="marks-entry__tc">
+                        <div class="marks-entry__td">`+student_result[i]['marks_data'][j]['question_no']+`</div>
+                        `;
+                        for(k=0;k<no_of_sub_questions;k++){
+                            sub_que_marks = student_result[i]['marks_data'][j]['sub_question_marks'][k];
+                            if(sub_que_marks['max_marks'] == 0){
+                                temp += `
+                            <div class="marks-entry__td">-</div>
+                            `;
+                            }else{
+                                temp += `
+                            <div class="marks-entry__td">`+sub_que_marks['marks_secured']+`</div>
+                            `;
+                            }
+                        }
+                        temp +=`
+                        <div class="marks-entry__td">`+student_result[i]['marks_data'][j]['total']+`</div>
+                        </div>
+                        `;
+                    }
+                    temp += `
+                    <div class="marks-entry__tc marks-entry__tc_border">
+                        <div class="marks-entry__td">Total</div>
+                        <div class="marks-entry__td marks-entry__td_3 marks-entry__td_none">&nbsp;</div>
+                        <div class="marks-entry__td marks-entry__td_none">`+student_result[i]['total_marks_obtained']+`</div>
+                        <div class="marks-entry__td marks-entry__td_3 marks-entry__td_none" >&nbsp;</div>
+                        <div class="marks-entry__td marks-entry__td_3 marks-entry__td_none">&nbsp;</div>
+                    </div>
+                    </div>
+                    </div>
+                    `;
+                }
+                else if(student_result[i]['test_res_type'] == "Consolidated"){
+                    temp += `
+                    <div class="assessment__res__set">
+                    <div class="marks-entry__extra">
+                    <div class="extra__item">
+                        <div class="item__heading">`+student_result[i]['test_set_name']+`</div>
+                        <div class="item__sub-heading">Secured-`+student_result[i]['marks_secured']+` /`+student_result[i]['max_marks']+`</div>
+                    </div>
+                    </div>
+                    </div>
+                    `;
+                }
+            }
+            temp += `</div></div>`;
+            $('.view__student__marks__modal').html(temp);
+            $('.view__student__marks__modal').removeClass('modal__dispnone');
+            
+        }
         function submitstudentsearch(){
             subject_selected = $('#subject-id').val();
             var d = {
@@ -198,10 +438,32 @@
                         table_data += '<td class="data-test">';
                         for(j=0;j<ret_obj['data']['student_data'][i]['assessments'].length;j++){
                             if(ret_obj['data']['student_data'][i]['assessments'][j]['data_found'] == true){
-                                table_data += '<button class="assessments__view__marks__button">View marks</button>';
+                                fcss_id = ret_obj['data']['student_data'][i]['fcss_id'];
+                                test_id = ret_obj['data']['student_data'][i]['assessments'][j]['test_id'];
+                                if(fcss_id in res_data){
+                                    res_data[fcss_id][test_id] = ret_obj['data']['student_data'][i]['assessments'][j]['marks'];
+                                    res_data[fcss_id]["name_" + test_id] = ret_obj['data']['student_data'][i]['assessments'][j]['name'];
+                                }
+                                else{
+                                    res_data[fcss_id] = {};
+                                    res_data[fcss_id][test_id] = ret_obj['data']['student_data'][i]['assessments'][j]['marks'];
+                                    res_data[fcss_id]["name_" + test_id] = ret_obj['data']['student_data'][i]['assessments'][j]['name'];
+                                }
+                                table_data += `<button class="assessments__view__marks__button" onclick="viewstudentmarks(`+ret_obj['data']['student_data'][i]['fcss_id']+`, `+ret_obj['data']['student_data'][i]['assessments'][j]['test_id']+`)">View marks</button>`;
                             }
                             else{
-                                table_data += '<button class="assessments__add__marks__button" onclick="openaddmarks()">Add marks</button>';
+                                fcss_id = ret_obj['data']['student_data'][i]['fcss_id'];
+                                test_id = ret_obj['data']['student_data'][i]['assessments'][j]['test_id'];
+                                if(fcss_id in qp_data){
+                                    qp_data[fcss_id][test_id] = ret_obj['data']['student_data'][i]['assessments'][j]['q_pattern'];
+                                    qp_data[fcss_id]["name_" + test_id] = ret_obj['data']['student_data'][i]['assessments'][j]['name'];
+                                }
+                                else{
+                                    qp_data[fcss_id] = {};
+                                    qp_data[fcss_id][test_id] = ret_obj['data']['student_data'][i]['assessments'][j]['q_pattern'];
+                                    qp_data[fcss_id]["name_" + test_id] = ret_obj['data']['student_data'][i]['assessments'][j]['name'];
+                                }
+                                table_data += `<button class="assessments__add__marks__button" onclick="openaddmarks(`+ret_obj['data']['student_data'][i]['fcss_id']+`, `+ret_obj['data']['student_data'][i]['assessments'][j]['test_id']+`)">Add marks</button>`;
                             }
                         }
                         table_data += '</td>';
@@ -227,11 +489,29 @@
         .add__assessment__display__none{
             display: none;
         }
-        .add__assessment__add__assessment{
+        .modal .modal__body{
             width: 80%;
             height: 80%;
-            margin-top: 100px;
             overflow: scroll;
+        }
+        input[type=number]::-webkit-inner-spin-button, 
+        input[type=number]::-webkit-outer-spin-button { 
+            -webkit-appearance: none; 
+            margin: 0; 
+        }
+        .max__marks{
+            color: lightgray;
+            text-align: left;
+        }
+        .changed__input__css__to__width__50{
+            width: 43px !important;
+        }
+        .view__marks__table td,th{
+            border: 1px solid black;
+            width: 30px;
+        }
+        .view__student__marks__modal .marks-entry__td{
+            width: 100%;
         }
     </style>
     <script>
@@ -242,10 +522,17 @@
         function closemodal(){
             $('.add__assessment__add__assessment').addClass('modal__dispnone');
         }
+        function closeviewmarks(){
+            $('.view__student__marks__modal').addClass('modal__dispnone');
+        }
+        function closeaddmarks(){
+            $('.add__assessment__add__marks__modal').addClass('modal__dispnone');
+        }
         function addcustompattern(stud_id){
             $('.submit__marks').attr("onclick", "submitaddqpattern("+stud_id+")");
             $('.add__assessment__add__assessment').removeClass('modal__dispnone');
         }
+        
         function changedtype(id){
             console.log(id);
             selector = "#" + id;
@@ -1121,9 +1408,64 @@
             
             </div>
         </div>
-        <div class="modal modal__dispnone">    <!--modal__dispnone is a class to hide the modal from the page-->
+        <div class="modal view__student__marks__modal modal__dispnone">
             <div class="modal__body">
-               <div class="close-btn"><i class="fa fa-times fa-2x"></i></div>
+                <div class="close-btn" onclick="closeviewmarks()"><i class="fa fa-times fa-2x"></i></div>
+                <div class="head">
+                    Assessment 1
+                </div>
+                <div class="assessment__res__set">
+                    <h3>IT - 1</h3>
+                    <div class="marks__table">
+                        <table class="view__marks__table">
+                            <thead>
+                                <th>Q No.</th>
+                                <th>1</th>
+                                <th>2</th>
+                                <th>3</th>
+                                <th>total</th>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th>a</th>
+                                    <td>10</td>
+                                    <td>10</td>
+                                    <td>10</td>
+                                    <td rowspan="4">100</td>
+                                </tr>
+                                <tr>
+                                    <th>b</th>
+                                    <td>10</td>
+                                    <td>10</td>
+                                    <td>10</td>
+                                </tr>
+                                <tr>
+                                    <th>c</th>
+                                    <td>10</td>
+                                    <td>10</td>
+                                    <td>10</td>
+                                </tr>
+                                <tr>
+                                    <th>total</th>
+                                    <td>10</td>
+                                    <td>10</td>
+                                    <td>10</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="assessment__res__set">
+                    <div class="extra__item">
+                        <div class="item__heading">quiz</div>
+                            <div class="item__sub-heading">Secured-10 /10</div>                       
+                   </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal add__assessment__add__marks__modal modal__dispnone">    <!--modal__dispnone is a class to hide the modal from the page-->
+            <div class="modal__body">
+               <div class="close-btn" onclick="closeaddmarks()"><i class="fa fa-times fa-2x"></i></div>
                <div class="marks-entry">
                <div class="head">
                    Assessment-1
@@ -1139,7 +1481,7 @@
                     </div>
                     <div class="marks-entry__tc">
                         <div class="marks-entry__td">1</div>
-                        <div class="marks-entry__td"><input type="number" class="number"></div>
+                        <div class="marks-entry__td"><input type="number" class="number" style="width: 50% !important;"><span class="max__marks">/10</span></div>
                         <div class="marks-entry__td"><input type="number" class="number"></div>
                         <div class="marks-entry__td"><input type="number" class="number"></div>
                         <div class="marks-entry__td"><input type="number" class="number"></div>
