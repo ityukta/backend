@@ -120,6 +120,13 @@
                 }
             });
         }
+        function closemodal(){
+            $('.modal').addClass('modal__dispnone');
+        }
+        function opennavbar()
+        {
+            $('.navbar').toggleClass('show-navbar');
+        }
     </script>
 </head>
 
@@ -129,7 +136,7 @@
     <div class="modal modal__dispnone">
         <!--modal__dispnone is a class to hide the modal from the page-->
         <div class="modal__body">
-            <div class="close-btn"><i class="fa fa-times fa-2x"></i></div>
+            <div class="close-btn" onclick="closemodal()"><i class="fa fa-times fa-2x"></i></div>
             <div>
                 <input type="hidden" id="sem">
                 <input type="hidden" id="sec">
@@ -155,7 +162,7 @@
         <header class="header">
             <img src="{{ url_for('static', filename = 'images/logo.jpg') }}" alt="" class="header__collegelogo">
             <div class="header__content1">
-                <button class="nav-btn"><i class="fa fa-bars fa-2x"></i></button>
+                <button class="nav-btn" onclick="opennavbar()"><i class="fa fa-bars fa-2x"></i></button>
                 <h3 class="header__heading">Student login</h3>
             </div>
             <div class="header__content2">
@@ -195,7 +202,7 @@
             </div>
         </header>
         <section class="section">
-            <div class="navbar ">
+            <div class="navbar">
                 <!--Add show-navbar on click of nav button-->
                 <ul class="nav__ul">
                     <li class="nav__li"><a href="">home</a> </li>
@@ -355,7 +362,8 @@
             </div>
         </section>
     </div>
-    <script src="{{ url_for('static', filename = 'js/sample.js') }}"></script>
+    
 </body>
-
+<script src="{{ url_for('static', filename = 'js/sample.js') }}"></script>
+    <script src="{{ url_for('static', filename = 'js/nav.js') }}"></script>
 </html>

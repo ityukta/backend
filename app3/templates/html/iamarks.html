@@ -284,21 +284,21 @@
                         for(k=0;k<question_paper_pattern[i]['questions_details']['no_of_sub_questions']; k++){
                             sub_que_marks = question_paper_pattern[i]['questions_details']['detailed_description'][j]['sub_questions_marks'][k];
                             if(sub_que_marks == 0){
-                                temp += `<div class="marks-entry__td sub__question__marks"><input type="number" class="number" disabled></div>`;
+                                temp += `<div class="marks-entry__td sub__question__marks__disabled"><input type="number" class="number" disabled></div>`;
                             }
                             else{
-                                temp += `<div class="marks-entry__td sub__question__marks"><input type="number" class="number changed__input__css__to__width__50" max="`+sub_que_marks+`" value="0"><span class="max__marks">/ `+sub_que_marks+`</span></div>`;
+                                temp += `<div class="marks-entry__td sub__question__marks"><input type="number" class="number changed__input__css__to__width__50" max="`+sub_que_marks+`" value="0" onchange="resmarkschanged($(this))"><span class="max__marks">/ `+sub_que_marks+`</span></div>`;
                             }
                         }
                         temp +=`
-                        <div class="marks-entry__td total__marks__per__question"><input type="number" class="number changed__input__css__to__width__50" max="`+question_paper_pattern[i]['questions_details']['detailed_description'][j]['max_marks']+`" value="0" readonly><span class="max__marks">/ `+question_paper_pattern[i]['questions_details']['detailed_description'][j]['max_marks']+`</span></div></div>
+                        <div class="marks-entry__td total__marks__per__question"><input type="number" class="number changed__input__css__to__width__50" max="`+question_paper_pattern[i]['questions_details']['detailed_description'][j]['max_marks']+`" value="0" onchange="updatedtotalmarks($(this))" readonly><span class="max__marks">/ `+question_paper_pattern[i]['questions_details']['detailed_description'][j]['max_marks']+`</span></div></div>
                         `;
                     }
                     temp+=`
                     <div class="marks-entry__tc marks-entry__tc_border">
                         <div class="marks-entry__td">Total</div>
                         <div class="marks-entry__td marks-entry__td_3 marks-entry__td_none">&nbsp;</div>
-                        <div class="marks-entry__td marks-entry__td_none total__marks__for__test__set"><input type="number" class="number"></div>
+                        <div class="marks-entry__td marks-entry__td_none total__marks__for__test__set"><input type="number" class="number" value="0" readonly></div>
                         <div class="marks-entry__td marks-entry__td_3 marks-entry__td_none" >&nbsp;</div>
                         <div class="marks-entry__td marks-entry__td_3 marks-entry__td_none">&nbsp;</div>
                     </div>
@@ -513,8 +513,83 @@
         .view__student__marks__modal .marks-entry__td{
             width: 100%;
         }
+        .invalid__red__boX{
+            border: 3px solid red;
+        }
     </style>
     <script>
+        function questionmarksinput(param){
+            console.log('at least here');
+            nearest_parent = $(param).closest('.add__assessment__q__pattern__question');
+            no_of_sub_questions = $(nearest_parent).find('.marks-entry__td').length - 2;
+            total_alloted_marks = 0;
+            max_marks = $(nearest_parent).find('.q__pattern__question__total input').val();
+            for(i=0;i<no_of_sub_questions;i++){
+                marks = parseInt($(nearest_parent).find('.marks-entry__td:nth-child('+(i+2)+')').find('input').val());
+                total_alloted_marks += marks;
+            }
+            console.log("max marks", max_marks);
+            console.log("marks alloted", total_alloted_marks);
+            if(max_marks == total_alloted_marks){
+                $(nearest_parent).removeClass('invalid__red__boX');
+            }
+            else{
+                $(nearest_parent).addClass('invalid__red__boX');
+            }
+
+        }
+        function resmarkschanged(param){
+            updated_marks = parseInt($(param).val());
+            max_marks = parseInt($(param).attr('max'));
+            console.log('updated', updated_marks);
+            console.log("max", max_marks);
+            if(updated_marks > max_marks){
+                $(param).closest('.sub__question__marks').addClass('invalid__red__boX');
+            }
+            else{
+                $(param).closest('.sub__question__marks').removeClass('invalid__red__boX');
+            }
+            total_for_question = 0;
+            $(param).closest('.marks__table__column').find('.sub__question__marks').each(function(){
+                total_for_question += parseInt($(this).find('input').val());
+            });
+            total_selector = $(param).closest('.marks__table__column').find('.total__marks__per__question');
+            total_max = $(total_selector).find('input').attr('max');
+            $(total_selector).find('input').val(total_for_question);
+            $(total_selector).find('input').trigger('change');
+            if(total_for_question > total_max){
+                $(total_selector).addClass('invalid__red__boX');
+            }
+            else{
+                $(total_selector).removeClass('invalid__red__boX');
+            }
+
+        }
+        function updatedtotalmarks(param){
+            console.log('cam in');
+            marks_table = $(param).closest('.marks-entry__table');
+            no_of_questions = $(marks_table).find('.marks__table__column').length;
+            final_total = 0;
+            console.log(no_of_questions);
+            marks_arr = [];
+            $(marks_table).find('.total__marks__per__question').each(function(){
+                marks_arr.push($(this).find('input').val());
+            });
+            console.log(marks_arr);
+            for(i=0;i<no_of_questions; i+=2){
+                marks1 = parseInt(marks_arr[i]);
+                marks2 = parseInt(marks_arr[i+1]);
+                console.log(marks1, marks2);
+                if(marks1 > marks2){
+                    final_total += marks1;
+                }
+                else{
+                    final_total += marks2;
+                }
+            }
+            console.log(final_total);
+            $(marks_table).find('.total__marks__for__test__set input').val(final_total);
+        }
         function openaddassmodal(){
             $('.submit__marks').attr("onclick", "submitaddqpattern(-1)");
             $('.add__assessment__add__assessment').removeClass('modal__dispnone');
@@ -580,13 +655,13 @@
             sample_table += `</div>`;
             for(i=1;i<=changed_value;i++){
                 temp = `
-                <div class="marks-entry__tc add__assessment__q__pattern__question">
+                <div class="marks-entry__tc add__assessment__q__pattern__question invalid__red__boX">
                     <div class="marks-entry__td">`+(i)+`</div>`;
                     for(j=0;j<no_of_sub_questions;j++){
-                        temp += `<div class="marks-entry__td"><input type="number" class="number" value="0"></div>`;
+                        temp += `<div class="marks-entry__td"><input type="number" class="number" value="0" onchange="questionmarksinput($(this))"></div>`;
                     }
                     temp +=`
-                    <div class="marks-entry__td q__pattern__question__total"><input type="number" class="number" value="`+max_marks+`"></div>
+                    <div class="marks-entry__td q__pattern__question__total"><input type="number" class="number" value="`+max_marks+`" onchange="questionmarksinput($(this))" readonly></div>
                 </div>
                 `;
                 sample_table += temp;
@@ -608,6 +683,7 @@
             changed_value = $(selector).val();
             $(selector).closest('.add__assessment__descriptive__container').find('.marks-entry__table').children('.add__assessment__q__pattern__question').each(function(){
                 x = $(this).find('.q__pattern__question__total input').val(changed_value);
+                $(this).find('.q__pattern__question__total input').trigger("change");
                 console.log(x);
             });
             // find('.find('.q__pattern__question__total input')').val(changed_value);
@@ -628,16 +704,16 @@
             final_table += `</div>`;
             for(i=1;i<=no_of_questions;i++){
                 final_table += `
-                <div class="marks-entry__tc add__assessment__q__pattern__question">
+                <div class="marks-entry__tc add__assessment__q__pattern__question invalid__red__boX">
                     <div class="marks-entry__td">`+i+`</div>
                 `;
                 for(j=0;j<changed_value;j++){
                     final_table +=`
-                    <div class="marks-entry__td"><input type="number" value="0" class="number"></div>
+                    <div class="marks-entry__td"><input type="number" value="0" class="number" onchange="questionmarksinput($(this))"></div>
                     `;
                 }
                 final_table +=`
-                    <div class="marks-entry__td q__pattern__question__total"><input type="number" class="number" value="`+max_marks+`"></div></div>
+                    <div class="marks-entry__td q__pattern__question__total"><input type="number" class="number" value="`+max_marks+`" onchange="questionmarksinput($(this))" readonly></div></div>
                     `;
             }
             console.log(final_table);
@@ -694,66 +770,66 @@
                                 <div class="marks-entry__td marks-entry__td_1">b</div>
                                 <div class="marks-entry__td marks-entry__td_2" >Total</div>
                             </div>
-                            <div class="marks-entry__tc add__assessment__q__pattern__question">
+                            <div class="marks-entry__tc add__assessment__q__pattern__question invalid__red__boX">
                                 <div class="marks-entry__td">1</div>
-                                <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
-                                <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
-                                <div class="marks-entry__td q__pattern__question__total"><input type="number" class="number" value="10"></div>
+                                <div class="marks-entry__td"><input type="number" class="number" value="0" onchange="questionmarksinput($(this))"></div>
+                                <div class="marks-entry__td"><input type="number" class="number" value="0" onchange="questionmarksinput($(this))"></div>
+                                <div class="marks-entry__td q__pattern__question__total"><input type="number" class="number" value="10" onchange="questionmarksinput($(this))" readonly></div>
                             </div>
-                            <div class="marks-entry__tc add__assessment__q__pattern__question">
+                            <div class="marks-entry__tc add__assessment__q__pattern__question invalid__red__boX">
                                 <div class="marks-entry__td">2</div>
-                                <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
-                                <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
-                                <div class="marks-entry__td q__pattern__question__total"><input type="number" class="number" value="10"></div>
+                                <div class="marks-entry__td"><input type="number" class="number" value="0" onchange="questionmarksinput($(this))"></div>
+                                <div class="marks-entry__td"><input type="number" class="number" value="0" onchange="questionmarksinput($(this))"></div>
+                                <div class="marks-entry__td q__pattern__question__total"><input type="number" class="number" value="10" onchange="questionmarksinput($(this))" readonly></div>
                             </div>
-                            <div class="marks-entry__tc add__assessment__q__pattern__question">
+                            <div class="marks-entry__tc add__assessment__q__pattern__question invalid__red__boX">
                                 <div class="marks-entry__td">3</div>
-                                <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
-                                <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
-                                <div class="marks-entry__td q__pattern__question__total"><input type="number" class="number" value="10"></div>
+                                <div class="marks-entry__td"><input type="number" class="number" value="0" onchange="questionmarksinput($(this))"></div>
+                                <div class="marks-entry__td"><input type="number" class="number" value="0" onchange="questionmarksinput($(this))"></div>
+                                <div class="marks-entry__td q__pattern__question__total"><input type="number" class="number" value="10" onchange="questionmarksinput($(this))" readonly></div>
                             </div>
                             
-                            <div class="marks-entry__tc add__assessment__q__pattern__question">
+                            <div class="marks-entry__tc add__assessment__q__pattern__question invalid__red__boX">
                                 <div class="marks-entry__td">4</div>
-                                <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
-                                <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
-                                <div class="marks-entry__td q__pattern__question__total"><input type="number" class="number" value="10"></div>
+                                <div class="marks-entry__td"><input type="number" class="number" value="0" onchange="questionmarksinput($(this))"></div>
+                                <div class="marks-entry__td"><input type="number" class="number" value="0" onchange="questionmarksinput($(this))"></div>
+                                <div class="marks-entry__td q__pattern__question__total"><input type="number" class="number" value="10" onchange="questionmarksinput($(this))" readonly></div>
                             </div>
-                            <div class="marks-entry__tc add__assessment__q__pattern__question">
+                            <div class="marks-entry__tc add__assessment__q__pattern__question invalid__red__boX">
                                 <div class="marks-entry__td">5</div>
-                                <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
-                                <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
-                                <div class="marks-entry__td q__pattern__question__total"><input type="number" class="number" value="10"></div>
+                                <div class="marks-entry__td"><input type="number" class="number" value="0" onchange="questionmarksinput($(this))"></div>
+                                <div class="marks-entry__td"><input type="number" class="number" value="0" onchange="questionmarksinput($(this))"></div>
+                                <div class="marks-entry__td q__pattern__question__total"><input type="number" class="number" value="10" onchange="questionmarksinput($(this))" readonly></div>
                             </div>
-                            <div class="marks-entry__tc add__assessment__q__pattern__question">
+                            <div class="marks-entry__tc add__assessment__q__pattern__question invalid__red__boX">
                                 <div class="marks-entry__td">6</div>
-                                <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
-                                <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
-                                <div class="marks-entry__td q__pattern__question__total"><input type="number" class="number" value="10"></div>
+                                <div class="marks-entry__td"><input type="number" class="number" value="0" onchange="questionmarksinput($(this))"></div>
+                                <div class="marks-entry__td"><input type="number" class="number" value="0" onchange="questionmarksinput($(this))"></div>
+                                <div class="marks-entry__td q__pattern__question__total"><input type="number" class="number" value="10" onchange="questionmarksinput($(this))" readonly></div>
                             </div>
-                            <div class="marks-entry__tc add__assessment__q__pattern__question">
+                            <div class="marks-entry__tc add__assessment__q__pattern__question invalid__red__boX">
                                 <div class="marks-entry__td">7</div>
-                                <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
-                                <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
-                                <div class="marks-entry__td q__pattern__question__total"><input type="number" class="number" value="10"></div>
+                                <div class="marks-entry__td"><input type="number" class="number" value="0" onchange="questionmarksinput($(this))"></div>
+                                <div class="marks-entry__td"><input type="number" class="number" value="0" onchange="questionmarksinput($(this))"></div>
+                                <div class="marks-entry__td q__pattern__question__total"><input type="number" class="number" value="10" onchange="questionmarksinput($(this))" readonly></div>
                             </div>
-                            <div class="marks-entry__tc add__assessment__q__pattern__question">
+                            <div class="marks-entry__tc add__assessment__q__pattern__question invalid__red__boX">
                                 <div class="marks-entry__td">8</div>
-                                <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
-                                <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
-                                <div class="marks-entry__td q__pattern__question__total"><input type="number" class="number" value="10"></div>
+                                <div class="marks-entry__td"><input type="number" class="number" value="0" onchange="questionmarksinput($(this))"></div>
+                                <div class="marks-entry__td"><input type="number" class="number" value="0" onchange="questionmarksinput($(this))"></div>
+                                <div class="marks-entry__td q__pattern__question__total"><input type="number" class="number" value="10" onchange="questionmarksinput($(this))" readonly></div>
                             </div>
-                            <div class="marks-entry__tc add__assessment__q__pattern__question">
+                            <div class="marks-entry__tc add__assessment__q__pattern__question invalid__red__boX">
                                 <div class="marks-entry__td">9</div>
-                                <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
-                                <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
-                                <div class="marks-entry__td q__pattern__question__total"><input type="number" class="number" value="10"></div>
+                                <div class="marks-entry__td"><input type="number" class="number" value="0" onchange="questionmarksinput($(this))"></div>
+                                <div class="marks-entry__td"><input type="number" class="number" value="0" onchange="questionmarksinput($(this))"></div>
+                                <div class="marks-entry__td q__pattern__question__total"><input type="number" class="number" value="10" onchange="questionmarksinput($(this))" readonly></div>
                             </div>
-                            <div class="marks-entry__tc add__assessment__q__pattern__question">
+                            <div class="marks-entry__tc add__assessment__q__pattern__question invalid__red__boX">
                                 <div class="marks-entry__td">10</div>
-                                <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
-                                <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
-                                <div class="marks-entry__td q__pattern__question__total"><input type="number" class="number" value="10"></div>
+                                <div class="marks-entry__td"><input type="number" class="number" value="0" onchange="questionmarksinput($(this))"></div>
+                                <div class="marks-entry__td"><input type="number" class="number" value="0" onchange="questionmarksinput($(this))"></div>
+                                <div class="marks-entry__td q__pattern__question__total"><input type="number" class="number" value="10" onchange="questionmarksinput($(this))" readonly></div>
                             </div>
                         </div>
                     </div>
@@ -1195,76 +1271,76 @@
                                         <!-- <div class="marks-entry__td marks-entry__td_1">c</div> -->
                                         <div class="marks-entry__td marks-entry__td_2" >Total</div>
                                     </div>
-                                    <div class="marks-entry__tc add__assessment__q__pattern__question">
+                                    <div class="marks-entry__tc add__assessment__q__pattern__question invalid__red__boX">
                                         <div class="marks-entry__td">1</div>
-                                        <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
-                                        <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
+                                        <div class="marks-entry__td"><input type="number" class="number" value="0" onchange="questionmarksinput($(this))"></div>
+                                        <div class="marks-entry__td"><input type="number" class="number" value="0" onchange="questionmarksinput($(this))"></div>
                                         <!-- <div class="marks-entry__td"><input type="number" class="number"></div> -->
-                                        <div class="marks-entry__td q__pattern__question__total"><input type="number" class="number" value="10"></div>
+                                        <div class="marks-entry__td q__pattern__question__total"><input type="number" class="number" value="10" onchange="questionmarksinput($(this))"></div>
                                     </div>
-                                    <div class="marks-entry__tc add__assessment__q__pattern__question">
+                                    <div class="marks-entry__tc add__assessment__q__pattern__question invalid__red__boX">
                                         <div class="marks-entry__td">2</div>
-                                        <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
+                                        <div class="marks-entry__td"><input type="number" class="number" value="0" onchange="questionmarksinput($(this))" readonly></div>
                                         <!-- <div class="marks-entry__td"><input type="number" class="number"></div> -->
-                                        <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
-                                        <div class="marks-entry__td q__pattern__question__total"><input type="number" class="number" value="10"></div>
+                                        <div class="marks-entry__td"><input type="number" class="number" value="0" onchange="questionmarksinput($(this))"></div>
+                                        <div class="marks-entry__td q__pattern__question__total"><input type="number" class="number" value="10" onchange="questionmarksinput($(this))" readonly></div>
                                     </div>
-                                    <div class="marks-entry__tc add__assessment__q__pattern__question">
+                                    <div class="marks-entry__tc add__assessment__q__pattern__question invalid__red__boX">
                                         <div class="marks-entry__td">3</div>
-                                        <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
+                                        <div class="marks-entry__td"><input type="number" class="number" value="0" onchange="questionmarksinput($(this))"></div>
                                         <!-- <div class="marks-entry__td"><input type="number" class="number"></div> -->
-                                        <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
-                                        <div class="marks-entry__td q__pattern__question__total"><input type="number" class="number" value="10"></div>
+                                        <div class="marks-entry__td"><input type="number" class="number" value="0" onchange="questionmarksinput($(this))"></div>
+                                        <div class="marks-entry__td q__pattern__question__total"><input type="number" class="number" value="10" onchange="questionmarksinput($(this))" readonly></div>
                                     </div>
                                     
-                                    <div class="marks-entry__tc add__assessment__q__pattern__question">
+                                    <div class="marks-entry__tc add__assessment__q__pattern__question invalid__red__boX">
                                         <div class="marks-entry__td">4</div>
-                                        <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
+                                        <div class="marks-entry__td"><input type="number" class="number" value="0" onchange="questionmarksinput($(this))"></div>
                                         <!-- <div class="marks-entry__td"><input type="number" class="number"></div> -->
-                                        <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
-                                        <div class="marks-entry__td q__pattern__question__total"><input type="number" class="number" value="10"></div>
+                                        <div class="marks-entry__td"><input type="number" class="number" value="0" onchange="questionmarksinput($(this))"></div>
+                                        <div class="marks-entry__td q__pattern__question__total"><input type="number" class="number" value="10" onchange="questionmarksinput($(this))" readonly></div>
                                     </div>
-                                    <div class="marks-entry__tc add__assessment__q__pattern__question">
+                                    <div class="marks-entry__tc add__assessment__q__pattern__question invalid__red__boX">
                                         <div class="marks-entry__td">5</div>
                                         <!-- <div class="marks-entry__td"><input type="number" class="number"></div> -->
-                                        <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
-                                        <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
-                                        <div class="marks-entry__td q__pattern__question__total"><input type="number" class="number" value="10"></div>
+                                        <div class="marks-entry__td"><input type="number" class="number" value="0" onchange="questionmarksinput($(this))"></div>
+                                        <div class="marks-entry__td"><input type="number" class="number" value="0" onchange="questionmarksinput($(this))"></div>
+                                        <div class="marks-entry__td q__pattern__question__total"><input type="number" class="number" value="10" onchange="questionmarksinput($(this))" readonly></div>
                                     </div>
-                                    <div class="marks-entry__tc add__assessment__q__pattern__question">
+                                    <div class="marks-entry__tc add__assessment__q__pattern__question invalid__red__boX">
                                         <div class="marks-entry__td">6</div>
-                                        <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
+                                        <div class="marks-entry__td"><input type="number" class="number" value="0" onchange="questionmarksinput($(this))"></div>
                                         <!-- <div class="marks-entry__td"><input type="number" class="number"></div> -->
-                                        <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
-                                        <div class="marks-entry__td q__pattern__question__total"><input type="number" class="number" value="10"></div>
+                                        <div class="marks-entry__td"><input type="number" class="number" value="0" onchange="questionmarksinput($(this))"></div>
+                                        <div class="marks-entry__td q__pattern__question__total"><input type="number" class="number" value="10" onchange="questionmarksinput($(this))" readonly></div>
                                     </div>
-                                    <div class="marks-entry__tc add__assessment__q__pattern__question">
+                                    <div class="marks-entry__tc add__assessment__q__pattern__question invalid__red__boX">
                                         <div class="marks-entry__td">7</div>
-                                        <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
+                                        <div class="marks-entry__td"><input type="number" class="number" value="0" onchange="questionmarksinput($(this))"></div>
                                         <!-- <div class="marks-entry__td"><input type="number" class="number"></div> -->
-                                        <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
-                                        <div class="marks-entry__td q__pattern__question__total"><input type="number" class="number" value="10"></div>
+                                        <div class="marks-entry__td"><input type="number" class="number" value="0" onchange="questionmarksinput($(this))"></div>
+                                        <div class="marks-entry__td q__pattern__question__total"><input type="number" class="number" value="10" onchange="questionmarksinput($(this))" readonly></div>
                                     </div>
-                                    <div class="marks-entry__tc add__assessment__q__pattern__question">
+                                    <div class="marks-entry__tc add__assessment__q__pattern__question invalid__red__boX">
                                         <div class="marks-entry__td">8</div>
-                                        <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
+                                        <div class="marks-entry__td"><input type="number" class="number" value="0" onchange="questionmarksinput($(this))"></div>
                                         <!-- <div class="marks-entry__td"><input type="number" class="number"></div> -->
-                                        <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
-                                        <div class="marks-entry__td q__pattern__question__total"><input type="number" class="number" value="10"></div>
+                                        <div class="marks-entry__td"><input type="number" class="number" value="0" onchange="questionmarksinput($(this))"></div>
+                                        <div class="marks-entry__td q__pattern__question__total"><input type="number" class="number" value="10" onchange="questionmarksinput($(this))" readonly></div>
                                     </div>
-                                    <div class="marks-entry__tc add__assessment__q__pattern__question">
+                                    <div class="marks-entry__tc add__assessment__q__pattern__question invalid__red__boX">
                                         <div class="marks-entry__td">9</div>
-                                        <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
+                                        <div class="marks-entry__td"><input type="number" class="number" value="0" onchange="questionmarksinput($(this))"></div>
                                         <!-- <div class="marks-entry__td"><input type="number" class="number"></div> -->
-                                        <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
-                                        <div class="marks-entry__td q__pattern__question__total"><input type="number" class="number" value="10"></div>
+                                        <div class="marks-entry__td"><input type="number" class="number" value="0" onchange="questionmarksinput($(this))"></div>
+                                        <div class="marks-entry__td q__pattern__question__total"><input type="number" class="number" value="10" onchange="questionmarksinput($(this))" readonly></div>
                                     </div>
-                                    <div class="marks-entry__tc add__assessment__q__pattern__question">
+                                    <div class="marks-entry__tc add__assessment__q__pattern__question invalid__red__boX">
                                         <div class="marks-entry__td">10</div>
                                         <!-- <div class="marks-entry__td"><input type="number" class="number"></div> -->
-                                        <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
-                                        <div class="marks-entry__td"><input type="number" class="number" value="0"></div>
-                                        <div class="marks-entry__td q__pattern__question__total"><input type="number" class="number" value="10"></div>
+                                        <div class="marks-entry__td"><input type="number" class="number" value="0" onchange="questionmarksinput($(this))"></div>
+                                        <div class="marks-entry__td"><input type="number" class="number" value="0" onchange="questionmarksinput($(this))"></div>
+                                        <div class="marks-entry__td q__pattern__question__total"><input type="number" class="number" value="10" onchange="questionmarksinput($(this))" readonly></div>
                                     </div>
                                     <!-- <div class="marks-entry__tc marks-entry__tc_border">
                                         <div class="marks-entry__td">Total</div>
@@ -1463,7 +1539,7 @@
                 </div>
             </div>
         </div>
-        <div class="modal add__assessment__add__marks__modal modal__dispnone">    <!--modal__dispnone is a class to hide the modal from the page-->
+        <div class="modal add__assessment__add__marks__modal">    <!--modal__dispnone is a class to hide the modal from the page-->
             <div class="modal__body">
                <div class="close-btn" onclick="closeaddmarks()"><i class="fa fa-times fa-2x"></i></div>
                <div class="marks-entry">
@@ -1481,9 +1557,9 @@
                     </div>
                     <div class="marks-entry__tc">
                         <div class="marks-entry__td">1</div>
-                        <div class="marks-entry__td"><input type="number" class="number" style="width: 50% !important;"><span class="max__marks">/10</span></div>
-                        <div class="marks-entry__td"><input type="number" class="number"></div>
-                        <div class="marks-entry__td"><input type="number" class="number"></div>
+                        <div class="marks-entry__td"><input type="number" class="number" onchange="inputchanged($(this))"><span class="max__marks">/10</span></div>
+                        <div class="marks-entry__td"><input type="number" class="number" onchange="inputchanged(this)"></div>
+                        <div class="marks-entry__td" onchange="inputchanged(this)"><input type="number" class="number"></div>
                         <div class="marks-entry__td"><input type="number" class="number"></div>
                     </div>
                     <div class="marks-entry__tc">
