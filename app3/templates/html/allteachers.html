@@ -4,20 +4,168 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="../sass/main.css" type="text/css">
-    <!--<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">-->
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css"
-      integrity="sha256-+N4/V/SbAFiW1MPBCXnfnP9QSN3+Keu+NlB+0ev/YKQ="
-      crossorigin="anonymous"
-    />
-    
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'sass/main.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'sass/pages/assignclass.css') }}" type="text/css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css"
+        integrity="sha256-+N4/V/SbAFiW1MPBCXnfnP9QSN3+Keu+NlB+0ev/YKQ=" crossorigin="anonymous" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <style>
+        .modal .modal__body{
+            height: 80%;
+            width: 80%;
+            overflow: scroll;
+        }
+    </style>
+    <script>
+        $(document).ready(function()
+            {
+            var faculty_id = localStorage.getItem('faculty_id');
+            var authkey = localStorage.getItem('authkey');
+            var data = {
+                'authkey': authkey,
+                'faculty_id': faculty_id
+                };
+                $.ajax(
+                {
+                    type: "POST",
+                    url: "get_all_faculty",
+                    dataType: 'Json',
+                    contentType: 'application/json',
+                    data: JSON.stringify(data),
+                    processData: false,
+                    success :function(ret_obj){
+                        console.log("tsting");
+                        console.log(ret_obj['data']);
+                        var d = ""; 
+                        for(i=0;i<ret_obj['data'].length;i++)
+                        {
+                         d += `<div class="allteachers__person" onclick= 'openmodal(`+ret_obj['data'][i][0]+`)'>      
+                                <div class="allteachers__dots">
+                                    <i class="fa fa-ellipsis-v fa-1x"></i>
+                                </div>
+                                <div class="allteachers__pic">
+                                    <img src="data:image/jpg;base64, `+ ret_obj['data'][i][3] + `" alt="" class="header__logout__img" >
+                                </div>
+                                <div class="allteachers__name">
+                                    <p>`+ret_obj['data'][i][1]+`</p>
+                                    <p> Department : `+ret_obj['data'][i][2]+`</p>
+                                </div>
+                            </div>`;
+                        }
+                        $('.allteachers__details').html(d);
+                    }
+                   
+                });
+               
+               
+            })
+            function openmodal(f_id)
+            {
+                console.log(f_id);
+            $(document).ready(function(){
+  
+            var faculty_id = localStorage.getItem('faculty_id');
+            var authkey = localStorage.getItem('authkey');
+            var data = {
+                'authkey': authkey,
+                'faculty_id': faculty_id,
+                'f_id':f_id
+            };
+            $.ajax({
+                type: "POST",
+                url: "get_complete_faculty_details",
+                dataType: 'Json',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                processData: false,
+                success: function (ret_obj){
+                    console.log(ret_obj);
+                    $('.personal__overview__name').text(ret_obj['data']['name']);
+                    $('.personal__overview__department').text(ret_obj['data']['dept']);
+                    $('.personal__overview__designation').text(ret_obj['data']['designation']);
+                    $('.personal__overview__id').text(faculty_id);
+                    $('.personal__overview__gender').text(ret_obj['data']['gender']);
+                    $('.personal__overview__dateofjoin').text(ret_obj['data']['date_of_joining']);
+                    $('.personal__overview__phonespan').text(ret_obj['data']['phone']);
+                    $('.personal__overview__emailspan').text(ret_obj['data']['email']);
+                    $('.personal__overview__dobspan').text(ret_obj['data']['dob']);
+                    $('.personal__overview__maritalspan').text(ret_obj['data']['marital_status']);
+                    $('.personal__overview__addressspan').text(ret_obj['data']['address']);
+                    $('.personal__overview__associationspan').text(ret_obj['data']['association_with_institute']);
+                    $('.personal__overview__experiencespan').text(ret_obj['data']['experience_in_years']);
+                    $('.personal__overview__areaofspecialspan').text(ret_obj['data']['area_of_spec']);
+                    var d = " ";
+                    for (i = 0 ; i<ret_obj['data']['qualification'].length;i++)
+                    {
+                        d += `<div class="personal__education__degree__institution marginbottom06 fontheavy"> Degree: `+ ret_obj['data']['qualification'][i][1]+` </div>`;
+                        d += `<div class="personal__education__degree__institution marginbottom06 fontlight"> University   : `+ ret_obj['data']['qualification'][i][6]+` </div>`;
+                        d += `<div class="personal__education__degree__institution marginbottom06 fontlight"> College : `+ ret_obj['data']['qualification'][i][3]+` </div>`;
+                        d += `<div class="personal__education__degree__branch marginbottom06 fontlight"> Branch : `+ ret_obj['data']['qualification'][i][2]+` </div>`; 
+                        d += `<div class="personal__education__degree__graduation marginbottom06 fontlight"> Percentage: `+ ret_obj['data']['qualification'][i][4]+` </div>`; 
+                        d += `<div class="personal__education__degree__graduation marginbottom06 fontlight"> Graduation year: `+ ret_obj['data']['qualification'][i][5]+` </div>`; 
+
+                    }
+                    var y = "";
+                    for(i =0;i<ret_obj['data']['experience'].length;i++)
+                    {
+                        y+=`<div class="personal__experience__company__name-role marginbottom06 fontheavy">`+ (i+1)+`. </div>`;
+                        y+=`<div class="personal__experience__company__name-role marginbottom06 fontlight"> Organisation:`+ ret_obj['data']['experience'][i][2]+` </div>`;
+                        y+=`<div class="personal__experience__company__name-role marginbottom06 fontlight"> Designation:`+ ret_obj['data']['experience'][i][1]+` </div>`;
+                        y+=`<div class="personal__experience__company__name-role marginbottom06 fontlight"> Duration:`+ ret_obj['data']['experience'][i][3]+`years </div>`;
+
+                    }
+                    var a = `<h3 class="personal__research__papers__heading marginbottom04 fontheavy">Papers</h3>`;
+                    for (i=0;i<ret_obj['data']['paper'].length;i++)
+                    {
+                        a += ` <div class="personal__research__papers__details fontlight">`+(i+1)+'. '+ret_obj['data']['paper'][i]+`</div>`;
+                    }
+                    var b = `<h3 class="personal__research__publications__heading marginbottom04 fontheavy">Publications</h3>`;
+                    for (i=0;i<ret_obj['data']['publications'].length;i++)
+                    {
+                        b += ` <div class="personal__research__publications__details fontlight">`+(i+1)+'. '+ret_obj['data']['publications'][i]+`</div>`;
+                    }
+                    
+                    var j = `<h1 class="personal__invitedtalks__heading marginbottom04 fontheavy">Invited Talks Delivered</h1>`;
+                    for (i = 0 ;i<ret_obj['data']['invitedtalks'].length;i++)
+                    {
+                        console.log(ret_obj['data']['invitedtalks'][i]);
+                        j+= `<div class="personal__invitedtalks__details fontlight"> `+ ret_obj['data']['invitedtalks'][i]+` </div>`;
+                    }
+                    var e = `<h1 class="personal__session__heading marginbottom04 fontheavy">Session chairs</h1>`;
+                    for (i=0;i<ret_obj['data']['sessions'].length;i++)
+                    {
+                        e += ` <div class="personal__session__details fontlight"> `+(i+1)+". "+ret_obj['data']['sessions'][i]+`</div>`;
+                    }
+                    var z = `<h1 class="personal__workshop__heading marginbottom04 fontheavy">Workshop</h1>`;
+                    for (i = 0;i<ret_obj['data']['workshops'].length;i++)
+                    {
+                        z+= `<div class="personal__workshop__details fontheavy">`+(i+1)+`.</div>`;
+                        z+=`<div class="personal__workshop__details fontlight"> Type:`+ret_obj['data']['workshops'][i][0]+`</div>`
+                        z+=`<div class="personal__workshop__details fontlight"> Details:`+ret_obj['data']['workshops'][i][1]+`</div>`
+                    }
+                    var img = ` <img src="data:image/jpg;base64, `+ ret_obj['data']['image'] + `" alt="" class="header__logout__img" >`;
+
+                    $('.personal__education__degree').html(d);
+                    $('.personal__experience__company').html(y);
+                    $('.personal__research__publications').html(b);
+                    $('.personal__research__papers').html(a);
+                    $('.personal__invitedtalks').html(j);
+                    $('.personal__session').html(e);
+                    $('.personal__workshop').html(z);
+                    $('.personal__overview__pic').html(img);
+
+
+                }
+            });
+        })
+                $('.modal').toggleClass('modal__dispnone');
+            }
+    </script>
 </head>
 <body> 
     <div class="container">
         <header class="header">
-            <img src="../images/logo.jpg" alt="" class="header__collegelogo">
+            <img src="{{url_for('static', filename = 'images/logo.jpg')}}" alt="" class="header__collegelogo">
             <div class="header__content1">
                 <button class="nav-btn"><i class="fa fa-bars fa-2x"></i></button>
                 <h3 class="header__heading">Student login</h3>
@@ -34,7 +182,7 @@
                 <div class="header__logout">
                     <div class="header__logout__group">
                         <div class="header__logout__pic">
-                            <img src="../images/user-3.jpg" alt="" class="header__logout__img">
+                            <!-- <img src="{{url_for('static', filename = 'images/logo.jpg')}}" alt="" class="header__logout__img"> -->
                         </div>
                         <div class="header__dots"><i class="fa fa-ellipsis-v fa-1x"></i>
                             <ul class="header__logout__list ">   <!--Add header__logout__listshow on click of header__logout__group-->
@@ -55,33 +203,35 @@
             </div>
         </header>
         <section class="section">
-            <div class="navbar "> <!--Add show-navbar on click of nav button-->
+            <div class="navbar ">
+                <!--Add show-navbar on click of nav button-->
                 <ul class="nav__ul">
                     <li class="nav__li"><a href="">home</a> </li>
-                    <li class="nav__li teacherli"><a href="" class="teacher">Professor</a>  <span></span>
-                        <ul class="sub ">  <!--Add show on click of teacherli-->
-                            <li class="sub__li"><a href="">Professors</a></li>
-                            <li class="sub__li"><a href="">Add subjects </a></li>
-                            <li class="sub__li"><a href="">Class teachers </a></li>
-                            <li class="sub__li"><a href="">Subject teachers</a></li>
+                    <li class="nav__li teacherli"><a href="" class="teacher">Professor</a> <span></span>
+                        <ul class="sub ">
+                            <!--Add show on click of teacherli-->
+                            
+                            <li class="sub__li" onclick="window.location.href = 'assignclass'">Class teachers</li>
+                            <li class="sub__li" onclick="window.location.href = 'assignteacher'">Add subjects</li>
                         </ul>
                     </li>
                     <li class="nav__li studentli"><a href="" class="student">Students</a>
-                        <ul class="sub studentlist"> <!--Add show on click of studentli-->
-                            <li class="sub__li"><a href=""> Add students</a></li>
-                            <li class="sub__li"><a href="">Assign subjects</a></li>
-                            <li class="sub__li"><a href="">Manage attendace</a></li>
-                            <li class="sub__li"><a href="">Manage IA marks</a></li>
+                        <ul class="sub studentlist">
+                            <!--Add show on click of studentli-->
+                            <li class="sub__li" onclick=" window.location.href = 'addstudent'"> Add students</li>
+                            
+                            <li class="sub__li" onclick=" window.location.href = 'addattendance'">Manage attendace</li>
+                            <li class="sub__li" onclick=" window.location.href = 'iamarks'"> Manage IA marks</li>
                         </ul>
                     </li>
                 </ul>
             </div>
             <div class="content">
                 <div class="allteachers">
-                    <div class="allteachers__heading"><h1>Professor</h1></div>
+                    <!-- <div class="allteachers__heading"><h1>Professor</h1></div> -->
                     
-                    <form action="">
-                        <div class="allteachers__form">         <!--Contains the forms to input teacher name and id-->
+                    <!-- <form action="">
+                        <div class="allteachers__form">         Contains the forms to input teacher name and id
                             <div class="allteachers__names">
                                 <input type="text" class="allteachers__inputname" placeholder="Professor Name">
                             </div>
@@ -100,146 +250,134 @@
                                 <input type="submit" class="allteachers__search-btn search-btn" value="Search">
                             </div>
                         </div>
-                    </form>
+                    </form> -->
                     <div class="allteachers__details">
-                        <div class="allteachers__person">      <!--Contains details of specific teacher -->
-                            <div class="allteachers__dots">
-                                <i class="fa fa-ellipsis-v fa-1x"></i>
-                            </div>
-                            <div class="allteachers__pic">
-                                <img src="../images/user-3.jpg" alt="" class="allteachers__img">
-                            </div>
-                            <div class="allteachers__name">
-                                <p>John doe</p>
-                            </div>
-                        </div>
-                        <div class="allteachers__person">
-                            <div class="allteachers__dots">
-                                <i class="fa fa-ellipsis-v fa-1x"></i>
-                            </div>
-                            <div class="allteachers__pic">
-                                <img src="../images/user-3.jpg" alt="" class="allteachers__img">
-                            </div>
-                            <div class="allteachers__name">
-                                <p>John doe</p>
-                            </div>
-                        </div>
-                        <div class="allteachers__person">
-                            <div class="allteachers__dots">
-                                <i class="fa fa-ellipsis-v fa-1x"></i>
-                            </div>
-                            <div class="allteachers__pic">
-                                <img src="../images/user-3.jpg" alt="" class="allteachers__img">
-                            </div>
-                            <div class="allteachers__name">
-                                <p>John doe</p>
-                            </div>
-                        </div>
-                        <div class="allteachers__person">
-                            <div class="allteachers__dots">
-                                <i class="fa fa-ellipsis-v fa-1x"></i>
-                            </div>
-                            <div class="allteachers__pic">
-                                <img src="../images/user-3.jpg" alt="" class="allteachers__img">
-                            </div>
-                            <div class="allteachers__name">
-                                <p>John doe</p>
-                            </div>
-                        </div>
-                        <div class="allteachers__person">
-                            <div class="allteachers__dots">
-                                <i class="fa fa-ellipsis-v fa-1x"></i>
-                            </div>
-                            <div class="allteachers__pic">
-                                <img src="../images/user-3.jpg" alt="" class="allteachers__img">
-                            </div>
-                            <div class="allteachers__name">
-                                <p>John doe</p>
-                            </div>
-                        </div>
-                        <div class="allteachers__person">
-                            <div class="allteachers__dots">
-                                <i class="fa fa-ellipsis-v fa-1x"></i>
-                            </div>
-                            <div class="allteachers__pic">
-                                <img src="../images/user-3.jpg" alt="" class="allteachers__img">
-                            </div>
-                            <div class="allteachers__name">
-                                <p>John doe</p>
-                            </div>
-                        </div>
-                        <div class="allteachers__person">
-                            <div class="allteachers__dots">
-                                <i class="fa fa-ellipsis-v fa-1x"></i>
-                            </div>
-                            <div class="allteachers__pic">
-                                <img src="../images/user-3.jpg" alt="" class="allteachers__img">
-                            </div>
-                            <div class="allteachers__name">
-                                <p>John doe</p>
-                            </div>
-                        </div>
-                        <div class="allteachers__person">
-                            <div class="allteachers__dots">
-                                <i class="fa fa-ellipsis-v fa-1x"></i>
-                            </div>
-                            <div class="allteachers__pic">
-                                <img src="../images/user-3.jpg" alt="" class="allteachers__img">
-                            </div>
-                            <div class="allteachers__name">
-                                <p>John doe</p>
-                            </div>
-                        </div>
-                        <div class="allteachers__person">
-                            <div class="allteachers__dots">
-                                <i class="fa fa-ellipsis-v fa-1x"></i>
-                            </div>
-                            <div class="allteachers__pic">
-                                <img src="../images/user-3.jpg" alt="" class="allteachers__img">
-                            </div>
-                            <div class="allteachers__name">
-                                <p>John doe</p>
-                            </div>
-                        </div>
-                        <div class="allteachers__person">
-                            <div class="allteachers__dots">
-                                <i class="fa fa-ellipsis-v fa-1x"></i>
-                            </div>
-                            <div class="allteachers__pic">
-                                <img src="../images/user-3.jpg" alt="" class="allteachers__img">
-                            </div>
-                            <div class="allteachers__name">
-                                <p>John doe</p>
-                            </div>
-                        </div>
-                        <div class="allteachers__person">
-                            <div class="allteachers__dots">
-                                <i class="fa fa-ellipsis-v fa-1x"></i>
-                            </div>
-                            <div class="allteachers__pic">
-                                <img src="../images/user-3.jpg" alt="" class="allteachers__img">
-                            </div>
-                            <div class="allteachers__name">
-                                <p>John doe</p>
-                            </div>
-                        </div>
-                        <div class="allteachers__person">
-                            <div class="allteachers__dots">
-                                <i class="fa fa-ellipsis-v fa-1x"></i>
-                            </div>
-                            <div class="allteachers__pic">
-                                <img src="../images/user-3.jpg" alt="" class="allteachers__img">
-                            </div>
-                            <div class="allteachers__name">
-                                <p>John doe</p>
-                            </div>
-                        </div>
+                        <!-- <div class="allteachers__person">      
+                          
+                        </div> -->
                     </div>    
                     
                 </div>
             </div>
         </section>
     </div>
-    <script src="../js/sample.js"></script>
+    <div class="modal modal__dispnone ">
+        <!--modal__dispnone is a class to hide the modal from the page-->
+        <div class="modal__body">
+            <div class="close-btn"><i class="fa fa-times fa-2x"></i></div>
+            <div class="personal">
+                <div class="personal__heading marginbottom06">
+                    <h1>Profile</h1>
+                </div>
+                <div class="personal__overview">
+                    <div class="personal__overview__1">
+                        <div class="personal__overview__pic" style="height: 200px; width: 200px;">
+                            <!-- <img src="../images/user-3.jpg" alt="" class="personal__overview__img"> -->
+                        </div>
+                        <div class="personal__overview__1details">
+                            <div class="personal__overview__name marginbottom04"></div>
+                            <div class="personal__overview__department fontlight marginbottom04"></div>
+                            <div class="personal__overview__designation fontlight marginbottom04"></div>
+                            <div class="personal__overview__id fontheavy marginbottom04"></div>
+                            <div class="personal__overview__gender fontlight marginbottom04"></div>
+                            <div class="personal__overview__dateofjoin fontlight "></div>
+                        </div>
+                    </div>
+                    <div class="personal__overview__2">
+                        <div class="personal__overview__2details">
+                            <div class="personal__overview__phone marginbottom06">
+                                Phone:
+                                <span class="personal__overview__phonespan marginleft10 color-bluedarker">  </span>
+                            </div>
+                            <div class="personal__overview__email marginbottom06">
+                                Email ID:
+                                <span class="personal__overview__emailspan marginleft9 color-bluedarker"></span>
+                            </div>
+                            <div class="personal__overview__dob marginbottom06">
+                                Date of birth:
+                                <span class="personal__overview__dobspan marginleft74"></span>
+                            </div>
+                            <div class="personal__overview__marital marginbottom06">
+                                Marital status:
+                                <span class="personal__overview__maritalspan marginleft7"></span>
+                            </div>
+                            <div class="personal__overview__address marginbottom06">
+                                Address:
+                                <span class="personal__overview__addressspan marginleft9"></span>
+                            </div>
+                            <div class="personal__overview__areaofspecial marginbottom06">
+                                Area of specialization:
+                                <span class="personal__overview__areaofspecialspan marginleft33 color-bluedarker"></span>
+                            </div>
+                            <div class="personal__overview__association marginbottom06">
+                                Association with Institution:
+                                <span class="personal__overview__associationspan marginleft1"></span>
+                            </div>
+                            <div class="personal__overview__experience">
+                                Experience in years:
+                                <span class="personal__overview__experiencespan marginleft4"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="personal__grid">
+                    <div class="personal__education border padding1">
+                        <h1 class="personal__education__heading marginbottom08">Educational Qualifications</h1>
+                        <div class="personal__education__degree">
+                            <!-- <div class="personal__education__degree__institution marginbottom06 fontheavy">
+                                College of arts and science(UG)
+                            </div>
+                            <div class="personal__education__degree__branch marginbottom06 fontlight">
+                                Computer science(95%)
+                            </div>
+                            <div class="personal__education__degree__graduation marginbottom06 fontlight">
+                                2000-2004
+                            </div> -->
+                        </div>
+                    </div>
+                    <div class="personal__experience border padding1">
+                        <h1 class="personal__experience__heading marginbottom08">Experience</h1>
+                        <div class="personal__experience__company">
+                            <!-- <div class="personal__experience__company__name-role marginbottom06 fontheavy">Professor at SJBIT</div>
+                            <div class="personal__experience__company__duration marginbottom06 fontlight">
+                                Jan 2013-Jan 2015 (2years)
+                            </div> -->
+                        </div>
+                    </div>
+                    <div class="personal__research border padding1">
+                        <h1 class="personal__research__heading marginbottom08">Research work</h1>
+                        <div class="personal__research__publications marginbottom08">
+                            <!-- <h3 class="personal__research__publications__heading marginbottom04 fontheavy">Publications</h3> -->
+                            <div class="personal__research__publications__details fontlight"> </div>         
+                        </div>
+                            <div class="personal__research__papers">
+                            <h3 class="personal__research__papers__heading marginbottom04 fontheavy">Papers</h3>
+                            <div class="personal__research__papers__details fontlight">
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="personal__invitedtalks border padding1">
+                        <!-- <h1 class="personal__invitedtalks__heading marginbottom04 fontheavy">Invited Talks Delivered</h1>
+                        <div class="personal__invitedtalks__details fontlight">Talk on digital india </div> -->
+                    </div>
+                    <div class="personal__session border padding1">
+                        <!-- <h1 class="personal__session__heading marginbottom04 fontheavy">Session chairs</h1>
+                        <div class="personal__session__details fontlight">Session chair example 1 </div> -->
+                    </div>
+                    <div class="personal__workshop border padding1">
+                        <!-- <h1 class="personal__workshop__heading marginbottom04 fontheavy">Workshop</h1>
+                        <div class="personal__workshop__details fontlight">
+                            Talk on AI
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    
 </body>
+<script src="{{ url_for('static', filename = 'js/sample.js') }}"></script>
+<script src="{{ url_for('static', filename = 'js/nav.js') }}"></script>
 </html>

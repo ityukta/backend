@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head> 
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'sass/main.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'sass/pages/assignclass.css') }}" type="text/css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css"
+        integrity="sha256-+N4/V/SbAFiW1MPBCXnfnP9QSN3+Keu+NlB+0ev/YKQ=" crossorigin="anonymous" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</head>
+<script>
+     $(document).ready(function()
+            {
+            // console.log(localStorage.getItem('faculty_type'));
+            var faculty_id = localStorage.getItem('faculty_id');
+            var authkey = localStorage.getItem('authkey');
+            var data = {
+                'authkey': authkey,
+                'faculty_id': faculty_id,
+                'check_approval':1
+                };
+                $.ajax(
+                {
+                    type: "POST",
+                    url: "get_all_faculty",
+                    dataType: 'Json',
+                    contentType: 'application/json',
+                    data: JSON.stringify(data),
+                    processData: false,
+                    success :function(ret_obj){
+                        console.log("tsting");
+                        console.log(ret_obj['data']);
+                        var d = ""; 
+                        for(i=0;i<ret_obj['data'].length;i++)
+                        {
+                         d += `<div class="allteachers__person" >      
+                                <div class="allteachers__dots">
+                                    <i class="fa fa-ellipsis-v fa-1x"></i>
+                                </div>
+                                <div class="allteachers__pic">
+                                    <img src="data:image/jpg;base64, `+ ret_obj['data'][i][3] + `" alt="" class="header__logout__img" >
+                                </div>
+                                <div class="allteachers__name">
+                                    <p>`+ret_obj['data'][i][1]+`</p>
+                                    <p> Department : `+ret_obj['data'][i][2]+`</p>
+                                </div>
+                                <button id = "decline__button" onclick='approvefunction(`+ret_obj['data'][i][0]+`,0)''">Decline</button>
+                                <button id = "approve__button" onclick='approvefunction(`+ret_obj['data'][i][0]+`,1)'">Approve</button>
+                            </div>
+                            `;
+                        }
+                        $('.allteachers__details').html(d);
+                    }
+                   
+                });
+            
+            })
+        function approvefunction(f_id,status)
+        {
+            console.log(f_id);
+            var faculty_id = localStorage.getItem('faculty_id');
+            var authkey = localStorage.getItem('authkey');
+            var data = {
+                'authkey': authkey,
+                'faculty_id': faculty_id,
+                'f_id':f_id,
+                'status' : status,
+                };
+            $.ajax(
+                {
+                    type: "POST",
+                    url: "approve__decline",
+                    dataType: 'Json',
+                    contentType: 'application/json',
+                    data: JSON.stringify(data),
+                    processData: false,
+                    success :function(ret_obj){
+                        console.log(ret_obj);
+                    }
+                });
+        }
+</script>
+<body>
+    <div class="container">
+        <header class="header">
+            <img src="{{url_for('static', filename = 'images/logo.jpg')}}" alt="" class="header__collegelogo">
+            <div class="header__content1">
+                <button class="nav-btn"><i class="fa fa-bars fa-2x"></i></button>
+                <h3 class="header__heading">Student login</h3>
+            </div>
+            <div class="header__content2">
+                <form action="" class="header__form search-show">
+                    <input type="search" class="header__search" placeholder="Search here">
+                    <button class="header__search-btn"><i class="fa fa-search fa-1x icon-sbtn"></i></button>
+                </form>
+                <div class="btn-shownone">
+                    <i class="fa fa-search fa-2x "></i>       <!--Make the btn-shownone to display block on click-->
+                </div>
+                
+                <div class="header__logout">
+                    <div class="header__logout__group">
+                        <div class="header__logout__pic">
+                            <!-- <img src="{{url_for('static', filename = 'images/logo.jpg')}}" alt="" class="header__logout__img"> -->
+                        </div>
+                        <div class="header__dots"><i class="fa fa-ellipsis-v fa-1x"></i>
+                            <ul class="header__logout__list ">   <!--Add header__logout__listshow on click of header__logout__group-->
+                                <li><a href="#">My profile</a></li>
+                                <li><a href="#">Settings</a></li>
+                                <li><a href="#">Log out</a></li>
+                            </ul>   
+                        </div>
+                        <p class="header__logout__name"><span class="header__logout__span">Admin</span>    
+                            <ul class="header__logout__list ">   <!--Add header__logout__listshow on click of header__logout__group-->
+                                <li><a href="#">My profile</a></li>
+                                <li><a href="#">Settings</a></li>
+                                <li><a href="#">Log out</a></li>
+                            </ul>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <section class="section">
+            <div class="navbar ">
+                <!--Add show-navbar on click of nav button-->
+                <ul class="nav__ul">
+                    <li class="nav__li"><a href="">home</a> </li>
+                    <li class="nav__li teacherli"><a href="" class="teacher">Professor</a> <span></span>
+                        <ul class="sub ">
+                            <!--Add show on click of teacherli-->
+                            
+                            <li class="sub__li" onclick="window.location.href = 'assignclass'">Class teachers</li>
+                            <li class="sub__li" onclick="window.location.href = 'assignteacher'">Add subjects</li>
+                        </ul>
+                    </li>
+                    <li class="nav__li studentli"><a href="" class="student">Students</a>
+                        <ul class="sub studentlist">
+                            <!--Add show on click of studentli-->
+                            <li class="sub__li" onclick=" window.location.href = 'addstudent'"> Add students</li>
+                            
+                            <li class="sub__li" onclick=" window.location.href = 'addattendance'">Manage attendace</li>
+                            <li class="sub__li" onclick=" window.location.href = 'iamarks'"> Manage IA marks</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div class="content">
+                <div class="allteachers">
+                    <div class="allteachers__details">
+                        <!-- <div class="allteachers__person">      
+                          
+                        </div> -->
+                    </div>    
+                    
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

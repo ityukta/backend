@@ -169,7 +169,7 @@ def create_fresh_database():
             current_address TEXT NOT NULL,
             c10th_res REAL NOT NULL,
             c12th_res REAL NOT NULL,
-            student_picture BLOB NOT NULL,
+            student_picture BLOB ,
             deleted BOOLEAN DEFAULT(FALSE),
             FOREIGN KEY(class_id) REFERENCES Class(class_id) ON DELETE SET NULL
         )
@@ -414,6 +414,9 @@ def validate_login(data):
     get_login_credentials_query = """
         SELECT *FROM Faculty WHERE email_id = ? AND password = ?
     """
+    get_type_query = """
+        SELECT type_description FROM Type WHERE faculty_id = ?
+    """
     c = conn.cursor()
     c.execute(get_login_credentials_query, (data['emailid'], data['password']))
     faculty_details = c.fetchone()
@@ -423,7 +426,7 @@ def validate_login(data):
     else:
         faculty_details = dict(
             zip([cur[0] for cur in c.description], faculty_details))
-        print("facultydet", faculty_details)
+        # print("facultydet", faculty_details)
         if(faculty_details['approved'] == 0):
             response = {"status_message": "Unsuccessful", "status_code": 301,
                         "data": "User Still not approved, contact admin"}
@@ -436,9 +439,21 @@ def validate_login(data):
             c.execute(insert_login_authkey_query,
                       (random_authkey, faculty_details['faculty_id']))
             conn.commit()
+            faculty_type = c.execute(get_type_query,(faculty_details['faculty_id'],)).fetchall()
+            faculty_type = [i[0] for i in faculty_type]
+            print(faculty_type)
+            conn.close()
+            if 'H' in faculty_type:
+                f_type = 'H'
+            elif 'C' in faculty_type:
+                f_type = 'C'
+            else:
+                f_type = 'P'
+            
             response = {"status_message": "Successful",
-                        "status_code": 200, "authkey": random_authkey, "data": faculty_details}
-    conn.close()
+                        "status_code": 200, "authkey": random_authkey,'faculty_type':f_type, "data": faculty_details}
+            
+    
     # except Exception as E:
     #     response = {"status_message": "Unsuccessful", "status_code": 301,
     #                 "data": "The following error occured" + str(E)}
@@ -1246,6 +1261,8 @@ def get_complete_faculty_details(data):
         response = {"status_message": "Unauthorized access",
                     "status_code": 404, "data": "Invalid Authkey provided"}
         return response
+    if 'f_id' in data.keys():
+        data['faculty_id']= data['f_id']
     get_complete_faculty_details_query = """
         SELECT * FROM Faculty WHERE faculty_id = ? 
     """
@@ -1287,9 +1304,8 @@ def get_complete_faculty_details(data):
     publication = [i[0] for i in publication]
     invited_talks = [i[0] for i in invited_talks]
     sessions = [i[0] for i in sessions]
-    print(invited_talks)
-    print(sessions)
-    print(workshops)
+    print(faculty_details)
+    
     response = {
         'status_code' : 200 ,
         'status_message' : 'successfull',
@@ -1313,7 +1329,74 @@ def get_complete_faculty_details(data):
             'invitedtalks': invited_talks, 
             'sessions':sessions,
             "workshops":workshops,
+            'image':faculty_details[12]
           }
     } 
     return response
 
+def get_complete_faculty(data):
+    conn = sql.connect('database.db')
+    # print(data)
+    check_authkey_query = """
+        SELECT *FROM LoginAuthKey WHERE authkey = ? AND faculty_id = ? AND DELETED = 0
+    """
+    c = conn.cursor()
+    _ = c.execute(check_authkey_query,
+                  (data['authkey'], data['faculty_id'])).fetchone()
+    if _ is None:
+        response = {"status_message": "Unauthorized access",
+                    "status_code": 404, "data": "Invalid Authkey provided"}
+        return response
+
+    params = data.keys()
+    
+    if 'check_approval' in params:
+        faculty_details_query = """
+        SELECT faculty_id , name , department, teacher_picture FROM Faculty WHERE approved = 0
+        """
+        faculty_details = c.execute(faculty_details_query).fetchall()
+    else:
+        faculty_details_query = """
+            SELECT faculty_id , name , department, teacher_picture FROM Faculty 
+        """
+        faculty_details = c.execute(faculty_details_query).fetchall()
+    # print(faculty_details)
+    response = {
+        "statusmessage": "Successfull",
+        "status_code": 200, "data": faculty_details
+    }
+    return response
+
+def approve__decline(data):
+    conn = sql.connect('database.db')
+    # print(data)
+    check_authkey_query = """
+        SELECT *FROM LoginAuthKey WHERE authkey = ? AND faculty_id = ? AND DELETED = 0
+    """
+    c = conn.cursor()
+    _ = c.execute(check_authkey_query,
+                  (data['authkey'], data['faculty_id'])).fetchone()
+    if _ is None:
+        response = {"status_message": "Unauthorized access",
+                    "status_code": 404, "data": "Invalid Authkey provided"}
+        return response
+
+    if data['status']==1:
+        approve_query = """
+        UPDATE Faculty SET approved = 1 WHERE faculty_id = ?
+        """
+        c.execute(approve_query,(data['f_id'],))
+        message = "approved"
+        conn.commit()
+    elif data['status'] == 0 :
+        decline_query = """
+            DELETE FROM Faculty WHERE faculty_id = ?
+        """
+        c.execute(decline_query,(data['f_id'],))
+        conn.commit()
+        message = "Declined"
+    response = {
+        "statusmessage": "Successfull",
+        "status_code": 200, "data": message
+    }
+    return response
