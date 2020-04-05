@@ -24,8 +24,8 @@
         processData: false,
         success: function (ret_obj) {
           if (ret_obj['status_code'] == 200) {
-            $('#email').val(ret_obj['data']['name']);
-            $('#name').val(ret_obj['data']['email_id']);
+            $('#email').val(ret_obj['data']['email_id']);
+            $('#name').val(ret_obj['data']['name']);
             $('#department').val(ret_obj['data']['department']);
             $('#email').attr('disabled', true);
             $('#name').attr('disabled', true);

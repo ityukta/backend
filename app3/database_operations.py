@@ -295,6 +295,9 @@ def update_faculty_details(data):
     check_authkey_query = """
         SELECT *FROM LoginAuthKey WHERE authkey = ? AND faculty_id = ? AND DELETED = 0
     """
+    update_first_login_query = """
+        UPDATE Faculty SET first_login = 0 
+    """
     c = conn.cursor()
     _ = c.execute(check_authkey_query,
                   (data['authkey'], data['faculty_id'])).fetchone()
@@ -402,7 +405,7 @@ def update_faculty_details(data):
                 """
                 c.execute(insert_specialisation_details_query,
                           (specialisation_details, inp_faculty_id))
-
+        c.execute(update_first_login_query,(data['faculty_id'],))
     conn.commit()
     response = {"msg": "successful"}
     return response
@@ -444,11 +447,11 @@ def validate_login(data):
             print(faculty_type)
             conn.close()
             if 'H' in faculty_type:
-                f_type = 'H'
+                f_type = 3
             elif 'C' in faculty_type:
-                f_type = 'C'
+                f_type = 2
             else:
-                f_type = 'P'
+                f_type = 1
             
             response = {"status_message": "Successful",
                         "status_code": 200, "authkey": random_authkey,'faculty_type':f_type, "data": faculty_details}

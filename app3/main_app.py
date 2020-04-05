@@ -87,7 +87,7 @@ def final_register_ajax():
     """This endpoint is to add all the faculty details"""
     data = request.get_json()
     print(data)
-    print(data['teacher_picture'])
+    # print(data['teacher_picture'])
     response = dbop.update_faculty_details(data)
     # response = {"msg" :"success"}
     return jsonify(response)

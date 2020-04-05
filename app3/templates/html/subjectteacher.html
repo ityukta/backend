@@ -49,6 +49,10 @@
         };
 
         $(document).ready(function () {
+            if (localStorage.getItem('faculty_type') < 2)
+                {
+                    window.location.href = 'home'
+                }
             var pic = localStorage.getItem("teacher_picture");
             console.log(pic);
             var img = ` <img src="data:image/jpg;base64, `+ pic + `" alt="" class="header__logout__img" >`
