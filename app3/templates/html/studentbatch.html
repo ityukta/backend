@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"> -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css"
         integrity="sha256-+N4/V/SbAFiW1MPBCXnfnP9QSN3+Keu+NlB+0ev/YKQ=" crossorigin="anonymous" />
     <link rel="stylesheet" href="{{ url_for('static', filename = 'sass/main.css') }}" type="text/css">
@@ -20,20 +20,90 @@
             width: 100%;
 
         }
+        .modal__body{
+            height: 80%;
+            width: 80%;
+            overflow: scroll;
+        }
+        .modal{
+            z-index: 1000;
+        }
     </style>
+    <script>
+        function openmodal(){
+            $('.modal').removeClass('modal__dispnone');
+        }
+        function closemodal(){
+            $('.modal').addClass('modal__dispnone');
+        }
+        function opennavbar(){
+            $('.navbar').toggleClass('show-navbar');
+        }
+        function showsublist(param , value){
+            $('ul', param).toggleClass(value);
+        }
+        function logout(){
+            localStorage.clear();
+            window.location.href = '/';
+        }
+        function loadnavbar(){
+            priority = localStorage.getItem('faculty_type');
+            console.log(priority);
+            var temp = `
+            <ul class="nav__ul">
+                    <li class="nav__li" onclick="window.location.href = 'home' ">home</li>
+                    <li class="nav__li teacherli" onclick="showsublist($(this), 'show')">Professor<span></span>
+                        <ul class="sub ">
+                            <!--Add show on click of teacherli-->`;
+            if(priority > 2){
+                temp += `
+                    <li class="sub__li" onclick="window.location.href = 'teachers'">View All Teachers</li>
+                    <li class="sub__li" onclick="window.location.href = 'approval'">Approve Register Request</li>
+                    <li class="sub__li" onclick="window.location.href = 'assignclass'">Assign Class teachers</li>
+                `;
+            }
+            if(priority > 1){
+                temp += `
+                <li class="sub__li" onclick="window.location.href = 'assignteacher'">Add subjects</li>
+                `;
+            }
+            temp += `</ul>
+                    </li>
+                    <li class="nav__li studentli" onclick="showsublist($(this), 'show')"><div class="student">Students</div>
+                        <ul class="sub studentlist">`;
+            if(priority > 1){
+                temp += `
+                    <li class="sub__li" onclick=" window.location.href = 'addstudent'"> Add students</li>
+                `;
+            }
+            temp += `
+                            <li class="sub__li" onclick=" window.location.href = 'addattendance'">Manage attendace</li>
+                            <li class="sub__li" onclick=" window.location.href = 'iamarks'"> Manage IA marks</li>
+                        </ul>
+                    </li>
+                </ul>
+            `;
+            $('.navbar').html(temp);
+        }
+    </script>
     <script>
         var subject_id_list = [], b64;
         $(document).ready(function () {
+            var faculty_id = localStorage.getItem('faculty_id');
+            var authkey = localStorage.getItem('authkey');
+            if(faculty_id == null || authkey == null){
+                window.location.href = '/';
+            }
             if (localStorage.getItem('faculty_type') < 2)
                 {
                     window.location.href = 'home'
                 }
             var pic = localStorage.getItem("teacher_picture");
+            loadnavbar();
             console.log(pic);
             var img = ` <img src="data:image/jpg;base64, `+ pic + `" alt="" class="header__logout__img" >`
             $('.header__logout__pic').html(img);
-            var faculty_id = localStorage.getItem('faculty_id');
-            var authkey = localStorage.getItem('authkey');
+            
             var data = {
                 "authkey": localStorage.getItem("authkey"),
                 "faculty_id": localStorage.getItem("faculty_id")
@@ -183,11 +253,15 @@
                 data: JSON.stringify(d),
                 processData: false,
                 success: function (ret_obj) {
+                    subject_id_list = [];
                     console.log(ret_obj);
                     if (ret_obj['status_code'] == 200) {
                         temp = "";
+                        $('.studentbatch__details__table__heading tr').html(" ");
+                        $('.studentbatch__details__table__heading tr').append(`<th>Sl.NO </th><th> Name </th><th>USN</th>`)
                         for (i = 0; i < ret_obj['data']['subject_details'].length; i++) {
                             subject_id_list.push(ret_obj['data']['subject_details'][i]['subject_id']);
+                        
                             $('.studentbatch__details__table__heading tr').append('<th id="studentbatch__details__subject__' + ret_obj['data']['subject_details'][i]['subject_id'] + '">' + ret_obj['data']['subject_details'][i]['subject_name'] + '</th>');
                             temp +='<div class="studentbatch__add__subject">';
                             temp += '<input type="checkbox" id="subject_'+ret_obj['data']['subject_details'][i]['subject_id']+'" class="studentbatch__add__subject_'+ret_obj['data']['subject_details'][i]['subject_id']+'__input inputcommom">';
@@ -196,6 +270,7 @@
                             temp += '</div>';
                         }
                         $('.studentbatch__add__subjects__container').html(temp);
+                      
                         final_table_data = "";
                         for (i = 0; i < ret_obj['data']['student_details'].length; i++) {
                             enrolled_subjects_list = []
@@ -218,7 +293,7 @@
                             final_table_data += d;
                         }
                         $('.studentbatch__details__table__body').html(final_table_data);
-                        $('.studentbatch__details').toggleClass('displaynone');
+                        $('.studentbatch__details').removeClass('displaynone');
                     }
                 }
             });
@@ -265,30 +340,123 @@
 </head>
 
 <body>
-
-    <div class="studentbatch">
-        <div class="studentbatch__add">
-            <div class="studentbatch__add__batch">
-                <button class="search-btn studentbatch__add__batch__btn" disabled>Add batch</button>
+    <div class="container">
+        <header class="header">
+            <img src="{{ url_for('static' , filename = 'images/logo.jpg')}}" alt="" class="header__collegelogo">
+            <div class="header__content1">
+                <button class="nav-btn" onclick="opennavbar()"><i class="fa fa-bars fa-2x"></i></button>
+                <h3 class="header__heading">Student login</h3>
             </div>
-
-            <!-- Button trigger modal -->
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLong">
-                Add student
-            </button>
-
-            <!-- Modal -->
-            <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog"
-                aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLongTitle">Add student details</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
+            <div class="header__content2">
+                <!-- <form action="" class="header__form search-show">
+                    <input type="search" class="header__search" placeholder="Search here">
+                    <button class="header__search-btn"><i class="fa fa-search fa-1x icon-sbtn"></i></button>
+                </form> -->
+                <div class="btn-shownone">
+                    <i class="fa fa-search fa-2x "></i>       <!--Make the btn-shownone to display block on click-->
+                </div>
+                
+                <div class="header__logout">
+                    <div class="header__logout__group" onclick="showsublist($(this), 'header__logout__listshow')">
+                        <div class="header__logout__pic">
+                            <img src="../images/user-3.jpg" alt="" class="header__logout__img">
                         </div>
-                        <div class="modal-body">
+                        <div class="header__dots" ><i class="fa fa-ellipsis-v fa-1x"></i>
+                            <ul class="header__logout__list ">   <!--Add header__logout__listshow on click of header__logout__group-->
+                                <li><a href="home">My profile</a></li>
+                                <!-- <li><a href="#">Settings</a></li> -->
+                                <li><a href="#">Log out</a></li>
+                            </ul>   
+                        </div>
+                        <p class="header__logout__name"><span class="header__logout__span">Admin</span>    
+                            <ul class="header__logout__list ">   <!--Add header__logout__listshow on click of header__logout__group-->
+                                <li><a href="home">My profile</a></li>
+                                <!-- <li><a href="#">Settings</a></li> -->
+                                <li><div onclick="logout()">Log out</div></li>
+                            </ul>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <section class="section">
+            <div class="navbar ">
+                <!--Add show-navbar on click of nav button-->
+                <ul class="nav__ul">
+                    <li class="nav__li"><a href="">home</a> </li>
+                    <li class="nav__li teacherli"><a href="" class="teacher">Professor</a> <span></span>
+                        <ul class="sub ">
+                            <!--Add show on click of teacherli-->
+                            
+                            <li class="sub__li" onclick="window.location.href = 'assignclass'">Class teachers</li>
+                            <li class="sub__li" onclick="window.location.href = 'assignteacher'">Add subjects</li>
+                        </ul>
+                    </li>
+                    <li class="nav__li studentli"><a href="" class="student">Students</a>
+                        <ul class="sub studentlist">
+                            <!--Add show on click of studentli-->
+                            <li class="sub__li" onclick=" window.location.href = 'addstudent'"> Add students</li>
+                            
+                            <li class="sub__li" onclick=" window.location.href = 'addattendance'">Manage attendace</li>
+                            <li class="sub__li" onclick=" window.location.href = 'iamarks'"> Manage IA marks</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div class="content">
+                <div class="assignclass__selectclass">
+                    <div class="assignclass__selectdept">
+                        <select class="dept" id="dept-id">
+                            <option value="" selected>Select branch</option>
+                            <option value="CSE">CSE</option>
+                            <option value="ISE">ISE</option>
+                            <option value="ECE">ECE</option>
+                            <option value="EEE">EEE</option>
+                        </select>
+                    </div>
+                    <div class="assignclass__selectyear">
+                        <select id="year-id" class="year" disabled>
+                            <option value="none" selected hidden>Select year</option>
+                            <!-- <option value="2020">2020</option>
+                            <option value="2021">2021</option>
+                            <option value="2022">2022</option> -->
+                        </select>
+                    </div>
+                    <div class="assignclass__selectsection">
+                        <select id="sem-id" class="section" disabled>
+                            <option value="none" selected hidden>Select sem</option>
+                            <!-- <option value="2">2</option>
+                            <option value="4">4</option>
+                            <option value="6">6</option> -->
+                        </select>
+                    </div>
+                    <div class="assignclass__selectsection">
+                        <select id="sec-id" class="section" disabled>
+                            <option value="none" selected hidden>Select section</option>
+                            <!-- <option value="a">A section</option>
+                            <option value="b">B section</option> -->
+                        </select>
+                    </div>
+                    <button id="submit-student-search" disabled onclick="submitstudentsearch()">Submit</button>
+                </div>
+                <div class="studentbatch">
+                    <div class="studentbatch__add">
+                        <div class="studentbatch__add__batch">
+                            <button class="search-btn studentbatch__add__batch__btn" disabled>Add batch</button>
+                        </div>
+            
+                        <!-- Button trigger modal -->
+                        <button type="button" onclick="openmodal()">
+                            Add student
+                        </button>
+            
+                        <!-- Modal -->
+                        <div class="modal modal__dispnone">
+                           <div class="modal__body">
+                            <div class="close-btn" onclick="closemodal()"><i class="fa fa-times fa-2x"></i></div>
+                            <div class="head">
+                             Add student details
+                            </div>
                             <div class="studentbatch__add__form">
                                 <div class="studentbatch__add__name formcommon">
                                     <label for="name">Name:</label>
@@ -369,102 +537,150 @@
                                     </div>                                    
                                 </div>
                             </div>
-                        </div>
-                        <div class="modal-footer">
                             <button type="button" class="btn btn-primary" onclick="addstudent()">Submit</button>
+                           </div>
+                           
                         </div>
+                        <!-- <div class="modal" id="exampleModalLong" tabindex="-1" role="dialog"
+                            aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal__body">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLongTitle">Add student details</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="studentbatch__add__form">
+                                            <div class="studentbatch__add__name formcommon">
+                                                <label for="name">Name:</label>
+                                                <input type="text" id="name" class="studentbatch__add__name__input inputcommon">
+                                            </div>
+                                            <div class="studentbatch__add__usn formcommon">
+                                                <label for="usn">USN:</label>
+                                                <input type="text" id="usn" class="studentbatch__add__usn__input inputcommon">
+                                            </div>
+            
+                                            <div class="studentbatch__add__bloodgroup formcommon">
+                                                <label for="blood_group">Blood Group:</label>
+                                                <input type="text" id="blood_group" class="studentbatch__add__bloodgroup__input inputcommon">
+                                            </div>
+                                            <div class="studentbatch__add__fathername formcommon">
+                                                <label for="fathername">Father Name:</label>
+                                                <input type="text" id="name"
+                                                    class="studentbatch__add__fathername__input inputcommon">
+                                            </div>
+                                            <div class="studentbatch__add__parentcontact formcommon">
+                                                <label for="contact">Parent/Guardian Contact number:</label>
+                                                <input type="text" id="contact"
+                                                    class="studentbatch__add__parentcontact__input inputcommon">
+                                            </div>
+                                            <div class="studentbatch__add__parentemail formcommon">
+                                                <label for="parent_email">Parent/Guardian Email ID:</label>
+                                                <input type="text" id="parent_email"
+                                                    class="studentbatch__add__parentemail__input inputcommon">
+                                            </div>
+                                            <div class="studentbatch__add__permanentaddress formcommon">
+                                                <label for="permanentaddress">Permanentaddress:</label>
+                                                <textarea id="permanentaddress" cols="30" rows="3"
+                                                    class="studentbatch__add__permanentaddress__input inputcommon"></textarea>
+                                            </div>
+                                            <div class="studentbatch__add__currentaddress formcommon">
+                                                <label for="currentaddress">Currentaddress:</label>
+                                                <textarea id="currentaddress" cols="30" rows="3"
+                                                    class="studentbatch__add__currentaddress__input inputcommon"></textarea>
+                                            </div>
+                                            
+                                            <div class="studentbatch__add__sslc formcommon">
+                                                <label for="sslc">10th results(%):</label>
+                                                <input type="number" id="sslc" class="studentbatch__add__sslc__input inputcommon">
+                                            </div>
+                                            <div class="studentbatch__add__puc formcommon">
+                                                <label for="puc">2nd puc results(%):</label>
+                                                <input type="number" id="puc" class="studentbatch__add__puc__input inputcommon">
+                                            </div>
+                                            
+                                            <div class="studentbatch__add__picture formcommon">
+                                                <label for="picture"></label>
+                                                <input type="file" id="picture" class="studentbatch__add__picture__input inputcommom">
+                                            </div>
+                                            <div class="studentbatch__add__subjects__container">
+                                                <div class="studentbatch__add__subject">
+                                                    <input type="checkbox" id="subject1" class="studentbatch__add__subject1__input inputcommom">
+                                                <label for="subject1">Subject 1</label>
+                                                </div>                                    
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-primary" onclick="addstudent()">Submit</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> -->
                     </div>
+            
+                    
+            
+            
+                    <!-- <div class="studentbatch__details">
+                        <div class="studentbatch__details__heading">2 sem A section ISE</div>
+                        <div class="studentbatch__details__batch">
+                            <div class="studentbatch__details__tablehead">
+                                <div class="studentbatch__details__student__sl">Sl no</div>
+                                <div class="studentbatch__details__student__usn">USN</div>
+                                <div class="studentbatch__details__student__name">Name</div>
+                            </div>
+                            <div class="studentbatch__details__student">
+                                <div class="studentbatch__details__student__sl">1</div>
+                                <div class="studentbatch__details__student__usn">1rn18cs056</div>
+                                <div class="studentbatch__details__student__name">Rahul</div>
+                            </div>
+                            <div class="studentbatch__details__student">
+                                <div class="studentbatch__details__student__sl">2</div>
+                                <div class="studentbatch__details__student__usn">1rn18cs057</div>
+                                <div class="studentbatch__details__student__name">Mehul</div>
+                            </div>
+                        </div>
+                    </div> -->
+                    
+            
                 </div>
-            </div>
-        </div>
-
-        <div class="assignclass__selectclass">
-            <div class="assignclass__selectdept">
-                <select class="dept" id="dept-id">
-                    <option value="" selected>Select branch</option>
-                    <option value="CSE">CSE</option>
-                    <option value="ISE">ISE</option>
-                    <option value="ECE">ECE</option>
-                    <option value="EEE">EEE</option>
-                </select>
-            </div>
-            <div class="assignclass__selectyear">
-                <select id="year-id" class="year" disabled>
-                    <option value="none" selected hidden>Select year</option>
-                    <!-- <option value="2020">2020</option>
-                    <option value="2021">2021</option>
-                    <option value="2022">2022</option> -->
-                </select>
-            </div>
-            <div class="assignclass__selectsection">
-                <select id="sem-id" class="section" disabled>
-                    <option value="none" selected hidden>Select sem</option>
-                    <!-- <option value="2">2</option>
-                    <option value="4">4</option>
-                    <option value="6">6</option> -->
-                </select>
-            </div>
-            <div class="assignclass__selectsection">
-                <select id="sec-id" class="section" disabled>
-                    <option value="none" selected hidden>Select section</option>
-                    <!-- <option value="a">A section</option>
-                    <option value="b">B section</option> -->
-                </select>
-            </div>
-            <button id="submit-student-search" disabled onclick="submitstudentsearch()">Submit</button>
-        </div>
-
-
-        <!-- <div class="studentbatch__details">
-            <div class="studentbatch__details__heading">2 sem A section ISE</div>
-            <div class="studentbatch__details__batch">
-                <div class="studentbatch__details__tablehead">
-                    <div class="studentbatch__details__student__sl">Sl no</div>
-                    <div class="studentbatch__details__student__usn">USN</div>
-                    <div class="studentbatch__details__student__name">Name</div>
+                <div class="studentbatch__details displaynone">
+                    <table class="studentbatch__details__table">
+                        <thead class="studentbatch__details__table__heading">
+                            <th>Sl. No</th>
+                            <th>Name</th>
+                            <th>USN</th>
+                        </thead>
+                        <tbody class="studentbatch__details__table__body">
+                            <tr>
+                                <td>1</td>
+                                <td>Amey Aditya Achar J</td>
+                                <td>1rn17is009</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
-                <div class="studentbatch__details__student">
-                    <div class="studentbatch__details__student__sl">1</div>
-                    <div class="studentbatch__details__student__usn">1rn18cs056</div>
-                    <div class="studentbatch__details__student__name">Rahul</div>
-                </div>
-                <div class="studentbatch__details__student">
-                    <div class="studentbatch__details__student__sl">2</div>
-                    <div class="studentbatch__details__student__usn">1rn18cs057</div>
-                    <div class="studentbatch__details__student__name">Mehul</div>
-                </div>
-            </div>
-        </div> -->
-        <div class="studentbatch__details displaynone">
-            <table class="studentbatch__details__table">
-                <thead class="studentbatch__details__table__heading">
-                    <th>Sl. No</th>
-                    <th>Name</th>
-                    <th>USN</th>
-                </thead>
-                <tbody class="studentbatch__details__table__body">
-                    <tr>
-                        <td>1</td>
-                        <td>Amey Aditya Achar J</td>
-                        <td>1rn17is009</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
 
+                
+            </div>
+        </section>
     </div>
+    
 
 
 
 
 
     <script src="{{ url_for('static', filename='js/modal.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    <!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
         integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
         crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
         integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-        crossorigin="anonymous"></script>
+        crossorigin="anonymous"></script> -->
 </body>
 <script>
     var input = document.getElementById('picture');

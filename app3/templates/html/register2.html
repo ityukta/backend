@@ -15,6 +15,9 @@
         "authkey": localStorage.getItem("authkey"),
         "faculty_id": localStorage.getItem("faculty_id")
       };
+      if(data['authkey'] == null || data['faculty_id'] == null){
+        window.location.href = "/";
+      }
       $.ajax({
         type: "POST",
         url: "getdetails",
@@ -329,8 +332,8 @@
         'date_of_birth': dob,
         'gender': gender,
         'address': address,
-        'marital_status': marital_status//,
-        // 'first_login' : 0
+        'marital_status': marital_status,
+        'first_login' : 0
       };
       localStorage.setItem("teacher_picture",b64) ;
       console.log(JSON.stringify(final_data));

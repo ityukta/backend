@@ -11,21 +11,75 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 </head>
 <script>
+    function opennavbar(){
+        $('.navbar').toggleClass('show-navbar');
+    }
+    function showsublist(param , value){
+        $('ul', param).toggleClass(value);
+    }
+    function logout(){
+        localStorage.clear();
+        window.location.href = '/';
+    }
+    function loadnavbar(){
+        priority = localStorage.getItem('faculty_type');
+        console.log(priority);
+        var temp = `
+        <ul class="nav__ul">
+                <li class="nav__li" onclick="window.location.href = 'home' ">home</li>
+                <li class="nav__li teacherli" onclick="showsublist($(this), 'show')">Professor<span></span>
+                    <ul class="sub ">
+                        <!--Add show on click of teacherli-->`;
+        if(priority > 2){
+            temp += `
+                <li class="sub__li" onclick="window.location.href = 'teachers'">View All Teachers</li>
+                <li class="sub__li" onclick="window.location.href = 'approval'">Approve Register Request</li>
+                <li class="sub__li" onclick="window.location.href = 'assignclass'">Assign Class teachers</li>
+            `;
+        }
+        if(priority > 1){
+            temp += `
+            <li class="sub__li" onclick="window.location.href = 'assignteacher'">Add subjects</li>
+            `;
+        }
+        temp += `</ul>
+                </li>
+                <li class="nav__li studentli" onclick="showsublist($(this), 'show')"><div class="student">Students</div>
+                    <ul class="sub studentlist">`;
+        if(priority > 1){
+            temp += `
+                <li class="sub__li" onclick=" window.location.href = 'addstudent'"> Add students</li>
+            `;
+        }
+        temp += `
+                        <li class="sub__li" onclick=" window.location.href = 'addattendance'">Manage attendace</li>
+                        <li class="sub__li" onclick=" window.location.href = 'iamarks'"> Manage IA marks</li>
+                    </ul>
+                </li>
+            </ul>
+        `;
+        $('.navbar').html(temp);
+    }
+</script>
+<script>
      $(document).ready(function()
             {
-                // console.log(localStorage.getItem('faculty_type'));
-                 if (localStorage.getItem('faculty_type') < 3)
-                {
-                    window.location.href = 'home'
-                }
-            
-            var faculty_id = localStorage.getItem('faculty_id');
+                var faculty_id = localStorage.getItem('faculty_id');
             var authkey = localStorage.getItem('authkey');
             var data = {
                 'authkey': authkey,
                 'faculty_id': faculty_id,
                 'check_approval':1
                 };
+                if(data['authkey'] == null || data['faculty_id'] == null){
+                window.location.href = "/";
+            }
+                // console.log(localStorage.getItem('faculty_type'));
+                 if (localStorage.getItem('faculty_type') < 3)
+                {
+                    window.location.href = 'home'
+                }
+                loadnavbar();
                 $.ajax(
                 {
                     type: "POST",
@@ -90,37 +144,37 @@
 <body>
     <div class="container">
         <header class="header">
-            <img src="{{url_for('static', filename = 'images/logo.jpg')}}" alt="" class="header__collegelogo">
+            <img src="{{ url_for('static' , filename = 'images/logo.jpg')}}" alt="" class="header__collegelogo">
             <div class="header__content1">
-                <button class="nav-btn"><i class="fa fa-bars fa-2x"></i></button>
+                <button class="nav-btn" onclick="opennavbar()"><i class="fa fa-bars fa-2x"></i></button>
                 <h3 class="header__heading">Student login</h3>
             </div>
             <div class="header__content2">
-                <form action="" class="header__form search-show">
+                <!-- <form action="" class="header__form search-show">
                     <input type="search" class="header__search" placeholder="Search here">
                     <button class="header__search-btn"><i class="fa fa-search fa-1x icon-sbtn"></i></button>
-                </form>
+                </form> -->
                 <div class="btn-shownone">
                     <i class="fa fa-search fa-2x "></i>       <!--Make the btn-shownone to display block on click-->
                 </div>
                 
                 <div class="header__logout">
-                    <div class="header__logout__group">
+                    <div class="header__logout__group" onclick="showsublist($(this), 'header__logout__listshow')">
                         <div class="header__logout__pic">
-                            <!-- <img src="{{url_for('static', filename = 'images/logo.jpg')}}" alt="" class="header__logout__img"> -->
+                            <img src="../images/user-3.jpg" alt="" class="header__logout__img">
                         </div>
-                        <div class="header__dots"><i class="fa fa-ellipsis-v fa-1x"></i>
+                        <div class="header__dots" ><i class="fa fa-ellipsis-v fa-1x"></i>
                             <ul class="header__logout__list ">   <!--Add header__logout__listshow on click of header__logout__group-->
-                                <li><a href="#">My profile</a></li>
-                                <li><a href="#">Settings</a></li>
+                                <li><a href="home">My profile</a></li>
+                                <!-- <li><a href="#">Settings</a></li> -->
                                 <li><a href="#">Log out</a></li>
                             </ul>   
                         </div>
                         <p class="header__logout__name"><span class="header__logout__span">Admin</span>    
                             <ul class="header__logout__list ">   <!--Add header__logout__listshow on click of header__logout__group-->
-                                <li><a href="#">My profile</a></li>
-                                <li><a href="#">Settings</a></li>
-                                <li><a href="#">Log out</a></li>
+                                <li><a href="home">My profile</a></li>
+                                <!-- <li><a href="#">Settings</a></li> -->
+                                <li><div onclick="logout()">Log out</div></li>
                             </ul>
                         </p>
                     </div>

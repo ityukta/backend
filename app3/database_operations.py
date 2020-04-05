@@ -442,7 +442,7 @@ def validate_login(data):
             c.execute(insert_login_authkey_query,
                       (random_authkey, faculty_details['faculty_id']))
             conn.commit()
-            faculty_type = c.execute(get_type_query,(faculty_details['faculty_id'],)).fetchall()
+            faculty_type = c.execute(get_type_query, (faculty_details['faculty_id'],)).fetchall()
             faculty_type = [i[0] for i in faculty_type]
             print(faculty_type)
             conn.close()
@@ -452,7 +452,7 @@ def validate_login(data):
                 f_type = 2
             else:
                 f_type = 1
-            
+            faculty_details['faculty_type'] = f_type
             response = {"status_message": "Successful",
                         "status_code": 200, "authkey": random_authkey,'faculty_type':f_type, "data": faculty_details}
             
@@ -561,6 +561,7 @@ def get_all_class_details(data):
             SELECT name, teacher_picture FROM faculty WHERE faculty_id = ?
         """
         f_data = c.execute(get_teacher_data, (teacher_id, )).fetchone()
+        print(teacher_id)
         f_data = dict(
             zip([cur[0] for cur in c.description], f_data))
         c_data[i]['details'] = f_data
