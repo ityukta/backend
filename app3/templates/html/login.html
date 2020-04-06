@@ -26,13 +26,18 @@
                 success: function(ret_obj){
                     console.log(ret_obj);
                     if(ret_obj['status_code'] == 200){
-                        if(ret_obj['data']['first_login']  == 1){
-                            localStorage.setItem("authkey", ret_obj['authkey']);
-                            localStorage.setItem("faculty_id", ret_obj['data']['faculty_id']);
-                            window.location.href = 'register2';
-                        }
+                        localStorage.setItem("authkey", ret_obj['authkey']);
+                        localStorage.setItem("faculty_id", ret_obj['data']['faculty_id']);
+                        localStorage.setItem("teacher_picture",ret_obj['data']['teacher_picture']);
+                        localStorage.setItem('faculty_type',ret_obj['data']['faculty_type']);
+                            if(ret_obj['data']['first_login']  == 1){
+                                 window.location.href = 'register2';
+                              }
+                            else{
+                                window.location.href = 'home';
+                                }
                     }else{
-                        alert(ret_obj['data']);
+                        alert("Error: " + ret_obj['data']);
                     }
                 }
             })
@@ -62,7 +67,7 @@
             </div>
         </forms>
         <div class="container__register">
-            Dont have an account yet?<a href="#" class="register">Register</a>
+            Dont have an account yet?<a href="register" class="register">Register</a>
         </div>
 
     </div>
