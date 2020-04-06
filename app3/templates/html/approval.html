@@ -90,7 +90,7 @@
                     processData: false,
                     success :function(ret_obj){
                         console.log("tsting");
-                        console.log(ret_obj['data']);
+                        console.log(ret_obj);
                         var d = ""; 
                         for(i=0;i<ret_obj['data'].length;i++)
                         {
@@ -98,12 +98,16 @@
                                 <div class="allteachers__dots">
                                     <i class="fa fa-ellipsis-v fa-1x"></i>
                                 </div>
-                                <div class="allteachers__pic">
-                                    <img src="data:image/jpg;base64, `+ ret_obj['data'][i][3] + `" alt="" class="header__logout__img" >
-                                </div>
+                                
                                 <div class="allteachers__name">
                                     <p>`+ret_obj['data'][i][1]+`</p>
+                                    <br>
+                                    <p> Email ` +ret_obj['data'][i][4]+`</p>
+                                    <br>
                                     <p> Department : `+ret_obj['data'][i][2]+`</p>
+                                    <br>
+                                    <p> Type : `+ret_obj['data'][i][5]+`</p>
+                                    <br>
                                 </div>
                                 <button id = "decline__button" onclick='approvefunction(`+ret_obj['data'][i][0]+`,0)''">Decline</button>
                                 <button id = "approve__button" onclick='approvefunction(`+ret_obj['data'][i][0]+`,1)'">Approve</button>

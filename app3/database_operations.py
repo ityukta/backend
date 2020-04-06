@@ -1356,7 +1356,8 @@ def get_complete_faculty(data):
     
     if 'check_approval' in params:
         faculty_details_query = """
-        SELECT faculty_id , name , department, teacher_picture FROM Faculty WHERE approved = 0
+        SELECT F.faculty_id , name , department, teacher_picture , email_id , t.type_description FROM Faculty F , Type t WHERE approved = 0 
+        AND F.faculty_id = t.faculty_id
         """
         faculty_details = c.execute(faculty_details_query).fetchall()
     else:
@@ -1364,7 +1365,7 @@ def get_complete_faculty(data):
             SELECT faculty_id , name , department, teacher_picture FROM Faculty 
         """
         faculty_details = c.execute(faculty_details_query).fetchall()
-    # print(faculty_details)
+    print(faculty_details)
     response = {
         "statusmessage": "Successfull",
         "status_code": 200, "data": faculty_details
