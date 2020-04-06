@@ -11,12 +11,15 @@
 @import "components/button.scss";
 @import "components/deptdropdown.scss";
 @import "components/modal.scss";
+@import "components/componentan";
 
 @import "layout/section.scss";
 @import "layout/content.scss";
 @import "layout/header.scss";
 @import "layout/navbar.scss";
+@import "layout/layoutan.scss";
 
+@import "pages/login.scss";
 @import "pages/register1.scss";
 @import "pages/register2.scss";
 @import "pages/home.scss";
@@ -27,4 +30,5 @@
 @import "pages/addstudent.scss";
 @import "pages/studentbatch.scss";
 @import "pages/attendance.scss";
-@import "pages/dayattendance.scss"; 
+@import "pages/dayattendance.scss";
+@import "pages/assessentry.scss";

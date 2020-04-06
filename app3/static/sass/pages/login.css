@@ -1,0 +1,155 @@
+* {
+  padding: 0px;
+  margin: 0px;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+body {
+  position: relative;
+  height: 95vh;
+  background: -webkit-gradient(linear, left top, right top, from(lightblue), to(#c9c5c5));
+  background: linear-gradient(to right, lightblue, #c9c5c5);
+  font-family: lato;
+}
+
+.maincontainer {
+  height: 100vh;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.containers {
+  width: 600px;
+  border: 1px solid #cfcfcf;
+  padding: 1rem;
+  border-radius: 5px;
+  /* position:absolute;
+    top:53%;
+   left:50%;
+   transform:translate(-45%,-50%);
+   border:0px solid rgba(199, 197, 197, 0.644);
+    background-color:white;
+    width:30%;
+    height:80%;
+    box-shadow:3px 3px 10px rgb(94, 87, 87);
+    border-radius:10px;*/
+}
+
+.containers__logo {
+  text-align: center;
+}
+
+.logo {
+  width: 36%;
+  height: 20%;
+}
+
+.containers__login {
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-weight: bold;
+  font-size: 200%;
+}
+
+.email__text {
+  margin-left: 7.5%;
+  font-weight: 550;
+}
+
+.email, .password {
+  width: 80%;
+  height: 6%;
+  margin-left: 7%;
+  margin-bottom: 7%;
+  margin-top: 4px;
+  place-content: none;
+  border: 1px solid #6b6969;
+  background-color: #f5eded;
+  border-radius: 10px;
+}
+
+.password__text {
+  margin-left: 7.5%;
+  position: relative;
+  font-weight: 550;
+}
+
+.button {
+  width: 80%;
+  margin-left: 40px;
+  margin-bottom: 5%;
+  font-weight: bold;
+  border: 0px solid gray;
+  background: -webkit-gradient(linear, left top, right top, from(#7292ac), to(blue));
+  background: linear-gradient(to right, #7292ac, blue);
+  color: white;
+  position: relative;
+  border-radius: 10px;
+  padding: 0.8rem;
+}
+
+.button:hover {
+  cursor: pointer;
+}
+
+.button:active {
+  -webkit-transform: translateY(5%);
+          transform: translateY(5%);
+}
+
+.forgotpassword {
+  position: absolute;
+  left: 63%;
+  font-size: 80%;
+  text-decoration: none;
+  color: gray;
+}
+
+.containers__register {
+  left: 50px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  padding: 0 2rem;
+}
+
+.containers__register__link {
+  margin-right: 2rem;
+  text-decoration: none;
+}
+
+.register {
+  position: relative;
+  top: 50px;
+}
+
+.register__text {
+  margin-left: 32px;
+}
+
+.forgotpassword {
+  position: relative;
+  left: 280px;
+}
+
+input {
+  padding: 0.4rem;
+  border-radius: 5px;
+}
+
+input:focus {
+  outline: none;
+}
+/*# sourceMappingURL=login.css.map */

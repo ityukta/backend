@@ -39,7 +39,7 @@ def add_class_view():
 @APP.route('/addattendance', methods=['GET'])
 def attendance_view():
     """ url to attendance"""
-    return render_template('html/dayattendance.html')
+    return render_template('html/attendancebatch.html')
 @APP.route('/assignteacher',methods=['GET'])
 def subjectteacher_view():
     "url to add subject teacher"
@@ -49,6 +49,26 @@ def subjectteacher_view():
 def add_student_view():
     """ URL to add or view students"""
     return render_template('html/studentbatch.html')
+
+@APP.route('/iamarks',methods = ['GET'])
+def add_iamarks_view():
+    """URL to add or view iamarks"""
+    return render_template('html/iamarks.html')
+
+@APP.route('/home',methods = ['GET'])
+def home_page_view():
+    """URL for professor home page """
+    return render_template('html/personalpage.html')
+
+@APP.route('/teachers',methods = ['GET'])
+def all_teachers_view():
+    """URL for all professors page """
+    return render_template('html/allteachers.html')
+
+@APP.route('/approval', methods = ['GET'])
+def approve_view():
+    """This is the page to approve teachers """
+    return render_template('html/approval.html')   
 # Endpoints
 
 
@@ -67,7 +87,7 @@ def final_register_ajax():
     """This endpoint is to add all the faculty details"""
     data = request.get_json()
     print(data)
-    print(data['teacher_picture'])
+    # print(data['teacher_picture'])
     response = dbop.update_faculty_details(data)
     # response = {"msg" :"success"}
     return jsonify(response)
@@ -76,9 +96,9 @@ def final_register_ajax():
 def login_ajax():
     """This is the ajax endpoint for login"""
     data = request.get_json()
-    print(data)
+   
     response = dbop.validate_login(data)
-    print(response)
+    # print(response)
     return jsonify(response)
 
 @APP.route('/getdetails', methods = ['POST'])
@@ -161,6 +181,75 @@ def add_student_ajax():
     response = dbop.add_student(data)
     print(response)
     return jsonify(response)
+
+@APP.route('/get_student_attendance_details', methods=['POST'])
+def get_student_attendance_details_ajax():
+    """This endpoint get stusdents details based on subject"""
+    data = request.get_json()
+    print(data)
+    response = dbop.get_student_attendance_details(data)
+    return jsonify(response)
+
+@APP.route('/get_student_marks_details', methods=['POST'])
+def get_student_marks_details_ajax():
+    """This endpoint get stusdents details based on subject"""
+    data = request.get_json()
+    print(data)
+    response = dbop.get_student_marks_details(data)
+    return jsonify(response)
+
+@APP.route('/add_student_attendance', methods=['POST'])
+def add_student_attendance_ajax():
+    """This endpoint is used to add student attendance"""
+    data = request.get_json()
+    print(data)
+    response = dbop.add_student_attendance(data)
+    return jsonify(response)
+
+@APP.route('/get_attendance_details', methods=['POST'])
+def get_attendance_details_ajax():
+    """This endpoint is used to get student attendance"""
+    data = request.get_json()
+    print(data)
+    response = dbop.get_attendance_details(data)
+    return jsonify(response)
+
+@APP.route('/add_question_paper_pattern', methods = ['POST'])
+def add_question_paper_pattern_ajax():
+    """This endpoint is to add qPattern"""
+    data = request.get_json()
+    print(data)
+    response = dbop.add_question_paper_pattern(data)
+    return jsonify(response)
+
+@APP.route('/get_complete_faculty_details' , methods = ['POST'])
+def get_faculty_details_view():
+    """This endpoint is used tot get faculty details"""
+    data = request.get_json()
+    response = dbop.get_complete_faculty_details(data)
+    return jsonify(response)
+
+@APP.route('/add_student_res', methods=['POST'])
+def add_student_res_ajax():
+    """This endpoint is to add student result"""
+    data = request.get_json()
+    resonse = dbop.add_student_res(data)
+    return jsonify(resonse)
+
+@APP.route('/get_all_faculty' , methods = ['POST'])
+def get_faculty_view():
+    """This endpoint is used get  all faculty """
+    data = request.get_json()
+    response = dbop.get_complete_faculty(data)
+    return jsonify(response)
+
+@APP.route('/approve__decline' , methods = ['POST'])
+def approve__decline__view():
+    """This endpoint is approve or decline a faculty """
+    data = request.get_json()
+    response = dbop.approve__decline(data)
+    return jsonify(response)
+
 if __name__ == '__main__':
     APP.run(debug=True, threaded=True)
     APP.run()

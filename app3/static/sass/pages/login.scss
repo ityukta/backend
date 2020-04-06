@@ -1,0 +1,144 @@
+*{
+    padding:0px;
+    margin:0px;
+    box-sizing: border-box;
+}
+
+
+body{
+    position:relative;
+    height:95vh;
+    background:linear-gradient(to right,lightblue,rgb(201, 197, 197));
+    font-family:lato;
+    
+}
+.maincontainer{
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.containers{
+    width: 600px;
+    border:1px solid rgb(207, 207, 207);
+    padding: 1rem;
+    border-radius: 5px;
+   /* position:absolute;
+    top:53%;
+   left:50%;
+   transform:translate(-45%,-50%);
+   border:0px solid rgba(199, 197, 197, 0.644);
+    background-color:white;
+    width:30%;
+    height:80%;
+    box-shadow:3px 3px 10px rgb(94, 87, 87);
+    border-radius:10px;*/
+}
+.containers__logo{
+    text-align:center;
+    
+}
+
+.logo{
+    width:36%;
+    height:20%;
+}
+.containers__login{
+    text-align:center;
+    margin-top:10px;
+    margin-bottom:10px;
+    font-weight:bold;
+    font-size:200%;
+}
+.email__text{
+    margin-left:7.5%;
+    font-weight:550;
+  
+  
+}
+.email,.password{
+    width:80%;
+    height:6%;
+    margin-left:7%;
+    margin-bottom:7%;
+    margin-top:4px;
+    place-content: none;
+    border:1px solid rgb(107, 105, 105);
+    background-color: rgb(245, 237, 237);
+    border-radius: 10px;
+}
+
+.password__text{
+    margin-left:7.5%;
+    position:relative;
+    font-weight:550;
+}
+
+
+.button{
+     width:80%;
+    // height:80%;
+   
+   margin-left:40px;
+    margin-bottom:5%;
+    font-weight:bold;
+    border:0px solid gray;
+    background:linear-gradient(to right,rgb(114, 146, 172),blue);
+    color:white;
+    position:relative;
+    border-radius:10px;
+    padding: 0.8rem;
+   
+}
+.button:hover{
+    cursor: pointer;
+}
+.button:active{
+    transform:translateY(5%);
+}
+.forgotpassword{
+    position:absolute;
+    left:63%;
+    font-size:80%;
+    text-decoration:none;
+    color:gray;
+}
+
+.containers__register{
+    //  text-align:center;
+    // margin-bottom:5%;
+   
+    left:50px;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 2rem;
+    &__link{
+        margin-right: 2rem;
+        text-decoration: none;
+    }
+}
+
+.register{
+    // text-decoration: none;
+    // color:blue;
+    position: relative;
+    top:50px;
+    &__text{
+        
+        margin-left:32px;
+    }
+}
+.containers__info{
+   
+}
+.forgotpassword{
+    position: relative;
+    left: 280px;
+}
+input{
+    padding: 0.4rem;
+    border-radius: 5px;
+    &:focus{
+        outline: none;
+    }
+}

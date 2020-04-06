@@ -15,6 +15,9 @@
         "authkey": localStorage.getItem("authkey"),
         "faculty_id": localStorage.getItem("faculty_id")
       };
+      if(data['authkey'] == null || data['faculty_id'] == null){
+        window.location.href = "/";
+      }
       $.ajax({
         type: "POST",
         url: "getdetails",
@@ -24,8 +27,8 @@
         processData: false,
         success: function (ret_obj) {
           if (ret_obj['status_code'] == 200) {
-            $('#email').val(ret_obj['data']['name']);
-            $('#name').val(ret_obj['data']['email_id']);
+            $('#email').val(ret_obj['data']['email_id']);
+            $('#name').val(ret_obj['data']['name']);
             $('#department').val(ret_obj['data']['department']);
             $('#email').attr('disabled', true);
             $('#name').attr('disabled', true);
@@ -329,9 +332,10 @@
         'date_of_birth': dob,
         'gender': gender,
         'address': address,
-        'marital_status': marital_status//,
-        // 'first_login' : 0
+        'marital_status': marital_status,
+        'first_login' : 0
       };
+      localStorage.setItem("teacher_picture",b64) ;
       console.log(JSON.stringify(final_data));
       $.ajax({
         type: "POST",
@@ -342,6 +346,7 @@
         processData: false,
         success: function (ret_obj) {
           console.log(ret_obj);
+          window.location.href = 'home';
         }
       });
     }

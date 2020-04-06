@@ -17,6 +17,57 @@
         }
     </style>
     <script>
+        function opennavbar(){
+            $('.navbar').toggleClass('show-navbar');
+        }
+        function showsublist(param , value){
+            $('ul', param).toggleClass(value);
+        }
+        function logout(){
+            localStorage.clear();
+            window.location.href = '/';
+        }
+        function loadnavbar(){
+            priority = localStorage.getItem('faculty_type');
+            console.log(priority);
+            var temp = `
+            <ul class="nav__ul">
+                    <li class="nav__li" onclick="window.location.href = 'home' ">home</li>
+                    <li class="nav__li teacherli" onclick="showsublist($(this), 'show')">Professor<span></span>
+                        <ul class="sub ">
+                            <!--Add show on click of teacherli-->`;
+            if(priority > 2){
+                temp += `
+                    <li class="sub__li" onclick="window.location.href = 'teachers'">View All Teachers</li>
+                    <li class="sub__li" onclick="window.location.href = 'approval'">Approve Register Request</li>
+                    <li class="sub__li" onclick="window.location.href = 'assignclass'">Assign Class teachers</li>
+                `;
+            }
+            if(priority > 1){
+                temp += `
+                <li class="sub__li" onclick="window.location.href = 'assignteacher'">Add subjects</li>
+                `;
+            }
+            temp += `</ul>
+                    </li>
+                    <li class="nav__li studentli" onclick="showsublist($(this), 'show')"><div class="student">Students</div>
+                        <ul class="sub studentlist">`;
+            if(priority > 1){
+                temp += `
+                    <li class="sub__li" onclick=" window.location.href = 'addstudent'"> Add students</li>
+                `;
+            }
+            temp += `
+                            <li class="sub__li" onclick=" window.location.href = 'addattendance'">Manage attendace</li>
+                            <li class="sub__li" onclick=" window.location.href = 'iamarks'"> Manage IA marks</li>
+                        </ul>
+                    </li>
+                </ul>
+            `;
+            $('.navbar').html(temp);
+        }
+    </script>
+    <script>
         function openmodal(branch, year, sem, sec) {
             $('.modal').toggleClass('modal__dispnone');
             $('.modal #branch').val(branch);
@@ -49,8 +100,30 @@
         };
 
         $(document).ready(function () {
-
+            var faculty_id = localStorage.getItem('faculty_id');
+            var authkey = localStorage.getItem('authkey');
+            if(faculty_id == null || authkey == null){
+                window.location.href = "/";
+            }
+            if (localStorage.getItem('faculty_type') < 2)
+                {
+                    window.location.href = 'home'
+                }
+                loadnavbar();
+            var pic = localStorage.getItem("teacher_picture");
+            console.log(pic);
+            var img = ` <img src="data:image/jpg;base64, `+ pic + `" alt="" class="header__logout__img" >`
+            $('.header__logout__pic').html(img);
             $('#dept-id').change(function () {
+                if ($('#dept-id').val() != "Select branch") {
+                    $('#year-id').removeAttr('disabled');
+                }
+                else {
+                    $('#year-id').attr('disabled', true);
+                    $('#sem-id').attr('disabled', true);
+                    $('#sec-id').attr('disabled', true);
+                    $('#submit-student-search').attr('disabled', true);
+                }
                 var d = {
                     'authkey': localStorage.getItem('authkey'),
                     'faculty_id': localStorage.getItem('faculty_id'),
@@ -73,77 +146,18 @@
                         $('#year-id').html(d);
                     }
                 });
-                if ($('#year-id').find(":selected").val() != "none" && $('#sec-id').find(":selected").val() != "none" && $('#sem-id').find(":selected").val() != "none") {
-                    var authkey = localStorage.getItem('authkey');
-                    var faculty_id = localStorage.getItem('faculty_id');
-                    var data = {
-                        'authkey': authkey,
-                        'faculty_id': faculty_id,
-                        'dept': $('#dept-id').val(),
-                        'sec': $('#sec-id').val(),
-                        'graduation_year': $('#year-id').val(),
-                        'sem': $('#sem-id').val()
-
-                    };
-                    $.ajax({
-                        type: "POST",
-                        url: "getfcs",
-                        dataType: 'Json',
-                        contentType: 'application/json',
-                        data: JSON.stringify(data),
-                        processData: false,
-                        success: function (ret_obj) {
-                            console.log(ret_obj);
-                            console.log(ret_obj['data']);
-                            var branch = $('#dept-id').val()
-
-                            var d = `
-                            <div class="assignclass__2__a">
-                            <div class="assignclass__add ">
-                                <!--Add assignclass__addshownone to hide the plus -->
-                                <div class="assignclass__add__pic" onclick="openmodal('`+ $('#dept-id').val() + `','` + $('#year-id').val() + `','` + $('#sem-id').val() + `','` + $('#sec-id').val() + `')">
-                                    <i class="fa fa-plus fa-2x"></i>
-                                </div>
-                                <p class="assignclass__add__text">Add subject 1</p>
-                            </div>
-                        </div>
-                            `;
-                            if (ret_obj['status_code'] == 200) {
-                                for (i = 0; i < ret_obj['data'].length; i++) {
-                                    credits = ret_obj['data'][i]['credits'];
-                                    sub_faculty_id = ret_obj['data'][i]['faculty_id'];
-                                    sub_teacher_name = ret_obj['data'][i]['name'];
-                                    sub_code = ret_obj['data'][i]['subject_code'];
-                                    teacher_pic = ret_obj['data'][i]['teacher_picture'];
-                                    subject_name = ret_obj['data'][i]['subject_name'];
-                                    var fill_data = `
-                                    <div class="assignclass__2__b" > 
-                                <div class="assignclass__dots">
-                                    <i class="fa fa-ellipsis-v fa-1x"></i>
-                                </div>
-                                <div class="assignclass__teacher-pic assignclass__picshow" >
-                                    <img src="data:image/jpg;base64, `+ teacher_pic + `" alt="" class="assignclass__teacher-img" height="30" width="30">
-                                </div>
-                                <div class="assignclass__teacherdetails assignclass__detailshow">
-                                    <p class="assignclass__teachername">Name:`+ sub_teacher_name + `</p>
-                                    <p class="assignclass__teacherid">Teacher id:`+ sub_faculty_id + `</p>
-                                    <p class="assignclass__teacherclass">Subject:`+ subject_name + `</p>
-                                    <p class="assignclass__subjectcode">Subject code:`+ sub_code + `</p>
-                                    <p class="assignclass__credits">Credits:`+ credits + `</p>
-                                </div>
-                            </div>`;
-                                    d += fill_data;
-                                }
-                            }
-                            $('.subject_teachers__container').html(d);
-
-                        }
-                    })
-
-                }
+               
             });
 
             $('#year-id').change(function () {
+                if ($('#year-id').val() != "Select year") {
+                    $('#sem-id').removeAttr('disabled');
+                }
+                else {
+                    $('#sem-id').attr('disabled', true);
+                    $('#sec-id').attr('disabled', true);
+                    $('#submit-student-search').attr('disabled', true);
+                }
                 var d = {
                     'authkey': localStorage.getItem('authkey'),
                     'faculty_id': localStorage.getItem('faculty_id'),
@@ -167,77 +181,17 @@
                         $('#sem-id').html(d);
                     }
                 });
-                if ($('#sec-id').find(":selected").val() != "none" && $('#dept-id').find(":selected").val() != "none" && $('#sem-id').find(":selected").val() != "none") {
-                    var authkey = localStorage.getItem('authkey');
-                    var faculty_id = localStorage.getItem('faculty_id');
-                    var data = {
-                        'authkey': authkey,
-                        'faculty_id': faculty_id,
-                        'dept': $('#dept-id').val(),
-                        'sec': $('#sec-id').val(),
-                        'graduation_year': $('#year-id').val(),
-                        'sem': $('#sem-id').val()
-
-                    };
-                    $.ajax({
-                        type: "POST",
-                        url: "getfcs",
-                        dataType: 'Json',
-                        contentType: 'application/json',
-                        data: JSON.stringify(data),
-                        processData: false,
-                        success: function (ret_obj) {
-                            console.log(ret_obj);
-                            console.log(ret_obj['data']);
-                            var branch = $('#dept-id').val()
-
-                            var d = `
-                            <div class="assignclass__2__a">
-                            <div class="assignclass__add ">
-                                <!--Add assignclass__addshownone to hide the plus -->
-                                <div class="assignclass__add__pic" onclick="openmodal('`+ $('#dept-id').val() + `','` + $('#year-id').val() + `','` + $('#sem-id').val() + `','` + $('#sec-id').val() + `')">
-                                    <i class="fa fa-plus fa-2x"></i>
-                                </div>
-                                <p class="assignclass__add__text">Add subject 1</p>
-                            </div>
-                        </div>
-                            `;
-                            if (ret_obj['status_code'] == 200) {
-                                for (i = 0; i < ret_obj['data'].length; i++) {
-                                    credits = ret_obj['data'][i]['credits'];
-                                    sub_faculty_id = ret_obj['data'][i]['faculty_id'];
-                                    sub_teacher_name = ret_obj['data'][i]['name'];
-                                    sub_code = ret_obj['data'][i]['subject_code'];
-                                    teacher_pic = ret_obj['data'][i]['teacher_picture'];
-                                    subject_name = ret_obj['data'][i]['subject_name'];
-                                    var fill_data = `
-                                    <div class="assignclass__2__b" > 
-                                <div class="assignclass__dots">
-                                    <i class="fa fa-ellipsis-v fa-1x"></i>
-                                </div>
-                                <div class="assignclass__teacher-pic assignclass__picshow" >
-                                    <img src="data:image/jpg;base64, `+ teacher_pic + `" alt="" class="assignclass__teacher-img" height="30" width="30">
-                                </div>
-                                <div class="assignclass__teacherdetails assignclass__detailshow">
-                                    <p class="assignclass__teachername">Name:`+ sub_teacher_name + `</p>
-                                    <p class="assignclass__teacherid">Teacher id:`+ sub_faculty_id + `</p>
-                                    <p class="assignclass__teacherclass">Subject:`+ subject_name + `</p>
-                                    <p class="assignclass__subjectcode">Subject code:`+ sub_code + `</p>
-                                    <p class="assignclass__credits">Credits:`+ credits + `</p>
-                                </div>
-                            </div>`;
-                                    d += fill_data;
-                                }
-                            }
-                            $('.subject_teachers__container').html(d);
-
-                        }
-                    })
-
-                }
+               
             });
 
             $('#sem-id').change(function () {
+                if ($('#sem-id').val() != "Select sem") {
+                    $('#sec-id').removeAttr('disabled');
+                }
+                else {
+                    $('#sec-id').attr('disabled', true);
+                    $('#submit-student-search').attr('disabled', true);
+                }
                 var d = {
                     'authkey': localStorage.getItem('authkey'),
                     'faculty_id': localStorage.getItem('faculty_id'),
@@ -263,148 +217,85 @@
                         $('#sec-id').html(d);
                     }
                 });
-                if ($('#year-id').find(":selected").val() != "none" && $('#dept-id').find(":selected").val() != "none" && $('#sec-id').find(":selected").val() != "none") {
-                    var authkey = localStorage.getItem('authkey');
-                    var faculty_id = localStorage.getItem('faculty_id');
-                    var data = {
-                        'authkey': authkey,
-                        'faculty_id': faculty_id,
-                        'dept': $('#dept-id').val(),
-                        'sec': $('#sec-id').val(),
-                        'graduation_year': $('#year-id').val(),
-                        'sem': $('#sem-id').val()
-
-                    };
-                    $.ajax({
-                        type: "POST",
-                        url: "getfcs",
-                        dataType: 'Json',
-                        contentType: 'application/json',
-                        data: JSON.stringify(data),
-                        processData: false,
-                        success: function (ret_obj) {
-                            console.log(ret_obj);
-                            console.log(ret_obj['data']);
-                            var branch = $('#dept-id').val()
-
-                            var d = `
-                            <div class="assignclass__2__a">
-                            <div class="assignclass__add ">
-                                <!--Add assignclass__addshownone to hide the plus -->
-                                <div class="assignclass__add__pic" onclick="openmodal('`+ $('#dept-id').val() + `','` + $('#year-id').val() + `','` + $('#sem-id').val() + `','` + $('#sec-id').val() + `')">
-                                    <i class="fa fa-plus fa-2x"></i>
-                                </div>
-                                <p class="assignclass__add__text">Add subject 1</p>
-                            </div>
-                        </div>
-                            `;
-                            if (ret_obj['status_code'] == 200) {
-                                for (i = 0; i < ret_obj['data'].length; i++) {
-                                    credits = ret_obj['data'][i]['credits'];
-                                    sub_faculty_id = ret_obj['data'][i]['faculty_id'];
-                                    sub_teacher_name = ret_obj['data'][i]['name'];
-                                    sub_code = ret_obj['data'][i]['subject_code'];
-                                    teacher_pic = ret_obj['data'][i]['teacher_picture'];
-                                    subject_name = ret_obj['data'][i]['subject_name'];
-                                    var fill_data = `
-                                    <div class="assignclass__2__b" > 
-                                <div class="assignclass__dots">
-                                    <i class="fa fa-ellipsis-v fa-1x"></i>
-                                </div>
-                                <div class="assignclass__teacher-pic assignclass__picshow" >
-                                    <img src="data:image/jpg;base64, `+ teacher_pic + `" alt="" class="assignclass__teacher-img" height="30" width="30">
-                                </div>
-                                <div class="assignclass__teacherdetails assignclass__detailshow">
-                                    <p class="assignclass__teachername">Name:`+ sub_teacher_name + `</p>
-                                    <p class="assignclass__teacherid">Teacher id:`+ sub_faculty_id + `</p>
-                                    <p class="assignclass__teacherclass">Subject:`+ subject_name + `</p>
-                                    <p class="assignclass__subjectcode">Subject code:`+ sub_code + `</p>
-                                    <p class="assignclass__credits">Credits:`+ credits + `</p>
-                                </div>
-                            </div>`;
-                                    d += fill_data;
-                                }
-                            }
-                            $('.subject_teachers__container').html(d);
-
-                        }
-                    })
-
-                }
+                
             });
             $('#sec-id').change(function () {
-                if ($('#year-id').find(":selected").val() != "none" && $('#dept-id').find(":selected").val() != "none" && $('#sem-id').find(":selected").val() != "none") {
-                    var authkey = localStorage.getItem('authkey');
-                    var faculty_id = localStorage.getItem('faculty_id');
-                    var data = {
-                        'authkey': authkey,
-                        'faculty_id': faculty_id,
-                        'dept': $('#dept-id').val(),
-                        'sec': $('#sec-id').val(),
-                        'graduation_year': $('#year-id').val(),
-                        'sem': $('#sem-id').val()
+                if ($('#dept-id').val() != "Select branch" && $('#year-id').val() != "Select year" && $('#sem-id').val() != "Select sem" && $('#sec-id').val() != "Select section") {
+                    $('#submit-student-search').removeAttr("disabled");
+                }
+                else {
+                    $('#submit-student-search').attr('disabled', true);
+                }
+               });
+           
+        });
+        function submitassignteacher() {
+            var authkey = localStorage.getItem('authkey');
+            var faculty_id = localStorage.getItem('faculty_id');
+            var data = {
+                'authkey': authkey,
+                'faculty_id': faculty_id,
+                'dept': $('#dept-id').val(),
+                'sec': $('#sec-id').val(),
+                'graduation_year': $('#year-id').val(),
+                'sem': $('#sem-id').val()
 
-                    };
-                    $.ajax({
-                        type: "POST",
-                        url: "getfcs",
-                        dataType: 'Json',
-                        contentType: 'application/json',
-                        data: JSON.stringify(data),
-                        processData: false,
-                        success: function (ret_obj) {
-                            console.log(ret_obj);
-                            console.log(ret_obj['data']);
-                            var branch = $('#dept-id').val()
+            };
+            $.ajax({
+                type: "POST",
+                url: "getfcs",
+                dataType: 'Json',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                processData: false,
+                success: function (ret_obj) {
+                    console.log(ret_obj);
+                    console.log(ret_obj['data']);
+                    var branch = $('#dept-id').val()
 
-                            var d = `
-                            <div class="assignclass__2__a">
-                            <div class="assignclass__add ">
-                                <!--Add assignclass__addshownone to hide the plus -->
-                                <div class="assignclass__add__pic" onclick="openmodal('`+ $('#dept-id').val() + `','` + $('#year-id').val() + `','` + $('#sem-id').val() + `','` + $('#sec-id').val() + `')">
-                                    <i class="fa fa-plus fa-2x"></i>
-                                </div>
-                                <p class="assignclass__add__text">Add subject 1</p>
-                            </div>
+                    var d = `
+                    <div class="assignclass__2__a">
+                    <div class="assignclass__add ">
+                        <!--Add assignclass__addshownone to hide the plus -->
+                        <div class="assignclass__add__pic" onclick="openmodal('`+ $('#dept-id').val() + `','` + $('#year-id').val() + `','` + $('#sem-id').val() + `','` + $('#sec-id').val() + `')">
+                            <i class="fa fa-plus fa-2x"></i>
                         </div>
-                            `;
-                            if (ret_obj['status_code'] == 200) {
-                                for (i = 0; i < ret_obj['data'].length; i++) {
-                                    credits = ret_obj['data'][i]['credits'];
-                                    sub_faculty_id = ret_obj['data'][i]['faculty_id'];
-                                    sub_teacher_name = ret_obj['data'][i]['name'];
-                                    sub_code = ret_obj['data'][i]['subject_code'];
-                                    teacher_pic = ret_obj['data'][i]['teacher_picture'];
-                                    subject_name = ret_obj['data'][i]['subject_name'];
-                                    var fill_data = `
-                                    <div class="assignclass__2__b" > 
-                                <div class="assignclass__dots">
-                                    <i class="fa fa-ellipsis-v fa-1x"></i>
-                                </div>
-                                <div class="assignclass__teacher-pic assignclass__picshow" >
-                                    <img src="data:image/jpg;base64, `+ teacher_pic + `" alt="" class="assignclass__teacher-img" height="30" width="30">
-                                </div>
-                                <div class="assignclass__teacherdetails assignclass__detailshow">
-                                    <p class="assignclass__teachername">Name:`+ sub_teacher_name + `</p>
-                                    <p class="assignclass__teacherid">Teacher id:`+ sub_faculty_id + `</p>
-                                    <p class="assignclass__teacherclass">Subject:`+ subject_name + `</p>
-                                    <p class="assignclass__subjectcode">Subject code:`+ sub_code + `</p>
-                                    <p class="assignclass__credits">Credits:`+ credits + `</p>
-                                </div>
-                            </div>`;
-                                    d += fill_data;
-                                }
-                            }
-                            $('.subject_teachers__container').html(d);
-
+                        <p class="assignclass__add__text">Add subject 1</p>
+                    </div>
+                </div>
+                    `;
+                    if (ret_obj['status_code'] == 200) {
+                        for (i = 0; i < ret_obj['data'].length; i++) {
+                            credits = ret_obj['data'][i]['credits'];
+                            sub_faculty_id = ret_obj['data'][i]['faculty_id'];
+                            sub_teacher_name = ret_obj['data'][i]['name'];
+                            sub_code = ret_obj['data'][i]['subject_code'];
+                            teacher_pic = ret_obj['data'][i]['teacher_picture'];
+                            subject_name = ret_obj['data'][i]['subject_name'];
+                            var fill_data = `
+                            <div class="assignclass__2__b" > 
+                        <div class="assignclass__dots">
+                            <i class="fa fa-ellipsis-v fa-1x"></i>
+                        </div>
+                        <div class="assignclass__teacher-pic assignclass__picshow" >
+                            <img src="data:image/jpg;base64, `+ teacher_pic + `" alt="" class="assignclass__teacher-img" height="30" width="30">
+                        </div>
+                        <div class="assignclass__teacherdetails assignclass__detailshow">
+                            <p class="assignclass__teachername">Name:`+ sub_teacher_name + `</p>
+                            <p class="assignclass__teacherid">Teacher id:`+ sub_faculty_id + `</p>
+                            <p class="assignclass__teacherclass">Subject:`+ subject_name + `</p>
+                            <p class="assignclass__subjectcode">Subject code:`+ sub_code + `</p>
+                            <p class="assignclass__credits">Credits:`+ credits + `</p>
+                        </div>
+                    </div>`;
+                            d += fill_data;
                         }
-                    })
+                    }
+                    $('.subject_teachers__container').html(d);
 
                 }
-
-
-            });
-        });
+            })
+        };
         function save_subject() {
             var authkey = localStorage.getItem('authkey');
             var faculty_id = localStorage.getItem('faculty_id');
@@ -479,42 +370,37 @@
     <!-- end of modal defination  -->
     <div class="container">
         <header class="header">
-            <img src="{{ url_for('static', filename='images/logo.jpg') }}" alt="" class="header__collegelogo">
+            <img src="{{ url_for('static' , filename = 'images/logo.jpg')}}" alt="" class="header__collegelogo">
             <div class="header__content1">
-                <button class="nav-btn"><i class="fa fa-bars fa-2x"></i></button>
+                <button class="nav-btn" onclick="opennavbar()"><i class="fa fa-bars fa-2x"></i></button>
                 <h3 class="header__heading">Student login</h3>
             </div>
             <div class="header__content2">
-                <form action="" class="header__form search-show">
+                <!-- <form action="" class="header__form search-show">
                     <input type="search" class="header__search" placeholder="Search here">
                     <button class="header__search-btn"><i class="fa fa-search fa-1x icon-sbtn"></i></button>
-                </form>
+                </form> -->
                 <div class="btn-shownone">
-                    <i class="fa fa-search fa-2x "></i>
-                    <!--Make the btn-shownone to display block on click-->
+                    <i class="fa fa-search fa-2x "></i>       <!--Make the btn-shownone to display block on click-->
                 </div>
-
+                
                 <div class="header__logout">
-                    <div class="header__logout__group">
+                    <div class="header__logout__group" onclick="showsublist($(this), 'header__logout__listshow')">
                         <div class="header__logout__pic">
-                            <img src="{{ url_for('static' , filename ='images/user-3.jpg') }}" alt=""
-                                class="header__logout__img" />
-                            <!-- <img src="../images/user-3.jpg" alt="" class="header__logout__img"> -->
+                            <img src="../images/user-3.jpg" alt="" class="header__logout__img">
                         </div>
-                        <div class="header__dots"><i class="fa fa-ellipsis-v fa-1x"></i>
-                            <ul class="header__logout__list ">
-                                <!--Add header__logout__listshow on click of header__logout__group-->
-                                <li><a href="#">My profile</a></li>
-                                <li><a href="#">Settings</a></li>
+                        <div class="header__dots" ><i class="fa fa-ellipsis-v fa-1x"></i>
+                            <ul class="header__logout__list ">   <!--Add header__logout__listshow on click of header__logout__group-->
+                                <li><a href="home">My profile</a></li>
+                                <!-- <li><a href="#">Settings</a></li> -->
                                 <li><a href="#">Log out</a></li>
-                            </ul>
+                            </ul>   
                         </div>
-                        <p class="header__logout__name"><span class="header__logout__span">Admin</span>
-                            <ul class="header__logout__list ">
-                                <!--Add header__logout__listshow on click of header__logout__group-->
-                                <li><a href="#">My profile</a></li>
-                                <li><a href="#">Settings</a></li>
-                                <li><a href="#">Log out</a></li>
+                        <p class="header__logout__name"><span class="header__logout__span">Admin</span>    
+                            <ul class="header__logout__list ">   <!--Add header__logout__listshow on click of header__logout__group-->
+                                <li><a href="home">My profile</a></li>
+                                <!-- <li><a href="#">Settings</a></li> -->
+                                <li><div onclick="logout()">Log out</div></li>
                             </ul>
                         </p>
                     </div>
@@ -525,23 +411,22 @@
             <div class="navbar ">
                 <!--Add show-navbar on click of nav button-->
                 <ul class="nav__ul">
-                    <li class="nav__li"><a href="">home</a> </li>
+                    <li class="nav__li" onclick="window.location.href = 'home' ">home</li>
                     <li class="nav__li teacherli"><a href="" class="teacher">Professor</a> <span></span>
                         <ul class="sub ">
                             <!--Add show on click of teacherli-->
-                            <li class="sub__li"><a href="">Professors</a></li>
-                            <li class="sub__li"><a href="">Add subjects </a></li>
-                            <li class="sub__li"><a href="">Class teachers </a></li>
-                            <li class="sub__li"><a href="">Subject teachers</a></li>
+                            
+                            <li class="sub__li" onclick="window.location.href = 'assignclass'">Class teachers</li>
+                            <li class="sub__li" onclick="window.location.href = 'assignteacher'">Add subjects</li>
                         </ul>
                     </li>
                     <li class="nav__li studentli"><a href="" class="student">Students</a>
                         <ul class="sub studentlist">
                             <!--Add show on click of studentli-->
-                            <li class="sub__li"><a href=""> Add students</a></li>
-                            <li class="sub__li"><a href="">Assign subjects</a></li>
-                            <li class="sub__li"><a href="">Manage attendace</a></li>
-                            <li class="sub__li"><a href="">Manage IA marks</a></li>
+                            <li class="sub__li" onclick=" window.location.href = 'addstudent'"> Add students</li>
+                            
+                            <li class="sub__li" onclick=" window.location.href = 'addattendance'">Manage attendace</li>
+                            <li class="sub__li" onclick=" window.location.href = 'iamarks'"> Manage IA marks</li>
                         </ul>
                     </li>
                 </ul>
@@ -550,7 +435,7 @@
                 <div class="assignclass">
                     <div class="assignclass__selectclass">
                         <div class="assignclass__selectdept">
-                            <select class="dept" id="dept-id">
+                            <select class="dept" id="dept-id" >
                                 <option value="" selected hidden>Select branch </option>
                                 <option value="CSE">CSE</option>
                                 <option value="ISE">ISE</option>
@@ -559,7 +444,7 @@
                             </select>
                         </div>
                         <div class="assignclass__selectyear">
-                            <select id="year-id" class="year">
+                            <select id="year-id" class="year" disabled>
                                 <option value="none" selected hidden>Select year</option>
                                 <!-- <option value="2020">2020</option>
                                 <option value="2021">2021</option>
@@ -567,7 +452,7 @@
                             </select>
                         </div>
                         <div class="assignclass__selectsection">
-                            <select id="sem-id" class="section">
+                            <select id="sem-id" class="section" disabled>
                                 <option value="none" selected hidden>Select sem</option>
                                 <!-- <option value="2">2</option>
                                 <option value="4">4</option>
@@ -575,12 +460,13 @@
                             </select>
                         </div>
                         <div class="assignclass__selectsection">
-                            <select id="sec-id" class="section">
+                            <select id="sec-id" class="section" disabled>
                                 <option value="none" selected hidden>Select section</option>
                                 <!-- <option value="a">A section</option>
                                 <option value="b">B section</option> -->
                             </select>
                         </div>
+                        <button id="submit-student-search" disabled onclick="submitassignteacher()">Submit</button>
                     </div>
                     <div class="assignclass__2 subject_teachers__container">
                         <!-- <div class="assignclass__2__a">
@@ -740,6 +626,7 @@
         </section>
     </div>
 </body>
-<script src="{{ url_for('static', filename = 'js/sample.js') }}"></script>
+<!-- <script src="{{ url_for('static', filename = 'js/sample.js') }}"></script>
+<script src="{{ url_for('static', filename = 'js/nav.js') }}"></script> -->
 
 </html>
