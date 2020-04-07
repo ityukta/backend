@@ -198,8 +198,9 @@
     <div class="modal modal__dispnone">
         <!--modal__dispnone is a class to hide the modal from the page-->
         <div class="modal__body">
+            <h1 class="modal__heading">Add class teacher</h1>
             <div class="close-btn" onclick="closemodal()"><i class="fa fa-times fa-2x"></i></div>
-            <div>
+            <div class="modal__content">
                 <input type="hidden" id="sem">
                 <input type="hidden" id="sec">
                 <label for="modal-department">Department</label>
@@ -224,7 +225,7 @@
         <header class="header">
             <img src="{{ url_for('static' , filename = 'images/logo.jpg')}}" alt="" class="header__collegelogo">
             <div class="header__content1">
-                <button class="nav-btn" onclick="opennavbar()"><i class="fa fa-bars fa-2x"></i></button>
+                <button class="nav-btn" onclick="opennavbar()"><i class="fa fa-bars fa-2x headericon"></i></button>
                 <h3 class="header__heading">Student login</h3>
             </div>
             <div class="header__content2">

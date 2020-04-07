@@ -1,20 +1,21 @@
 .navbar{
-    
+    font-family: sans-serif;
     width: 0;
-    height: max-content;
-    //background-color: orange;
+    //height: max-content;
+    height: 120vh;
+  //  background:linear-gradient(top right,rgb(127, 172, 231),rgb(74, 86, 245));
+    background-color:#34444c;
     transition: 0.2s;
-    border-right: 1px solid $color-border;
+    border-right: 1px solid rgb(207, 207, 207);
 }
 .show-navbar{
     width: 230px;
     
 }
-
-
-
+ 
 .navbar ul{
     padding: 1rem;
+    color:#b7c0cd;
 }
 .navbar ul .nav__li{
     padding: 1rem;
@@ -32,6 +33,7 @@
         list-style: none;
         padding: 1rem 0;
         border-radius: 2px;
+        
     }
 }
 .navbar a{
@@ -44,7 +46,8 @@
         transition: 0.2s;
     }
     &__li:hover{
-        background-color: rgb(209, 230, 248);
+        color:#fff;
+        // background-color: rgb(209, 230, 248);
         /*& a{
             color: white;
         }*/

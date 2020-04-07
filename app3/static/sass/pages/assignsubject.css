@@ -1,1 +1,19 @@
-/* No CSS *//*# sourceMappingURL=assignsubject.css.map */
+.addsubject {
+  width: 25rem;
+}
+
+.addsubject__subjectname__input {
+  border: 1px solid #cfcfcf;
+  padding: 0.6rem;
+}
+
+.addsubject__subjectcode__input {
+  border: 1px solid #cfcfcf;
+  padding: 0.5rem;
+}
+
+.addsubject__subjectteacher__input {
+  border: 1px solid #cfcfcf;
+  padding: 0.5rem;
+}
+/*# sourceMappingURL=assignsubject.css.map */
