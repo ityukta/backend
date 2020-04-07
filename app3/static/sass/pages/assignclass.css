@@ -17,6 +17,10 @@
           justify-content: space-between;
 }
 
+.assignclass__modal {
+  padding: 1rem;
+}
+
 .assignclass__selectdept {
   width: 10rem;
 }
