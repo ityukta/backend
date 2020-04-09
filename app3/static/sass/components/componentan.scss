@@ -33,13 +33,14 @@
     }
 
     &__search{
-        background-color: lightgreen;
+        background:linear-gradient(to right,#00c5fb,#0253cc);
+        color:#fff;
 
          &:focus{
             outline:none;
         }
         &:hover{
-            transform:translateY(-.5rem);
+            cursor: pointer;
         }
 
     }

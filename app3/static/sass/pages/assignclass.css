@@ -6,15 +6,23 @@
   grid-gap: 2rem;
 }
 
+.assignclass select {
+  width: 100%;
+}
+
+.assignclass__btn {
+  background-color: blue;
+  border-radius: 100px;
+  padding: 0.5rem 2rem 0.5rem 1rem;
+}
+
 .assignclass__selectclass {
-  margin: 0 auto;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  width: 50%;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 1fr 1fr 1fr;
+      grid-template-columns: 1fr 1fr 1fr;
+  justify-items: center;
+  grid-gap: 20px;
 }
 
 .assignclass__modal {
@@ -23,6 +31,7 @@
 
 .assignclass__selectdept {
   width: 10rem;
+  width: 70%;
 }
 
 .assignclass__selectdept .dept {
@@ -30,10 +39,17 @@
   padding: 0.3rem;
   border-radius: 10px;
   border: 1px solid #cfcfcf;
+  padding: 0.5rem 2rem 0.5rem 1rem;
+  border-radius: 100px;
+  background-color: #eee;
+  font-weight: 500;
+  text-transform: uppercase;
+  border: none;
 }
 
 .assignclass__selectyear {
   width: 10rem;
+  width: 70%;
 }
 
 .assignclass__selectyear .year {
@@ -41,10 +57,17 @@
   padding: 0.3rem;
   border-radius: 10px;
   border: 1px solid #cfcfcf;
+  padding: 0.5rem 2rem 0.5rem 1rem;
+  border-radius: 100px;
+  background-color: #eee;
+  font-weight: 500;
+  text-transform: uppercase;
+  border: none;
 }
 
 .assignclass__selectsection {
   width: 10rem;
+  width: 70%;
 }
 
 .assignclass__selectsection .section {
@@ -52,6 +75,21 @@
   padding: 0.3rem;
   border-radius: 10px;
   border: 1px solid #cfcfcf;
+  padding: 0.5rem 2rem 0.5rem 1rem;
+  border-radius: 100px;
+  background-color: #eee;
+  font-weight: 500;
+  text-transform: uppercase;
+  border: none;
+}
+
+.assignclass .year, .assignclass .dept, .assignclass .section {
+  padding: 0.5rem 2rem 0.5rem 1rem;
+  border-radius: 100px;
+  background-color: #eee;
+  font-weight: 500;
+  text-transform: uppercase;
+  border: none;
 }
 
 .assignclass__2 {

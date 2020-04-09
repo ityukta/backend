@@ -51,7 +51,7 @@
             console.log(priority);
             var temp = `
             <ul class="nav__ul">
-                    <li class="nav__li" onclick="window.location.href = 'home' ">home</li>
+                    <li class="nav__li" onclick="window.location.href = 'home' ">Home</li>
                     <li class="nav__li teacherli" onclick="showsublist($(this), 'show')">Professor<span></span>
                         <ul class="sub ">
                             <!--Add show on click of teacherli-->`;
@@ -344,7 +344,7 @@
         <header class="header">
             <img src="{{ url_for('static' , filename = 'images/logo.jpg')}}" alt="" class="header__collegelogo">
             <div class="header__content1">
-                <button class="nav-btn" onclick="opennavbar()"><i class="fa fa-bars fa-2x"></i></button>
+                <button class="nav-btn" onclick="opennavbar()"><i class="fa fa-bars fa-2x headericon"></i></button>
                 <h3 class="header__heading">Student login</h3>
             </div>
             <div class="header__content2">
@@ -383,7 +383,7 @@
             <div class="navbar ">
                 <!--Add show-navbar on click of nav button-->
                 <ul class="nav__ul">
-                    <li class="nav__li"><a href="">home</a> </li>
+                    <li class="nav__li"><a href="">Home</a> </li>
                     <li class="nav__li teacherli"><a href="" class="teacher">Professor</a> <span></span>
                         <ul class="sub ">
                             <!--Add show on click of teacherli-->
@@ -400,7 +400,7 @@
                             <li class="sub__li" onclick=" window.location.href = 'addattendance'">Manage attendace</li>
                             <li class="sub__li" onclick=" window.location.href = 'iamarks'"> Manage IA marks</li>
                         </ul>
-                    </li>
+                    </li> 
                 </ul>
             </div>
             <div class="content">
@@ -437,16 +437,17 @@
                             <option value="b">B section</option> -->
                         </select>
                     </div>
-                    <button id="submit-student-search" disabled onclick="submitstudentsearch()">Submit</button>
+                    <div class=""></div> 
+                    <button class="register__btn bluebtn attendance__submit assignclass__btn"id="submit-student-search" disabled onclick="submitstudentsearch()">Submit</button>
                 </div>
                 <div class="studentbatch">
                     <div class="studentbatch__add">
                         <div class="studentbatch__add__batch">
-                            <button class="search-btn studentbatch__add__batch__btn" disabled>Add batch</button>
+                            <button class="attendance__details__addbtn" disabled>Add batch</button>
                         </div>
             
                         <!-- Button trigger modal -->
-                        <button type="button" onclick="openmodal()">
+                        <button type="button" onclick="openmodal()" class="attendance__details__addbtn">
                             Add student
                         </button>
             
@@ -537,7 +538,7 @@
                                     </div>                                    
                                 </div>
                             </div>
-                            <button type="button" class="btn btn-primary" onclick="addstudent()">Submit</button>
+                            <button type="button" class="btn btn-primary register__btn bluebtn" onclick="addstudent()">Submit</button>
                            </div>
                            
                         </div>

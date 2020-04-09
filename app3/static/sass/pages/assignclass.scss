@@ -1,12 +1,25 @@
-.assignclass{
+.assignclass{ 
     display: grid;
     grid-template-columns: 1fr;                     //Per year 1 column,Only 1 row for that semister(1row for 2nd sem,1row for 4th sem)
     grid-gap: 2rem;
+    select{
+        width: 100%;
+    }
+    
+    &__btn{
+        background-color: blue;
+        border-radius: 100px;
+        padding: 0.5rem 2rem 0.5rem 1rem;
+    }
     &__selectclass{
-        margin: 0 auto ;
-        display: flex;
-        width: 50%;
-        justify-content: space-between;
+        // margin: 0 auto ;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        justify-items: center;
+        grid-gap: 20px;
+        // display: flex;
+        // width: 50%;
+        // justify-content: space-between;
        // background-color:red
     }
     &__modal{
@@ -14,30 +27,60 @@
     }
     &__selectdept{
         width: 10rem;
+        width: 70%;
         .dept{
             width: 100%;
             padding: 0.3rem;
             border-radius: 10px;
             border:1px solid rgb(207, 207, 207);
+            padding: 0.5rem 2rem 0.5rem 1rem;
+            border-radius: 100px;
+            background-color: #eee;
+            font-weight: 500;
+            text-transform: uppercase;
+            border:none;
         }
     }
     &__selectyear{
         width: 10rem;
+        width: 70%;
         .year{
             width: 100%;
             padding: 0.3rem;
             border-radius: 10px;
             border:1px solid rgb(207, 207, 207);
+            padding: 0.5rem 2rem 0.5rem 1rem;
+            border-radius: 100px;
+            background-color: #eee;
+            font-weight: 500;
+            text-transform: uppercase;
+            border:none;
         }
     }
     &__selectsection{
         width: 10rem;
+        width: 70%;
         .section{
             width: 100%;
             padding: 0.3rem;
             border-radius: 10px;
             border:1px solid rgb(207, 207, 207);
+            padding: 0.5rem 2rem 0.5rem 1rem;
+            border-radius: 100px;
+            background-color: #eee;
+            font-weight: 500;
+            text-transform: uppercase;
+            border:none;
         }
+    }
+    
+    .year,.dept,.section{
+        padding: 0.5rem 2rem 0.5rem 1rem;
+        border-radius: 100px;
+        background-color: #eee;
+        font-weight: 500;
+        text-transform: uppercase;
+        border:none;
     }
     &__2{                                           //Holds styling for 2nd sem class teachers
         display: grid;

@@ -11,6 +11,7 @@
     integrity="sha256-+N4/V/SbAFiW1MPBCXnfnP9QSN3+Keu+NlB+0ev/YKQ="
     crossorigin="anonymous"
   />
+  <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script>
     function opennavbar(){
@@ -28,7 +29,7 @@
         console.log(priority);
         var temp = `
         <ul class="nav__ul">
-                <li class="nav__li" onclick="window.location.href = 'home' ">home</li>
+                <li class="nav__li" onclick="window.location.href = 'home' ">Home</li>
                 <li class="nav__li teacherli" onclick="showsublist($(this), 'show')">Professor<span></span>
                     <ul class="sub ">
                         <!--Add show on click of teacherli-->`;
@@ -446,7 +447,7 @@
         <header class="header">
             <img src="{{ url_for('static' , filename = 'images/logo.jpg')}}" alt="" class="header__collegelogo">
             <div class="header__content1">
-                <button class="nav-btn" onclick="opennavbar()"><i class="fa fa-bars fa-2x"></i></button>
+                <button class="nav-btn" onclick="opennavbar()"><i class="fa fa-bars fa-2x headericon"></i></button>
                 <h3 class="header__heading">Student login</h3>
             </div>
             <div class="header__content2">
@@ -484,7 +485,7 @@
         <section class="section">
             <div class="navbar "> <!--Add show-navbar on click of nav button-->
                 <ul class="nav__ul">
-                    <li class="nav__li"><a href="">home</a> </li>
+                    <li class="nav__li"><a href="">Home</a> </li>
                     <li class="nav__li teacherli"><a href="" class="teacher">Professor</a> <span></span>
                         <ul class="sub ">
                             <!--Add show on click of teacherli-->
@@ -535,7 +536,7 @@
                         </div>
 
                         <div class="attendance__selectsection">
-                            <select id="sec-id" class="aattendance__selectsection__select" disabled>
+                            <select id="sec-id" class="attendance__selectsection__select" disabled>
                                 <option value="none" selected>Select section</option>
                                 <!-- <option value="a">A section</option>
                                 <option value="b">B section</option> -->
@@ -546,8 +547,8 @@
                             <select id="subject-id" class="attendance__selectsubject__select" disabled>
                                 <option value="none">Select Subject</option>
                             </select>
-                        </div>
-                        <button id="submit-attendance-search" onclick="submit_get_attendance()" disabled>Submit</button>
+                        </div> 
+                        <button class="register__btn bluebtn attendance__submit" id="submit-attendance-search" onclick="submit_get_attendance()" disabled>Submit</button>
                         <!-- <select  id="" class="attendance__year__sem">
                             <option value="2nd sem">2nd sem</option>
                             <option value="4th sem">4th sem</option>
@@ -565,7 +566,7 @@
                         </select> -->
                     </div>
                     <div class="attendance__details displaynone">
-                        <button id="add_attendance_button" onclick="openaddattendance()">Add Attendance</button>
+                        <button class="attendance__details__addbtn" id="add_attendance_button" onclick="openaddattendance()">Add Attendance</button>
                         <table class="attendance__table">
                             <thead>
                                 <tr class="attendance__table__heading">

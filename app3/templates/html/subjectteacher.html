@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-
+ 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -32,7 +32,7 @@
             console.log(priority);
             var temp = `
             <ul class="nav__ul">
-                    <li class="nav__li" onclick="window.location.href = 'home' ">home</li>
+                    <li class="nav__li" onclick="window.location.href = 'home' ">Home</li>
                     <li class="nav__li teacherli" onclick="showsublist($(this), 'show')">Professor<span></span>
                         <ul class="sub ">
                             <!--Add show on click of teacherli-->`;
@@ -467,7 +467,8 @@
                                 <option value="b">B section</option> -->
                             </select>
                         </div>
-                        <button id="submit-student-search" disabled onclick="submitassignteacher()">Submit</button>
+                        <div class=""></div>
+                        <button class="register__btn bluebtn attendance__submit"id="submit-student-search" disabled onclick="submitassignteacher()">Submit</button>
                     </div>
                     <div class="assignclass__2 subject_teachers__container">
                         <!-- <div class="assignclass__2__a">
