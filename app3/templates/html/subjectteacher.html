@@ -312,19 +312,19 @@
                 'dept': $('#branch').val()
             }
             console.log(data);
-            $.ajax({
-                type: "POST",
-                url: "addsubject",
-                dataType: 'Json',
-                contentType: 'application/json',
-                data: JSON.stringify(data),
-                processData: false,
-                success: function (ret_obj) {
-                    console.log(ret_obj);
-                    $('.modal').toggleClass('modal_dispnone');
-                    // location.reload();
-                }
-            });
+            // $.ajax({
+            //     type: "POST",
+            //     url: "addsubject",
+            //     dataType: 'Json',
+            //     contentType: 'application/json',
+            //     data: JSON.stringify(data),
+            //     processData: false,
+            //     success: function (ret_obj) {
+            //         console.log(ret_obj);
+            //         $('.modal').toggleClass('modal_dispnone');
+            //         // location.reload();
+            //     }
+            // });
         }
     </script>
 
