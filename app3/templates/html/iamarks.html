@@ -12,6 +12,7 @@
       crossorigin="anonymous"
     />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    
     <script>
         function opennavbar(){
             $('.navbar').toggleClass('show-navbar');
@@ -70,9 +71,10 @@
         function getappendtext(){
             var append_text = `
             <div class="add__assessment__test__set">
-                    <div class="add__assessment__input__group test__type__input__group">
+                <div class="add__assessment__test__flex1">
+                    <div class="add__assessment__input__group test__type__input__group add__assessment__common">
                         <label for="test_type_1">Choose Type</label>
-                        <select name="test_type_1" id="`+randstr('test_type_')+`" class="test__type" onchange="changedtype(this.id)">
+                        <select name="test_type_1" id="`+randstr('test_type_')+`" class="test__type add__assessment__select" onchange="changedtype(this.id)">
                             <option value="Select">Select an option</option>
                             <option value="Internal Assessment">Internal Test</option>
                             <option value="Quiz">Quiz</option>
@@ -80,15 +82,17 @@
                             <option value="Projects">Projects</option>
                         </select>
                     </div>
-                    <div class="add__assessment__input__group eval__type__input__group">
+                    <div class="add__assessment__input__group eval__type__input__group add__assessment__common">
                         <label for="test_eval_type_1">Choose Evaluation Type</label>
-                        <select name="test_eval_type_1" id="`+randstr('eval_type_')+`" class = "test__eval__type" onchange="changedeval(this.id)">
+                        <select name="test_eval_type_1" id="`+randstr('eval_type_')+`" class = "test__eval__type add__assessment__select" onchange="changedeval(this.id)">
                             <option value="Select">Select an option</option>
                             <option value="Descriptive">Descriptive</option>
                             <option value="Consolidated">Consolidated</option>
                         </select>
                     </div>
+                </div>
                     <div class="add__assessment__descriptive__container descriptive_container_no_1 add__assessment__display__none">
+                    <div class="add__assessment__descriptive__grid">
                         <div class="add__assessment__input__group">
                                 <label for="descriptive_name_1">Enter Name</label>
                                 <input type="text" name="descriptive_name_1"
@@ -106,6 +110,7 @@
                             <label for="max_sub_questions_1">Maximum no. of sub questions</label>
                             <input type="number" name="max_sub_questions_1" id="`+randstr('max_sub_questions_')+`" class="max__sub__questions" value="2" onchange="changedsubquestions(this.id)">
                         </div>
+                    </div>
                         <div class="add__assessment__question__paper__pattern__input add__assessment__question__paper__pattern__input_1">
                             <div class="marks-entry__table">
 
@@ -180,10 +185,12 @@
                         </div>
                     </div>
                     <div class="add__assessment__consolidated__container consolidated__container__no_1 add__assessment__display__none">
+                        <div class="add__assessment__descriptive__grid2">
                         <div class="add__assessment__input__group">
                             <label for="descriptive_name_1">Enter Name</label>
                                 <input type="number" name="consolidated_name_1"
                                 class="test__set__name" id="consolidated_name_1">
+                        </div>
                         </div>
                         <div class="marks-entry__extra">
                             <div class="extra__item">
@@ -502,7 +509,7 @@
                         <div class="marks-entry__td ">Q.No</div>
                     `;
                     for(j=0;j<question_paper_pattern[i]['questions_details']['no_of_sub_questions']; j++){
-                       temp += `<div class="marks-entry__td marks-entry__td_1 sub__question__markers">`+String.fromCharCode(97 + j)+`</div>`; 
+                       temp += `<div class="marks-entry__td marks-entry__td_1 sub__question__markers" style="height:50px">`+String.fromCharCode(97 + j)+`</div>`; 
                     }
                     temp += `
                     <div class="marks-entry__td marks-entry__td_2" >Total</div>
@@ -513,7 +520,7 @@
                         for(k=0;k<question_paper_pattern[i]['questions_details']['no_of_sub_questions']; k++){
                             sub_que_marks = question_paper_pattern[i]['questions_details']['detailed_description'][j]['sub_questions_marks'][k];
                             if(sub_que_marks == 0){
-                                temp += `<div class="marks-entry__td sub__question__marks__disabled"><input type="number" class="number" disabled></div>`;
+                                temp += `<div class="marks-entry__td sub__question__marks__disabled" ><input type="number" class="number" disabled></div>`;
                             }
                             else{
                                 temp += `<div class="marks-entry__td sub__question__marks"><input type="number" class="number changed__input__css__to__width__50" max="`+sub_que_marks+`" value="0" onchange="resmarkschanged($(this))"><span class="max__marks">/ `+sub_que_marks+`</span></div>`;
@@ -912,28 +919,28 @@
             get_eval_type_value = $(selector).closest(".add__assessment__test__set").find(".test__eval__type").val();
             console.log(get_eval_type_value);
             if($(selector).val() == "Select" || get_eval_type_value == "Select"){
-                $(selector).parent().parent().find(".add__assessment__descriptive__container").addClass('add__assessment__display__none');
+                $(selector).parent().parent().parent().find(".add__assessment__descriptive__container").addClass('add__assessment__display__none');
             }
             else{
-                $(selector).parent().parent().find('.add__assessment__descriptive__container').removeClass('add__assessment__display__none');
+                $(selector).parent().parent().parent().find('.add__assessment__descriptive__container').removeClass('add__assessment__display__none');
                 $(selector).parent().parent().find('.add__assessment__consolidated__container').addClass('add__assessment__display__none');
             }
         }
         function changedeval(id){
             selector = "#" + id;
-            get_test_type_value = $(selector).parent().parent().find('.test__type').val();
+            get_test_type_value = $(selector).parent().parent().parent().find('.test__type').val();
             if($(selector).val() == "Descriptive" && get_test_type_value != "Select"){
                 console.log(id);
-                $(selector).parent().parent().find('.add__assessment__descriptive__container').removeClass('add__assessment__display__none');
-                $(selector).parent().parent().find('.add__assessment__consolidated__container').addClass('add__assessment__display__none');
+                $(selector).parent().parent().parent().find('.add__assessment__descriptive__container').removeClass('add__assessment__display__none');
+                $(selector).parent().parent().parent().find('.add__assessment__consolidated__container').addClass('add__assessment__display__none');
             }
             else if($(selector).val() == "Consolidated" && get_test_type_value != "Select"){
-                $(selector).parent().parent().find('.add__assessment__descriptive__container').addClass('add__assessment__display__none');
-                $(selector).parent().parent().find('.add__assessment__consolidated__container').removeClass('add__assessment__display__none');
+                $(selector).parent().parent().parent().find('.add__assessment__descriptive__container').addClass('add__assessment__display__none');
+                $(selector).parent().parent().parent().find('.add__assessment__consolidated__container').removeClass('add__assessment__display__none');
             }
             else{
-                $(selector).parent().parent().find('.add__assessment__descriptive__container').addClass('add__assessment__display__none');
-                $(selector).parent().parent().find('.add__assessment__consolidated__container').addClass('add__assessment__display__none');
+                $(selector).parent().parent().parent().find('.add__assessment__descriptive__container').addClass('add__assessment__display__none');
+                $(selector).parent().parent().parent().find('.add__assessment__consolidated__container').addClass('add__assessment__display__none');
             }
         }
         function changednoofquestions(id){
@@ -1114,13 +1121,8 @@
         <header class="header">
             <img src="{{ url_for('static' , filename = 'images/logo.png')}}" alt="" class="header__collegelogo">
             <div class="header__content1">
-<<<<<<< HEAD
                 <button class="nav-btn" onclick="opennavbar()"><i class="fa fa-bars fa-2x headericon"></i></button>
-                <h3 class="header__heading">Student login</h3>
-=======
-                <button class="nav-btn" onclick="opennavbar()"><i class="fa fa-bars fa-2x"></i></button>
                 <h3 class="header__heading">Add Student IA Marks</h3>
->>>>>>> 7ef1088ae928e2ef56acd2591aa4e4e79bceb5ef
             </div>
             <div class="header__content2">
                 <!-- <form action="" class="header__form search-show">
@@ -1402,10 +1404,10 @@
                    Add Internal Assessment
                </div>
                <div class="add__assessment__container">
-                    
+                     
                     
                </div>
-               <button class="add__assessment__add__test__set" onclick="addmoretestset()">Add more sub tests</button>
+               <button class="add__assessment__add__test__set attendance__details__addbtn" onclick="addmoretestset()">Add more sub tests</button>
                 <!-- <div class="marks-entry__table">
     
                     <div class="marks-entry__tc">

@@ -82,7 +82,12 @@
             {
                 window.location.href = 'home'
             }   
+
+         
             loadnavbar();
+            var pic=localStorage.getItem("teacher_picture");
+            var img=`<img src="data:image/jpg;base64, `+ pic + `"alt="" class="header__logout__img">`;
+            $('.header__logout__pic').html(img);
                 $.ajax(
                 {
                     type: "POST",
@@ -102,7 +107,7 @@
                                     <i class="fa fa-ellipsis-v fa-1x"></i>
                                 </div>
                                 <div class="allteachers__pic">
-                                    <img src="data:image/jpg;base64, `+ ret_obj['data'][i][3] + `" alt="" class="header__logout__img" >
+                                    <img src="data:image/jpg;base64, `+ ret_obj['data'][i][3] + `"  class="personal__overview__img" >
                                 </div>
                                 <div class="allteachers__name">
                                     <p>`+ret_obj['data'][i][1]+`</p>
@@ -201,7 +206,7 @@
                         z+=`<div class="personal__workshop__details fontlight"> Type:`+ret_obj['data']['workshops'][i][0]+`</div>`
                         z+=`<div class="personal__workshop__details fontlight"> Details:`+ret_obj['data']['workshops'][i][1]+`</div>`
                     }
-                    var img = ` <img src="data:image/jpg;base64, `+ ret_obj['data']['image'] + `" alt="" class="header__logout__img" >`;
+                    var img = ` <img src="data:image/jpg;base64, `+ ret_obj['data']['image'] + `" alt="" class="personal__overview__img" >`;
 
                     $('.personal__education__degree').html(d);
                     $('.personal__experience__company').html(y);
@@ -329,7 +334,7 @@
                 </div>
                 <div class="personal__overview">
                     <div class="personal__overview__1">
-                        <div class="personal__overview__pic" style="height: 200px; width: 200px;">
+                        <div class="personal__overview__pic" >
                             <!-- <img src="../images/user-3.jpg" alt="" class="personal__overview__img"> -->
                         </div>
                         <div class="personal__overview__1details">

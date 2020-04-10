@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Assign teacher</title>
     <link rel="stylesheet" href="{{ url_for('static', filename = 'sass/main.css') }}" type="text/css">
-    <link rel="stylesheet" href="{{ url_for('static', filename = 'sass/pages/assignclass.css') }}" type="text/css">
+    <!-- <link rel="stylesheet" href="{{ url_for('static', filename = 'sass/pages/assignclass.css') }}" type="text/css"> -->
     <!--<link rel="stylesheet" href="../sass/pages/assignclass.css" type="text/css">-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css"
         integrity="sha256-+N4/V/SbAFiW1MPBCXnfnP9QSN3+Keu+NlB+0ev/YKQ=" crossorigin="anonymous" />
@@ -15,10 +15,14 @@
         .modal {
             z-index: 1000;
         }
+        .displaynone{
+            display: none;
+        }
     </style>
     <script>
         function opennavbar(){
             $('.navbar').toggleClass('show-navbar');
+            $('.nav__icon').toggleClass('displaynone');
         }
         function showsublist(param , value){
             $('ul', param).toggleClass(value);
@@ -32,8 +36,8 @@
             console.log(priority);
             var temp = `
             <ul class="nav__ul">
-                    <li class="nav__li" onclick="window.location.href = 'home' ">Home</li>
-                    <li class="nav__li teacherli" onclick="showsublist($(this), 'show')">Professor<span></span>
+                    <li class="nav__li" onclick="window.location.href = 'home' "><i class="fa fal fa-home displaynone nav__icon"></i>&nbsp;&nbsp;Home</li>
+                    <li class="nav__li teacherli" onclick="showsublist($(this), 'show')"><i class="fa fal fa-user nav__icon displaynone"></i>&nbsp;&nbsp;Professor<span></span>
                         <ul class="sub ">
                             <!--Add show on click of teacherli-->`;
             if(priority > 2){
@@ -98,7 +102,10 @@
                 }
             });
         };
-
+        function closemodal(){
+            $('.modal').addClass('modal__dispnone');
+            
+        }
         $(document).ready(function () {
             var faculty_id = localStorage.getItem('faculty_id');
             var authkey = localStorage.getItem('authkey');
@@ -321,7 +328,7 @@
                 processData: false,
                 success: function (ret_obj) {
                     console.log(ret_obj);
-                    $('.modal').toggleClass('modal_dispnone');
+                    $('.modal').addClass('modal__dispnone');
                     // location.reload();
                 }
             });
@@ -335,7 +342,7 @@
         <!--modal__dispnone is a class to hide the modal from the page-->
         <div class="modal__body">
             <h1 class="modal__heading">Add subject teacher</h1>
-            <div class="close-btn"><i class="fa fa-times fa-2x"></i></div>
+            <div class="close-btn" onclick="closemodal()"><i class="fa fa-times fa-2x"></i></div>
             <div class="addsubject">
                 <input type="hidden" id="branch">
                 <input type="hidden" id="year">
@@ -351,7 +358,7 @@
                     <input type="text" id="subjectcode" placeholder="Subjectcode"
                         class="addsubject__subjectcode__input">
                 </div>
-                <div class="addsubject__subjectteacher">
+                <div class="addsubject__subjectteacher"> 
                     <label for="subjectteacher">Subjectteacher:</label>
                     <select id="subjectteacher" class="addsubject__subjectteacher__input">
                         <option value="" selected hidden>Select teacher</option>

@@ -815,6 +815,9 @@ td {
 .navbar {
   font-family: sans-serif;
   width: 0;
+  -webkit-box-flex: 0%;
+      -ms-flex: 0% 0 0px;
+          flex: 0% 0 0;
   height: 120vh;
   background-color: #34444c;
   -webkit-transition: 0.2s;
@@ -823,7 +826,11 @@ td {
 }
 
 .show-navbar {
-  width: 230px;
+  -webkit-box-flex: 14%;
+      -ms-flex: 14% 0 0px;
+          flex: 14% 0 0;
+  -webkit-transition: 0.5s ease-in-out;
+  transition: 0.5s ease-in-out;
 }
 
 .navbar ul {
@@ -1411,8 +1418,9 @@ body {
 }
 
 .allteachers__pic {
-  height: 6rem;
-  margin-bottom: 1rem;
+  height: 7rem;
+  width: 7rem;
+  margin: 0 auto 1.2rem auto;
 }
 
 .allteachers__img {
@@ -2427,5 +2435,100 @@ td {
   outline: none;
   -webkit-transform: translatey(0.2rem);
           transform: translatey(0.2rem);
+}
+
+.add__assessment__question__paper__pattern__input {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.add__assessment__common {
+  width: 33%;
+}
+
+.add__assessment__test__flex1 {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.add__assessment__descriptive__grid {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 1fr 1fr;
+      grid-template-columns: 1fr 1fr;
+  grid-gap: 30px;
+  width: 60%;
+  margin: 0 auto;
+}
+
+.add__assessment__descriptive__grid2 {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.add__assessment__input__group {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.add__assessment__select {
+  /*border-radius: 100px;
+        border:none;
+        background-color: #eee;
+        padding: 0.5rem 2rem 0.5rem 2rem;*/
+  padding: 0.5rem 2rem 0.5rem 1rem;
+  border-radius: 100px;
+  background-color: #eee;
+  font-weight: 500;
+  text-transform: uppercase;
+  border: none;
+}
+
+.add__assessment__add__test__set {
+  width: 300px;
+  position: relative;
+  left: 70%;
+}
+
+.add__assessment__add__test__set:hover {
+  cursor: pointer;
+}
+
+.marks-entry__table {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.marks-entry__td {
+  height: 50px;
+  width: 80px;
+  padding: 1rem 0 0 0;
+}
+
+.submit__marks {
+  width: 100%;
 }
 /*# sourceMappingURL=main.css.map */
