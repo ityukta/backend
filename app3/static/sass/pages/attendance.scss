@@ -1,5 +1,10 @@
 .attendance{
     width: 100%;
+    &__modal{
+        &__form{
+            margin-top: 6px;
+        }
+    }
     select{
         
         border:none;
@@ -121,6 +126,15 @@
        }
       
     }
+}
+.student{
+    &__submit{
+        margin-top: 2rem;
+    }
+}
+#attendance__hour{
+    border: 1px solid rgb(207, 207, 207);
+    padding: 0.3rem;
 }
 td{
     padding: 5px;

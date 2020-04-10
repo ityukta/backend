@@ -2,7 +2,7 @@
     text-align:center;
     text-transform: uppercase;
     padding:2rem;
-    font-size:20px;
+    font-size:20px; 
     font-weight: 600;
 }
 
@@ -61,7 +61,7 @@
 .extra__item{
     border:1px solid black;
     flex:0 0 45%;
-    text-align:center;
+    text-align:center; 
     display:flex;
     justify-content: space-evenly;
     flex-direction: column;
@@ -175,6 +175,22 @@
         }
     }
 }
+.assessment{
+    &__button{
+        background-color: #eee;
+        padding: 0.3rem;
+        margin-right: 0.5rem;
+        border:1px solid rgb(207, 207, 207);
+        transition: 0.2s;
+        &:hover{
+            cursor: pointer;
+            background-color: rgb(196, 196, 196);
+        }
+        &:focus{
+            outline:none;
+        }
+    }
+}
 .marks-entry__table{
     display: flex;
     justify-content: center;
@@ -186,4 +202,16 @@
 }
 .submit__marks{
     width: 100%;
+}
+.add__new__assessment__button{
+    border-radius: 10px;
+    font-weight:600;
+    letter-spacing: 1px;
+    font-size: 1rem;
+    &:hover{
+        cursor: pointer;
+    }
+    &:focus{
+        outline: none;
+    }
 }

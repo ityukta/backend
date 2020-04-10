@@ -24,7 +24,7 @@
         localStorage.clear();
         window.location.href = '/';
     }
-    function loadnavbar(){
+    function loadnavbar(){ 
         priority = localStorage.getItem('faculty_type');
         console.log(priority);
         var temp = `
@@ -397,7 +397,7 @@
 }
 #student__names__table{
     width: 100%;
-    margin-top: 40px;
+    margin-top: 20px;
 }
 #student__names__table td{
     text-align: center;
@@ -438,7 +438,7 @@
                 </tr> -->
             </tbody>
         </table>
-        <button id="submit-attendance-button" onclick="submitattendancedetails()"> Submit</button>
+        <button id="submit-attendance-button" class="register__btn bluebtn student__submit"onclick="submitattendancedetails()"> Submit</button>
     </div>
   </div>
 

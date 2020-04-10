@@ -73,6 +73,10 @@ body {
   font-weight: 600;
 }
 
+.margin-top {
+  margin-top: 1rem;
+}
+
 .marginbottom06 {
   margin-bottom: 0.6rem;
 }
@@ -445,14 +449,9 @@ body {
 }
 
 .element {
-  -webkit-box-flex: 0;
-      -ms-flex: 0 0 20%;
-          flex: 0 0 20%;
   font-weight: 600;
-  padding: .5rem;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  width: 90%;
+  padding: .7rem .5rem;
   border-radius: 100px;
   border: none;
   background-color: #eee;
@@ -880,10 +879,6 @@ td {
   display: block;
 }
 
-.ia-content {
-  padding: 2rem 2rem 3rem 2rem;
-}
-
 .ia-container {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -898,18 +893,13 @@ td {
 }
 
 .ia-container__dropdown {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-wrap: wrap;
-      flex-wrap: wrap;
-  padding: 2rem 3rem 0rem 11rem;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  border: 1px solid black;
-  margin-bottom: 4rem;
-  background-color: #fff;
+  margin: 0 auto;
+  display: -ms-grid;
+  display: grid;
+  grid-column-gap: 15rem;
+  -ms-grid-columns: 1fr 1fr 1fr;
+      grid-template-columns: 1fr 1fr 1fr;
+  margin-bottom: 2rem;
 }
 
 @media (max-width: 600px) {
@@ -2065,6 +2055,10 @@ body {
   width: 100%;
 }
 
+.attendance__modal__form {
+  margin-top: 6px;
+}
+
 .attendance select {
   border: none;
   text-transform: uppercase;
@@ -2216,6 +2210,15 @@ body {
 .attendance__table__row {
   text-align: center;
   width: 100%;
+}
+
+.student__submit {
+  margin-top: 2rem;
+}
+
+#attendance__hour {
+  border: 1px solid #cfcfcf;
+  padding: 0.3rem;
 }
 
 td {
@@ -2513,6 +2516,24 @@ td {
   cursor: pointer;
 }
 
+.assessment__button {
+  background-color: #eee;
+  padding: 0.3rem;
+  margin-right: 0.5rem;
+  border: 1px solid #cfcfcf;
+  -webkit-transition: 0.2s;
+  transition: 0.2s;
+}
+
+.assessment__button:hover {
+  cursor: pointer;
+  background-color: #c4c4c4;
+}
+
+.assessment__button:focus {
+  outline: none;
+}
+
 .marks-entry__table {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -2530,5 +2551,20 @@ td {
 
 .submit__marks {
   width: 100%;
+}
+
+.add__new__assessment__button {
+  border-radius: 10px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  font-size: 1rem;
+}
+
+.add__new__assessment__button:hover {
+  cursor: pointer;
+}
+
+.add__new__assessment__button:focus {
+  outline: none;
 }
 /*# sourceMappingURL=main.css.map */

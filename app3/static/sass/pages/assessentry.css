@@ -220,6 +220,24 @@
   cursor: pointer;
 }
 
+.assessment__button {
+  background-color: #eee;
+  padding: 0.3rem;
+  margin-right: 0.5rem;
+  border: 1px solid #cfcfcf;
+  -webkit-transition: 0.2s;
+  transition: 0.2s;
+}
+
+.assessment__button:hover {
+  cursor: pointer;
+  background-color: #c4c4c4;
+}
+
+.assessment__button:focus {
+  outline: none;
+}
+
 .marks-entry__table {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -237,5 +255,20 @@
 
 .submit__marks {
   width: 100%;
+}
+
+.add__new__assessment__button {
+  border-radius: 10px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  font-size: 1rem;
+}
+
+.add__new__assessment__button:hover {
+  cursor: pointer;
+}
+
+.add__new__assessment__button:focus {
+  outline: none;
 }
 /*# sourceMappingURL=assessentry.css.map */

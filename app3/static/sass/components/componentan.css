@@ -1,12 +1,7 @@
 .element {
-  -webkit-box-flex: 0;
-      -ms-flex: 0 0 20%;
-          flex: 0 0 20%;
   font-weight: 600;
-  padding: .5rem;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  width: 90%;
+  padding: .7rem .5rem;
   border-radius: 100px;
   border: none;
   background-color: #eee;

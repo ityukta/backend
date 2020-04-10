@@ -2,6 +2,10 @@
   width: 100%;
 }
 
+.attendance__modal__form {
+  margin-top: 6px;
+}
+
 .attendance select {
   border: none;
   text-transform: uppercase;
@@ -153,6 +157,15 @@
 .attendance__table__row {
   text-align: center;
   width: 100%;
+}
+
+.student__submit {
+  margin-top: 2rem;
+}
+
+#attendance__hour {
+  border: 1px solid #cfcfcf;
+  padding: 0.3rem;
 }
 
 td {
