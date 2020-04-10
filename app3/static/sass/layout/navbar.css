@@ -1,6 +1,9 @@
 .navbar {
   font-family: sans-serif;
   width: 0;
+  -webkit-box-flex: 0%;
+      -ms-flex: 0% 0 0px;
+          flex: 0% 0 0;
   height: 120vh;
   background-color: #34444c;
   -webkit-transition: 0.2s;
@@ -9,7 +12,11 @@
 }
 
 .show-navbar {
-  width: 230px;
+  -webkit-box-flex: 14%;
+      -ms-flex: 14% 0 0px;
+          flex: 14% 0 0;
+  -webkit-transition: 0.5s ease-in-out;
+  transition: 0.5s ease-in-out;
 }
 
 .navbar ul {

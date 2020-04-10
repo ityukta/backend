@@ -1,8 +1,9 @@
 .element{
-    flex:0 0 20%;
+   // flex:0 0 22%;
    font-weight: 600;
-    padding:.5rem;
-   justify-content: center;
+   width:90%;
+    padding:.7rem .5rem;
+  // justify-content: center;
     border-radius:100px;
     border:none;
     background-color: #eee;
@@ -33,13 +34,14 @@
     }
 
     &__search{
-        background-color: lightgreen;
+        background:linear-gradient(to right,#00c5fb,#0253cc);
+        color:#fff;
 
          &:focus{
             outline:none;
         }
         &:hover{
-            transform:translateY(-.5rem);
+            cursor: pointer;
         }
 
     }
