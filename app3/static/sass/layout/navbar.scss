@@ -1,6 +1,7 @@
 .navbar{
     font-family: sans-serif;
     width: 0;
+    flex:0% 0 0;
     //height: max-content;
     height: 120vh;
   //  background:linear-gradient(top right,rgb(127, 172, 231),rgb(74, 86, 245));
@@ -9,8 +10,9 @@
     border-right: 1px solid rgb(207, 207, 207);
 }
 .show-navbar{
-    width: 230px;
-    
+    flex:14% 0 0;
+    transition: 0.5s ease-in-out;
+    //width: 230px;
 }
  
 .navbar ul{

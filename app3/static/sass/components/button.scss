@@ -78,10 +78,10 @@
     }
 }*/
 #submit-student-search{
-    padding: 0.2rem 1.2rem;
-    border-radius: 5px;
+    padding:0.6rem;
+    border-radius: 100px;
     border: 1px solid rgb(207, 207, 207);
-    background:rgb(0, 173, 0);
+    background:linear-gradient(to right,#00c5fb,#0253cc);
     color:white;
     &:hover{
         cursor: pointer;

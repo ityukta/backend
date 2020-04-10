@@ -10,6 +10,38 @@
         integrity="sha256-+N4/V/SbAFiW1MPBCXnfnP9QSN3+Keu+NlB+0ev/YKQ=" crossorigin="anonymous" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 </head>
+<style>
+    #decline__button{
+        border-radius: 5px;
+        padding: 0.5rem;
+        border: none;
+        background-color: red;
+        color:white;
+        font-weight: 600;
+        letter-spacing: 1px;
+    }
+    #decline__button:hover{
+       cursor: pointer;
+    }
+    #decline__button:focus{
+       outline: none;
+    }
+    #approve__button{
+        border-radius: 5px;
+        padding: 0.5rem;
+        border: none;
+        background-color: #55ce63;
+        color:white;
+        font-weight: 600;
+        letter-spacing: 1px;
+    }
+    #approve__button:hover{
+       cursor: pointer;
+    }
+    #approve__button:focus{
+       outline: none;
+    }
+</style>
 <script>
     function opennavbar(){
         $('.navbar').toggleClass('show-navbar');
@@ -20,13 +52,13 @@
     function logout(){
         localStorage.clear();
         window.location.href = '/';
-    }
+    } 
     function loadnavbar(){
         priority = localStorage.getItem('faculty_type');
         console.log(priority);
         var temp = `
         <ul class="nav__ul">
-                <li class="nav__li" onclick="window.location.href = 'home' ">home</li>
+                <li class="nav__li" onclick="window.location.href = 'home' ">Home</li>
                 <li class="nav__li teacherli" onclick="showsublist($(this), 'show')">Professor<span></span>
                     <ul class="sub ">
                         <!--Add show on click of teacherli-->`;
@@ -103,6 +135,9 @@
                                 </div>
                                 <div class="allteachers__name">
                                     <p>`+ret_obj['data'][i][1]+`</p>
+                                    <br>
+                                    <p> Email : ` +ret_obj['data'][i][4]+`</p>
+                                    <br>
                                     <p> Department : `+ret_obj['data'][i][2]+`</p>
                                 </div>
                                 <button id = "decline__button" onclick='approvefunction(`+ret_obj['data'][i][0]+`,0)''">Decline</button>
@@ -146,7 +181,7 @@
         <header class="header">
             <img src="{{ url_for('static' , filename = 'images/logo.jpg')}}" alt="" class="header__collegelogo">
             <div class="header__content1">
-                <button class="nav-btn" onclick="opennavbar()"><i class="fa fa-bars fa-2x"></i></button>
+                <button class="nav-btn" onclick="opennavbar()"><i class="fa fa-bars fa-2x headericon"></i></button>
                 <h3 class="header__heading">Student login</h3>
             </div>
             <div class="header__content2">

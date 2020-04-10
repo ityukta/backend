@@ -30,7 +30,12 @@
         }
     </style>
     <script>
+        add_student_content = `
+        
+        `;
         function openmodal(){
+            // $('.studentbatch__add__form').html(add_student_content);
+            
             $('.modal').removeClass('modal__dispnone');
         }
         function closemodal(){
@@ -51,7 +56,7 @@
             console.log(priority);
             var temp = `
             <ul class="nav__ul">
-                    <li class="nav__li" onclick="window.location.href = 'home' ">home</li>
+                    <li class="nav__li" onclick="window.location.href = 'home' ">Home</li>
                     <li class="nav__li teacherli" onclick="showsublist($(this), 'show')">Professor<span></span>
                         <ul class="sub ">
                             <!--Add show on click of teacherli-->`;
@@ -87,6 +92,7 @@
         }
     </script>
     <script>
+        b64 = null;
         var subject_id_list = [], b64;
         $(document).ready(function () {
             var faculty_id = localStorage.getItem('faculty_id');
@@ -231,6 +237,98 @@
             // })
         });
         function submitstudentsearch() {
+          var student_modal_content = `
+            <div class="studentbatch__add__name formcommon">
+                                    <label for="name">Name:</label>
+                                    <input type="text" id="name" class="studentbatch__add__name__input inputcommon">
+                                </div>
+                                <div class="studentbatch__add__usn formcommon">
+                                    <label for="usn">USN:</label>
+                                    <input type="text" id="usn" class="studentbatch__add__usn__input inputcommon">
+                                </div>
+                                <!-- <div class="studentbatch__add__batch formcommon">
+                                    <label for="batch">Batch:</label>
+                                    <input type="number" id="batch" class="studentbatch__add__batch__input inputcommon">
+                                </div> -->
+                                <div class="studentbatch__add__bloodgroup formcommon">
+                                    <label for="blood_group">Blood Group:</label>
+                                    <input type="text" id="blood_group" class="studentbatch__add__bloodgroup__input inputcommon">
+                                </div>
+                                <div class="studentbatch__add__fathername formcommon">
+                                    <label for="fathername">Father Name:</label>
+                                    <input type="text" id="name"
+                                        class="studentbatch__add__fathername__input inputcommon">
+                                </div>
+                                <div class="studentbatch__add__parentcontact formcommon">
+                                    <label for="contact">Parent/Guardian Contact number:</label>
+                                    <input type="text" id="contact"
+                                        class="studentbatch__add__parentcontact__input inputcommon">
+                                </div>
+                                <div class="studentbatch__add__parentemail formcommon">
+                                    <label for="parent_email">Parent/Guardian Email ID:</label>
+                                    <input type="text" id="parent_email"
+                                        class="studentbatch__add__parentemail__input inputcommon">
+                                </div>
+                                <div class="studentbatch__add__permanentaddress formcommon">
+                                    <label for="permanentaddress">Permanentaddress:</label>
+                                    <textarea id="permanentaddress" cols="30" rows="3"
+                                        class="studentbatch__add__permanentaddress__input inputcommon"></textarea>
+                                </div>
+                                <div class="studentbatch__add__currentaddress formcommon">
+                                    <label for="currentaddress">Currentaddress:</label>
+                                    <textarea id="currentaddress" cols="30" rows="3"
+                                        class="studentbatch__add__currentaddress__input inputcommon"></textarea>
+                                </div>
+                                <!-- <div class="studentbatch__add__hobbies formcommon">
+                                    <label for="hobbies">Hobbies:</label>
+                                    <input type="text" id="hobbies"
+                                        class="studentbatch__add__parentcontact__input inputcommon">
+                                </div>
+                                <div class="studentbatch__add__personality formcommon">
+                                    <label for="personality">Personality:</label>
+                                    <input type="text" id="personality"
+                                        class="studentbatch__add__personality__input inputcommon">
+                                </div>
+                                <div class="studentbatch__add__career formcommon">
+                                    <label for="career">Career aspirations:</label>
+                                    <input type="text" id="career" class="studentbatch__add__career__input inputcommon">
+                                </div> -->
+                                <div class="studentbatch__add__sslc formcommon">
+                                    <label for="sslc">10th results(%):</label>
+                                    <input type="number" id="sslc" class="studentbatch__add__sslc__input inputcommon">
+                                </div>
+                                <div class="studentbatch__add__puc formcommon">
+                                    <label for="puc">2nd puc results(%):</label>
+                                    <input type="number" id="puc" class="studentbatch__add__puc__input inputcommon">
+                                </div>
+                                <!-- <div class="studentbatch__add__diploma formcommon">
+                                    <label for="diploma">Diploma results(%):</label>
+                                    <input type="number" id="diploma"
+                                        class="studentbatch__add__sslc__input inputcommon">
+                                </div> -->
+                                <div class="studentbatch__add__picture formcommon">
+                                    <label for="picture"></label>
+                                    <input type="file" id="picture" class="studentbatch__add__picture__input inputcommom">
+                                </div>
+                                <div class="studentbatch__add__subjects__container">
+                                    <div class="studentbatch__add__subject">
+                                        <input type="checkbox" id="subject1" class="studentbatch__add__subject1__input inputcommom">
+                                    <label for="subject1">Subject 1</label>
+                                    </div>                                    
+                                </div>
+            `;
+            $('.studentbatch__add__form').html(student_modal_content);
+            var input = document.getElementById('picture');
+            input.onchange = function () {
+            var file = input.files[0],
+                reader = new FileReader();
+            reader.onloadend = function () {
+                b64 = reader.result.replace(/^data:.+;base64,/, '');
+                console.log(b64);
+            };
+            reader.readAsDataURL(file);
+            };
+            // $('.studentbatch__add__form').load(location.href + " .studentbatch__add__form");
             var department = $('#dept-id').val();
             var year = $('#year-id').val();
             var sem = $('#sem-id').val();
@@ -324,17 +422,40 @@
                 'year': $('#year-id').val(),
                 'enrolled_subjects' : enrolled_subjects
             };
-            console.log(d);
-            $.ajax({
-                type: "POST",
-                url: "addstudent",
-                dataType : "Json",
-                contentType :"application/json",
-                data: JSON.stringify(d),
-                success: function(ret_obj){
-                    console.log(ret_obj);
+            var j = 0;
+            console.log(d['picture']);
+            for (var i of Object.keys(d))
+            {
+                if(d[i]=="")
+                {
+                    alert('"'+i+'"'+" Required")
+                    j= 1;
+                    break
                 }
-            });
+            }
+            if(j==0){
+                if(typeof d['picture']==='undefined')
+                {
+                    alert('"Picture" Required"');
+                    j = 1;
+                }
+            }
+            console.log(j);
+            if(j==0)
+            {
+                $.ajax({
+                    type: "POST",
+                    url: "addstudent",
+                    dataType : "Json",
+                    contentType :"application/json",
+                    data: JSON.stringify(d),
+                    success: function(ret_obj){
+                        console.log(ret_obj);
+                        submitstudentsearch();
+                        $('.modal').addClass('modal__dispnone');
+                    }
+                });
+            }
         }
     </script>
 </head>
@@ -344,7 +465,7 @@
         <header class="header">
             <img src="{{ url_for('static' , filename = 'images/logo.jpg')}}" alt="" class="header__collegelogo">
             <div class="header__content1">
-                <button class="nav-btn" onclick="opennavbar()"><i class="fa fa-bars fa-2x"></i></button>
+                <button class="nav-btn" onclick="opennavbar()"><i class="fa fa-bars fa-2x headericon"></i></button>
                 <h3 class="header__heading">Student login</h3>
             </div>
             <div class="header__content2">
@@ -383,7 +504,7 @@
             <div class="navbar ">
                 <!--Add show-navbar on click of nav button-->
                 <ul class="nav__ul">
-                    <li class="nav__li"><a href="">home</a> </li>
+                    <li class="nav__li"><a href="">Home</a> </li>
                     <li class="nav__li teacherli"><a href="" class="teacher">Professor</a> <span></span>
                         <ul class="sub ">
                             <!--Add show on click of teacherli-->
@@ -400,7 +521,7 @@
                             <li class="sub__li" onclick=" window.location.href = 'addattendance'">Manage attendace</li>
                             <li class="sub__li" onclick=" window.location.href = 'iamarks'"> Manage IA marks</li>
                         </ul>
-                    </li>
+                    </li> 
                 </ul>
             </div>
             <div class="content">
@@ -437,107 +558,31 @@
                             <option value="b">B section</option> -->
                         </select>
                     </div>
-                    <button id="submit-student-search" disabled onclick="submitstudentsearch()">Submit</button>
+                    <div class=""></div> 
+                    <button class="register__btn bluebtn attendance__submit assignclass__btn"id="submit-student-search" disabled onclick="submitstudentsearch()">Submit</button>
                 </div>
                 <div class="studentbatch">
                     <div class="studentbatch__add">
                         <div class="studentbatch__add__batch">
-                            <button class="search-btn studentbatch__add__batch__btn" disabled>Add batch</button>
+                            <button class="attendance__details__addbtn" disabled>Add batch</button>
                         </div>
             
                         <!-- Button trigger modal -->
-                        <button type="button" onclick="openmodal()">
+                        <button type="button" onclick="openmodal()" class="attendance__details__addbtn">
                             Add student
                         </button>
             
                         <!-- Modal -->
                         <div class="modal modal__dispnone">
                            <div class="modal__body">
-                            <div class="close-btn" onclick="closemodal()"><i class="fa fa-times fa-2x"></i></div>
+                            <div class="close-btn" ><i class="fa fa-times fa-2x" onclick="closemodal()"></i></div>
                             <div class="head">
                              Add student details
                             </div>
                             <div class="studentbatch__add__form">
-                                <div class="studentbatch__add__name formcommon">
-                                    <label for="name">Name:</label>
-                                    <input type="text" id="name" class="studentbatch__add__name__input inputcommon">
-                                </div>
-                                <div class="studentbatch__add__usn formcommon">
-                                    <label for="usn">USN:</label>
-                                    <input type="text" id="usn" class="studentbatch__add__usn__input inputcommon">
-                                </div>
-                                <!-- <div class="studentbatch__add__batch formcommon">
-                                    <label for="batch">Batch:</label>
-                                    <input type="number" id="batch" class="studentbatch__add__batch__input inputcommon">
-                                </div> -->
-                                <div class="studentbatch__add__bloodgroup formcommon">
-                                    <label for="blood_group">Blood Group:</label>
-                                    <input type="text" id="blood_group" class="studentbatch__add__bloodgroup__input inputcommon">
-                                </div>
-                                <div class="studentbatch__add__fathername formcommon">
-                                    <label for="fathername">Father Name:</label>
-                                    <input type="text" id="name"
-                                        class="studentbatch__add__fathername__input inputcommon">
-                                </div>
-                                <div class="studentbatch__add__parentcontact formcommon">
-                                    <label for="contact">Parent/Guardian Contact number:</label>
-                                    <input type="text" id="contact"
-                                        class="studentbatch__add__parentcontact__input inputcommon">
-                                </div>
-                                <div class="studentbatch__add__parentemail formcommon">
-                                    <label for="parent_email">Parent/Guardian Email ID:</label>
-                                    <input type="text" id="parent_email"
-                                        class="studentbatch__add__parentemail__input inputcommon">
-                                </div>
-                                <div class="studentbatch__add__permanentaddress formcommon">
-                                    <label for="permanentaddress">Permanentaddress:</label>
-                                    <textarea id="permanentaddress" cols="30" rows="3"
-                                        class="studentbatch__add__permanentaddress__input inputcommon"></textarea>
-                                </div>
-                                <div class="studentbatch__add__currentaddress formcommon">
-                                    <label for="currentaddress">Currentaddress:</label>
-                                    <textarea id="currentaddress" cols="30" rows="3"
-                                        class="studentbatch__add__currentaddress__input inputcommon"></textarea>
-                                </div>
-                                <!-- <div class="studentbatch__add__hobbies formcommon">
-                                    <label for="hobbies">Hobbies:</label>
-                                    <input type="text" id="hobbies"
-                                        class="studentbatch__add__parentcontact__input inputcommon">
-                                </div>
-                                <div class="studentbatch__add__personality formcommon">
-                                    <label for="personality">Personality:</label>
-                                    <input type="text" id="personality"
-                                        class="studentbatch__add__personality__input inputcommon">
-                                </div>
-                                <div class="studentbatch__add__career formcommon">
-                                    <label for="career">Career aspirations:</label>
-                                    <input type="text" id="career" class="studentbatch__add__career__input inputcommon">
-                                </div> -->
-                                <div class="studentbatch__add__sslc formcommon">
-                                    <label for="sslc">10th results(%):</label>
-                                    <input type="number" id="sslc" class="studentbatch__add__sslc__input inputcommon">
-                                </div>
-                                <div class="studentbatch__add__puc formcommon">
-                                    <label for="puc">2nd puc results(%):</label>
-                                    <input type="number" id="puc" class="studentbatch__add__puc__input inputcommon">
-                                </div>
-                                <!-- <div class="studentbatch__add__diploma formcommon">
-                                    <label for="diploma">Diploma results(%):</label>
-                                    <input type="number" id="diploma"
-                                        class="studentbatch__add__sslc__input inputcommon">
-                                </div> -->
-                                <div class="studentbatch__add__picture formcommon">
-                                    <label for="picture"></label>
-                                    <input type="file" id="picture" class="studentbatch__add__picture__input inputcommom">
-                                </div>
-                                <div class="studentbatch__add__subjects__container">
-                                    <div class="studentbatch__add__subject">
-                                        <input type="checkbox" id="subject1" class="studentbatch__add__subject1__input inputcommom">
-                                    <label for="subject1">Subject 1</label>
-                                    </div>                                    
-                                </div>
+                                
                             </div>
-                            <button type="button" class="btn btn-primary" onclick="addstudent()">Submit</button>
+                            <button type="button" class="btn btn-primary register__btn bluebtn" onclick="addstudent()">Submit</button>
                            </div>
                            
                         </div>
@@ -674,7 +719,7 @@
 
 
 
-    <script src="{{ url_for('static', filename='js/modal.js') }}"></script>
+    <!--<script src="{{ url_for('static', filename='js/modal.js') }}"></script>-->
     <!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
         integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
         crossorigin="anonymous"></script>
@@ -683,15 +728,6 @@
         crossorigin="anonymous"></script> -->
 </body>
 <script>
-    var input = document.getElementById('picture');
-    input.onchange = function () {
-      var file = input.files[0],
-        reader = new FileReader();
-      reader.onloadend = function () {
-        b64 = reader.result.replace(/^data:.+;base64,/, '');
-        console.log(b64);
-      };
-      reader.readAsDataURL(file);
-    };
+    
   </script>
 </html>
