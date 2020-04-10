@@ -69,6 +69,11 @@ def all_teachers_view():
 def approve_view():
     """This is the page to approve teachers """
     return render_template('html/approval.html')   
+
+@APP.route('/viewmarks', methods=['GET'])
+def view_marks_view():
+    """This is the page to view marks and send SMS"""
+    return render_template('html/viewmarks.html')
 # Endpoints
 
 
@@ -250,6 +255,12 @@ def approve__decline__view():
     response = dbop.approve__decline(data)
     return jsonify(response)
 
+@APP.route('/get_class_marks', methods=['POST'])
+def get_class_marks_ajax():
+    """This endpoint is used to get marks classwise"""
+    data = request.get_json()
+    response = dbop.get_class_marks(data)
+    return response
 if __name__ == '__main__':
     APP.run(debug=True, threaded=True)
     APP.run()

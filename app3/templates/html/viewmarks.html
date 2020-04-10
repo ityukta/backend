@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css"
+        integrity="sha256-+N4/V/SbAFiW1MPBCXnfnP9QSN3+Keu+NlB+0ev/YKQ=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'sass/main.css') }}" type="text/css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script>
+        function openmodal() {
+            $('.modal').removeClass('modal__dispnone');
+        }
+        function closemodal() {
+            $('.modal').addClass('modal__dispnone');
+        }
+        function opennavbar() {
+            $('.navbar').toggleClass('show-navbar');
+        }
+        function showsublist(param, value) {
+            $('ul', param).toggleClass(value);
+        }
+        function logout() {
+            localStorage.clear();
+            window.location.href = '/';
+        }
+        function loadnavbar() {
+            priority = localStorage.getItem('faculty_type');
+            console.log(priority);
+            var temp = `
+            <ul class="nav__ul">
+                    <li class="nav__li" onclick="window.location.href = 'home' ">home</li>
+                    <li class="nav__li teacherli" onclick="showsublist($(this), 'show')">Professor<span></span>
+                        <ul class="sub ">
+                            <!--Add show on click of teacherli-->`;
+            if (priority > 2) {
+                temp += `
+                    <li class="sub__li" onclick="window.location.href = 'teachers'">View All Teachers</li>
+                    <li class="sub__li" onclick="window.location.href = 'approval'">Approve Register Request</li>
+                    <li class="sub__li" onclick="window.location.href = 'assignclass'">Assign Class teachers</li>
+                `;
+            }
+            if (priority > 1) {
+                temp += `
+                <li class="sub__li" onclick="window.location.href = 'assignteacher'">Add subjects</li>
+                `;
+            }
+            temp += `</ul>
+                    </li>
+                    <li class="nav__li studentli" onclick="showsublist($(this), 'show')"><div class="student">Students</div>
+                        <ul class="sub studentlist">`;
+            if (priority > 1) {
+                temp += `
+                    <li class="sub__li" onclick=" window.location.href = 'addstudent'"> Add students</li>
+                `;
+            }
+            temp += `
+                            <li class="sub__li" onclick=" window.location.href = 'addattendance'">Manage attendace</li>
+                            <li class="sub__li" onclick=" window.location.href = 'iamarks'"> Manage IA marks</li>
+                        </ul>
+                    </li>
+                </ul>
+            `;
+            $('.navbar').html(temp);
+        }
+    </script>
+    <script>
+        $(document).ready(function () {
+            var faculty_id = localStorage.getItem('faculty_id');
+            var authkey = localStorage.getItem('authkey');
+            if (faculty_id == null || authkey == null) {
+                window.location.href = "/";
+            }
+            if (localStorage.getItem('faculty_type') < 2) {
+                window.location.href = 'home'
+            }
+            loadnavbar();
+            var pic = localStorage.getItem("teacher_picture");
+            console.log(pic);
+            var img = ` <img src="data:image/jpg;base64, ` + pic + `" alt="" class="header__logout__img" >`
+            $('.header__logout__pic').html(img);
+            $('#dept-id').change(function () {
+                if ($('#dept-id').val() != "Select branch") {
+                    $('#year-id').removeAttr('disabled');
+                }
+                else {
+                    $('#year-id').attr('disabled', true);
+                    $('#sem-id').attr('disabled', true);
+                    $('#sec-id').attr('disabled', true);
+                    $('#submit-student-search').attr('disabled', true);
+                }
+                var d = {
+                    'authkey': localStorage.getItem('authkey'),
+                    'faculty_id': localStorage.getItem('faculty_id'),
+                    'department': $('#dept-id').val()
+                };
+                $.ajax({
+                    type: "POST",
+                    url: "get_year_sem_sec",
+                    dataType: 'Json',
+                    contentType: 'application/json',
+
+                    data: JSON.stringify(d),
+                    processData: false,
+                    success: function (ret_obj) {
+                        console.log(ret_obj);
+                        var d = "<option selected>Select year</option>";
+                        for (i = 0; i < (ret_obj['data']).length; i++) {
+                            d += `'<option value="` + ret_obj['data'][i]['0'] + `">` + ret_obj['data'][i]['0'] + `</option>'`;
+                        }
+                        $('#year-id').html(d);
+                    }
+                });
+
+            });
+
+            $('#year-id').change(function () {
+                if ($('#year-id').val() != "Select year") {
+                    $('#sem-id').removeAttr('disabled');
+                }
+                else {
+                    $('#sem-id').attr('disabled', true);
+                    $('#sem-id').attr('disabled', true);
+                    $('#sec-id').attr('disabled', true);
+                    $('#submit-student-search').attr('disabled', true);
+                }
+                var d = {
+                    'authkey': localStorage.getItem('authkey'),
+                    'faculty_id': localStorage.getItem('faculty_id'),
+                    'department': $('#dept-id').val(),
+                    'year': $('#year-id').val()
+                };
+                $.ajax({
+                    type: "POST",
+                    url: "get_year_sem_sec",
+                    dataType: 'Json',
+                    contentType: 'application/json',
+
+                    data: JSON.stringify(d),
+                    processData: false,
+                    success: function (ret_obj) {
+                        console.log(ret_obj);
+                        var d = "<option selected>Select sem</option>";
+                        for (i = 0; i < (ret_obj['data']).length; i++) {
+                            d += `'<option value="` + ret_obj['data'][i]['0'] + `">` + ret_obj['data'][i]['0'] + `</option>'`;
+                        }
+                        $('#sem-id').html(d);
+                    }
+                });
+
+            });
+
+            $('#sem-id').change(function () {
+                if ($('#sem-id').val() != "Select sem") {
+                    $('#sec-id').removeAttr('disabled');
+                }
+                else {
+                    $('#sec-id').attr('disabled', true);
+                    $('#submit-student-search').attr('disabled', true);
+                }
+                var d = {
+                    'authkey': localStorage.getItem('authkey'),
+                    'faculty_id': localStorage.getItem('faculty_id'),
+                    'department': $('#dept-id').val(),
+                    'year': $('#year-id').val(),
+                    'sem': $('#sem-id').val()
+                };
+                $.ajax({
+                    type: "POST",
+                    url: "get_year_sem_sec",
+                    dataType: 'Json',
+                    contentType: 'application/json',
+
+                    data: JSON.stringify(d),
+                    processData: false,
+                    success: function (ret_obj) {
+                        console.log(ret_obj);
+
+                        var d = "<option selected>Select sem</option>";
+                        for (i = 0; i < (ret_obj['data']).length; i++) {
+                            d += `'<option value="` + ret_obj['data'][i]['0'] + `">` + ret_obj['data'][i]['0'] + ` - Section </option>'`;
+                        }
+                        $('#sec-id').html(d);
+                    }
+                });
+
+            });
+            $('#sec-id').change(function () {
+                if ($('#dept-id').val() != "Select branch" && $('#year-id').val() != "Select year" && $('#sem-id').val() != "Select sem" && $('#sec-id').val() != "Select section") {
+                    $('#submit-student-search').removeAttr("disabled");
+                }
+                else {
+                    $('#submit-student-search').attr('disabled', true);
+                }
+            });
+        });
+        function submitgetmarks() {
+            var faculty_id = localStorage.getItem('faculty_id');
+            var authkey = localStorage.getItem('authkey');
+            var d = {
+                'faculty_id': faculty_id,
+                'authkey': authkey,
+                'dept': $('#dept-id').val(),
+                'sec': $('#sec-id').val(),
+                'graduation_year': $('#year-id').val(),
+                'sem': $('#sem-id').val()
+            };
+            $.ajax({
+                type: "POST",
+                url: "get_class_marks",
+                dataType: 'Json',
+                contentType: 'application/json',
+                data: JSON.stringify(d),
+                processData: false,
+                success: function (ret_obj) {
+                    console.log(ret_obj);
+                    student_data = [];
+                    if (ret_obj['status_code'] == 200) {
+                        temp = `
+                            <th>Name</th>
+                            <th>USN</th>
+                        `;
+                        subject_data = Array();
+                        for (i = 0; i < ret_obj['data']['subject_data'].length; i++){
+                            temp += `<th>`+ret_obj['data']['subject_data'][i]['subject_name']+`</th>`;
+                            subject_data.push(ret_obj['data']['subject_data'][i]['subject_name']);
+                        }
+                        localStorage.setItem('subject_data',subject_data);
+                        $('.marks_table_head').html(temp);
+                        temp = "";
+                        for(i=0;i<ret_obj['data']['marks_data'].length; i++){
+                            temp += '<tr id="'+ret_obj['data']['marks_data'][i]['student_id']+'">';
+                            temp += '<td>'+ ret_obj['data']['marks_data'][i]['name'] +'</td>';
+                            temp += '<td>'+ ret_obj['data']['marks_data'][i]['usn'] +'</td>';
+                            for(j=0;j<ret_obj['data']['subject_data'].length; j++){
+                                sub_name = ret_obj['data']['subject_data'][j]['subject_name'];
+                                flag = 0;
+                                for(k=0;k<ret_obj['data']['marks_data'][i]['marks'].length; k++){
+                                    if(sub_name == ret_obj['data']['marks_data'][i]['marks'][k]['subject_name']){
+                                        flag = 1;
+                                        temp += '<td>'+ ret_obj['data']['marks_data'][i]['marks'][k]['sub_marks'] +'</td>';
+                                        break;
+                                    }
+                                }
+                                if(flag == 0){
+                                    temp += '<td>-</td>';
+                                }
+                            }
+                            temp += '</tr>';
+                        }
+                        $('.marks_table_body').html(temp);
+                    }
+                }
+            });
+        }
+        function sendsms(){
+            var faculty_id = localStorage.getItem('faculty_id');
+            var authkey = localStorage.getItem('authkey');
+            var subject_data = localStorage.getItem('subject_data');
+            subject_data = subject_data.split(",");
+            console.log(subject_data);
+            final_data = [];
+            $('.marks_table_body').find('tr').each(function(){
+                student_id = $(this).attr('id');
+                marks = [];
+                k = 0;
+                name = name = $('td:nth-child(1)', this).text();
+                usn = $('td:nth-child(2)', this).text();
+                console.log(name);
+                for(i =0;i<subject_data.length;i++){
+                    m = $('td:nth-child('+(i+3)+')', this).text();
+                    if(m != "-"){
+                        dum = {
+                            "subject": subject_data[i],
+                            "marks": m
+                        };
+                        marks.push(dum);
+                    }
+                }
+                final_data.push({"student_id": student_id, "marks": marks});
+            });
+            console.log(final_data);
+            var d = {
+                "faculty_id": faculty_id,
+                "authkey": authkey,
+                "data": final_data
+            };
+            $.ajax({
+                type: "POST",
+                url: "send_marks_sms",
+                dataType: 'Json',
+                contentType: 'application/json',
+                data: JSON.stringify(d),
+                processData: false,
+                success: function (ret_obj) {
+                    console.log(ret_obj);
+                    alert("Messages Successfully sent");
+                }
+            });
+        }
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <header class="header">
+            <img src="{{ url_for('static' , filename = 'images/logo.jpg')}}" alt="" class="header__collegelogo">
+            <div class="header__content1">
+                <button class="nav-btn" onclick="opennavbar()"><i class="fa fa-bars fa-2x"></i></button>
+                <h3 class="header__heading">Student login</h3>
+            </div>
+            <div class="header__content2">
+                <!-- <form action="" class="header__form search-show">
+                    <input type="search" class="header__search" placeholder="Search here">
+                    <button class="header__search-btn"><i class="fa fa-search fa-1x icon-sbtn"></i></button>
+                </form> -->
+                <div class="btn-shownone">
+                    <i class="fa fa-search fa-2x "></i>
+                    <!--Make the btn-shownone to display block on click-->
+                </div>
+
+                <div class="header__logout">
+                    <div class="header__logout__group" onclick="showsublist($(this), 'header__logout__listshow')">
+                        <div class="header__logout__pic">
+                            <img src="../images/user-3.jpg" alt="" class="header__logout__img">
+                        </div>
+                        <div class="header__dots"><i class="fa fa-ellipsis-v fa-1x"></i>
+                            <ul class="header__logout__list ">
+                                <!--Add header__logout__listshow on click of header__logout__group-->
+                                <li><a href="home">My profile</a></li>
+                                <!-- <li><a href="#">Settings</a></li> -->
+                                <li><a href="#">Log out</a></li>
+                            </ul>
+                        </div>
+                        <p class="header__logout__name"><span class="header__logout__span">Admin</span>
+                            <ul class="header__logout__list ">
+                                <!--Add header__logout__listshow on click of header__logout__group-->
+                                <li><a href="home">My profile</a></li>
+                                <!-- <li><a href="#">Settings</a></li> -->
+                                <li>
+                                    <div onclick="logout()">Log out</div>
+                                </li>
+                            </ul>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <section class="section">
+            <div class="navbar ">
+                <!--Add show-navbar on click of nav button-->
+                <ul class="nav__ul">
+                    <li class="nav__li"><a href="">home</a> </li>
+                    <li class="nav__li teacherli"><a href="" class="teacher">Professor</a> <span></span>
+                        <ul class="sub ">
+                            <!--Add show on click of teacherli-->
+
+                            <li class="sub__li" onclick="window.location.href = 'assignclass'">Class teachers</li>
+                            <li class="sub__li" onclick="window.location.href = 'assignteacher'">Add subjects</li>
+                        </ul>
+                    </li>
+                    <li class="nav__li studentli"><a href="" class="student">Students</a>
+                        <ul class="sub studentlist">
+                            <!--Add show on click of studentli-->
+                            <li class="sub__li" onclick=" window.location.href = 'addstudent'"> Add students</li>
+
+                            <li class="sub__li" onclick=" window.location.href = 'addattendance'">Manage attendace</li>
+                            <li class="sub__li" onclick=" window.location.href = 'iamarks'"> Manage IA marks</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div class="content">
+                <div class="viewmarks">
+                    <div class="viewmarks__selectclass">
+                        <div class="viewmarks__selectdept">
+                            <select class="dept" id="dept-id">
+                                <option value="" selected hidden>Select branch </option>
+                                <option value="CSE">CSE</option>
+                                <option value="ISE">ISE</option>
+                                <option value="ECE">ECE</option>
+                                <option value="EEE">EEE</option>
+                            </select>
+                        </div>
+                        <div class="viewmarks__selectyear">
+                            <select id="year-id" class="year" disabled>
+                                <option value="none" selected hidden>Select year</option>
+                                <!-- <option value="2020">2020</option>
+                                <option value="2021">2021</option>
+                                <option value="2022">2022</option> -->
+                            </select>
+                        </div>
+                        <div class="viewmarks__selectsection">
+                            <select id="sem-id" class="section" disabled>
+                                <option value="none" selected hidden>Select sem</option>
+                                <!-- <option value="2">2</option>
+                                <option value="4">4</option>
+                                <option value="6">6</option> -->
+                            </select>
+                        </div>
+                        <div class="viewmarks__selectsection">
+                            <select id="sec-id" class="section" disabled>
+                                <option value="none" selected hidden>Select section</option>
+                                <!-- <option value="a">A section</option>
+                                <option value="b">B section</option> -->
+                            </select>
+                        </div>
+                        <button id="submit-student-search" disabled onclick="submitgetmarks()">Submit</button>
+                    </div>
+
+                    <div class="marks_table">
+                        <table>
+                            <thead class="marks_table_head">
+                                <th>Name</th>
+                                <th>USN</th>
+                            </thead>
+                            <tbody class="marks_table_body">
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <button onclick="sendsms()">Send SMS</button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+</body>
+
+</html>
