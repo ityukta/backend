@@ -33,10 +33,14 @@
         add_student_content = `
         
         `;
+        function openbatchmodal()
+        {
+            $('#batchmodal').removeClass('modal__dispnone');
+        }
         function openmodal(){
             // $('.studentbatch__add__form').html(add_student_content);
             
-            $('.modal').removeClass('modal__dispnone');
+            $('#studentmodal').removeClass('modal__dispnone');
         }
         function closemodal(){
             $('.modal').addClass('modal__dispnone');
@@ -423,7 +427,7 @@
                 'enrolled_subjects' : enrolled_subjects
             };
             var j = 0;
-            console.log(d['picture']);
+            // console.log(d['picture']);
             for (var i of Object.keys(d))
             {
                 if(d[i]=="")
@@ -434,7 +438,7 @@
                 }
             }
             if(j==0){
-                if(typeof d['picture']==='undefined')
+                if(d['picture']== null)
                 {
                     alert('"Picture" Required"');
                     j = 1;
@@ -443,6 +447,7 @@
             console.log(j);
             if(j==0)
             {
+                // console.log(d['picture']);
                 $.ajax({
                     type: "POST",
                     url: "addstudent",
@@ -457,10 +462,25 @@
                 });
             }
         }
+    function addbatch()
+    {   var d = $('#batchdetails').val();
+        $.ajax({
+            type:"POST",
+            url : "submitfile",
+            data :d,
+            processData:false,
+            success:function(ret_obj)
+            {
+                console.log(ret_obj);
+            }
+
+        });
+    }
     </script>
 </head>
 
 <body>
+    
     <div class="container">
         <header class="header">
             <img src="{{ url_for('static' , filename = 'images/logo.jpg')}}" alt="" class="header__collegelogo">
@@ -564,7 +584,7 @@
                 <div class="studentbatch">
                     <div class="studentbatch__add">
                         <div class="studentbatch__add__batch">
-                            <button class="attendance__details__addbtn" disabled>Add batch</button>
+                            <button class="attendance__details__addbtn" onclick="openbatchmodal()">Add batch</button>
                         </div>
             
                         <!-- Button trigger modal -->
@@ -573,7 +593,7 @@
                         </button>
             
                         <!-- Modal -->
-                        <div class="modal modal__dispnone">
+                        <div class="modal modal__dispnone" id = "studentmodal">
                            <div class="modal__body">
                             <div class="close-btn" ><i class="fa fa-times fa-2x" onclick="closemodal()"></i></div>
                             <div class="head">
@@ -586,6 +606,20 @@
                            </div>
                            
                         </div>
+
+                        <div class="modal modal__dispnone" id = "batchmodal">
+                            <div class="modal__body">
+                             <div class="close-btn" ><i class="fa fa-times fa-2x" onclick="closemodal()"></i></div>
+                            <div>
+                                <input type="file" id = "batchdetails">
+                            </div> 
+                            <div>
+                                <input type="file" id = "batchpics">
+                            </div> 
+                             <button type="button" class="btn btn-primary register__btn bluebtn" onclick="addbatch()">Submit</button>
+                            </div>
+                            
+                         </div>
                         <!-- <div class="modal" id="exampleModalLong" tabindex="-1" role="dialog"
                             aria-labelledby="exampleModalLongTitle" aria-hidden="true">
                             <div class="modal-dialog" role="document">

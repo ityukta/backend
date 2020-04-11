@@ -250,6 +250,14 @@ def approve__decline__view():
     response = dbop.approve__decline(data)
     return jsonify(response)
 
+@APP.route('/submitfile' , methods = ['POST'])
+def submit__file__view():
+    """This endpoint is add student batch """
+    data = request.files["files"]
+    # print(data)
+    response = dbop.submit__batch(data)
+    return jsonify(response)
+
 if __name__ == '__main__':
     APP.run(debug=True, threaded=True)
     APP.run()

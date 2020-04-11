@@ -237,6 +237,13 @@ def create_fresh_database():
             FOREIGN KEY(test_id) REFERENCES Tests(test_id) ON DELETE SET NULL
         )
     """
+    create_otp_table = """
+        CREATE TABLE IF NOT EXISTS OTP(
+            email_id TEXT PRIMARY KEY ,
+            otp TEXT ,
+            FOREIGN KEY(email_id) REFERENCES Faculty(email_id) ON DELETE CASCADE
+        )
+    """
     conn.execute(create_faculty_table)
     conn.execute(create_faculty_type__table)
     conn.execute(create_publications_table)
@@ -787,8 +794,9 @@ def get_year_sem_sec(data):
         class_id = class_id[0]
         get_subjects_query = """
             SELECT Fcs.subject_id, subject_name FROM Fcs, Subject WHERE Fcs.subject_id = Subject.subject_id AND class_id = ?
+            AND Fcs.faculty_id = ?
         """
-        subjects_data = c.execute(get_subjects_query, (class_id, )).fetchall()
+        subjects_data = c.execute(get_subjects_query, (class_id,data['faculty_id'] )).fetchall()
         print(subjects_data)
         for i in range(len(subjects_data)):
             subjects_data[i] = dict(
@@ -1405,3 +1413,10 @@ def approve__decline(data):
         "status_code": 200, "data": message
     }
     return response
+
+def submit__batch(data) :
+    print(data)
+    response = {"status_message": "Unauthorized access",
+                    "status_code": 404, "data": "Invalid Authkey provided"}
+    return response
+
