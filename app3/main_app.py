@@ -250,6 +250,13 @@ def approve__decline__view():
     response = dbop.approve__decline(data)
     return jsonify(response)
 
+@APP.route('/resetpassword' , methods = ['POST'])
+def reset__password__view():
+    """This endpoint is reset password """
+    data = request.get_json()
+    response = dbop.reset__password(data)
+    return jsonify(response)
+
 @APP.route('/submitfile' , methods = ['POST'])
 def submit__file__view():
     """This endpoint is add student batch """

@@ -1414,6 +1414,57 @@ def approve__decline(data):
     }
     return response
 
+def reset__password(data):
+    conn = sql.connect('database.db')
+    generate_otp_query = """
+     INSERT INTO OTP(email,otp) VALUES (?,?)
+    """
+    get_otp_query = """
+        SELECT otp FROM OTP WHERE email =?
+    """
+    delete_query = """
+        DELETE FROM OTP WHERE email = ?
+    """
+    update_query = """
+        UPDATE Faculty SET password = ? WHERE email_id = ?
+    """
+    c = conn.cursor()
+    params = data.keys()
+    print(params)
+    if 'email' in params and 'otp' not in params and 'pass' not in params:
+        otp = "".join(["{}".format(random.randint(0,9)) for i in range(0,6)])
+        print(otp)
+        c.execute(delete_query,(data['email'],))
+        conn.commit()
+        c.execute(generate_otp_query,(data['email'],otp))
+        conn.commit()
+        helper.sendotp(data['email'],otp)
+        response = {"status_message": "Sucess",
+                        "status_code": 200}
+    elif 'email' in params and 'otp' in params:
+        print('reset')
+        value = c.execute(get_otp_query,(data['email'],)).fetchone()
+        print(value)
+        if data['otp']==value[0] :
+            c.execute(delete_query,(data['email'],))
+            conn.commit()
+            response = {"status_message": "Authorization Suceess",
+                            "status_code":200,}
+        else:
+            response = {"status_message": "Unauthorized access",
+                            "status_code": 404, "data": "Invalid Authkey provided"}
+    elif 'pass' in params and 'email'  in params and 'otp' not in params :
+        print(data)
+        c.execute(update_query,(data['pass'],data['email']))
+        conn.commit()
+        print("updated")
+        response = {"status_message": "Authorization Suceess",
+                            "status_code":200,}
+    else:
+            response = {"status_message": "Unauthorized access",
+                            "status_code": 404, "data": "Invalid Authkey provided"}
+    return response
+
 def submit__batch(data) :
     print(data)
     response = {"status_message": "Unauthorized access",

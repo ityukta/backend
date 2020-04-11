@@ -159,3 +159,13 @@ def sendsms(number, hour):
     _ = urllib.request.urlopen(URL[:len(URL)-1])
     print(f"SMS sent to {number}")
 
+def sendotp(to,otp):
+    sender = ""
+    # sender = "ameyj@gmail.com"
+    subject = "OTP TO RESET PASSWORD"
+    msgHtml = f"your otp to reset password is {otp}"
+    msgPlain = f"your otp to reset password is {otp}"
+    SendMessage(sender, to, subject, msgHtml, msgPlain)
+    print(f"Mail Sent to {to}")
+    # Send message with attachment:
+    # SendMessage(sender, to, subject, msgHtml, msgPlain, '/path/to/file.pdf')

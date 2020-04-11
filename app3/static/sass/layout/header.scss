@@ -1,10 +1,7 @@
 .header
 {
-    font-family: sans-serif;
-    color:white;
-    background:linear-gradient(to right,$color-websiteblue,$color-websitebluedark) ;
+    //background:linear-gradient(to right,$color-bluelight,$color-bluedark) ;
     height: 8vh;
-    font-weight: 100;
     position: relative;
     display: flex;
     align-items: center;
@@ -81,21 +78,19 @@
             padding: 10px;
             transition: 0.3s;
             &:hover{
-                //background-color:$color-hover;
-                background-color:rgba(0, 86, 179,0.7);
+                background-color:$color-hover;
                 cursor: pointer;
             }
         }
         &__pic{                             //Is the parent container of the logout image
             margin-right: 5px;
             height: 40px;
-            width:40px;
             border-radius: 50%;
             display: flex;
             align-items: center;
         }
         &__img{
-            width: 100%;
+           
             height: 100%;
             border-radius: 50%;
         }
@@ -104,7 +99,6 @@
             display: none;
             padding: 5px;
             background-color: white;
-            color:black;
             position: absolute;
             top:100%;
             list-style: none;

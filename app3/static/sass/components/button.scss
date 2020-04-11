@@ -10,7 +10,7 @@
 }
 .nav-btn{
     border: none;
-    background-color: transparent;
+    background-color: white;
     &:hover{
         cursor: pointer;
     }
@@ -25,11 +25,6 @@
 .btn-shownone{
     display: none;
     
-}
-.headericon{
-    color: white;
-    z-index: 100;
-    opacity: 1;
 }
 .search-btn{
     background-color: rgb(29, 211, 29);
@@ -77,16 +72,6 @@
         height: 50%;
     }
 }*/
-#submit-student-search{
-    padding:0.6rem;
-    border-radius: 100px;
-    border: 1px solid rgb(207, 207, 207);
-    background:linear-gradient(to right,#00c5fb,#0253cc);
-    color:white;
-    &:hover{
-        cursor: pointer;
-    }
-}
 
 @media screen and (max-width:991px)
 {

@@ -1,73 +1,10 @@
 .attendance{
-    width: 100%;
-    &__modal{
-        &__form{
-            margin-top: 6px;
-        }
-    }
-    select{
-        
-        border:none;
-        text-transform: uppercase;
-        padding: .5rem 2.5rem .5rem 0.5rem;
-        border-radius: 100px;
-        background-color:#eee;
-        font-weight:600;
-    }
-    &__selectdept{
-        width: 70%;
-        display:flex;
-        flex-direction: column;
-        &__select{
-            width: 100%;
-        }
-     }
-    &__selectyear{
-       width: 70%;
-       display:flex;
-       flex-direction: column;
-       &__select{
-           width: 100%;
-       }
-    }
-    &__selectsection{
-        width: 70%;
-        display:flex;
-        flex-direction: column;
-        &__select{
-            width: 100%;
-        }
-     }
-  
-     &__selectsubject{
-        width: 70%;
-        display:flex;
-        flex-direction: column;
-        &__select{
-            width: 100%;
-        }
-     }
-    &__submit{
-        width: 70%;
-        border-radius: 100px;
-        text-transform: uppercase;
-        font-weight: 600;
-        letter-spacing: 2px;
 
-        
-    }
+    width: 100vw;
     &__year{
-        display:grid;
-        grid-template-columns:1fr 1fr 1fr;
-        grid-gap:20px;
+        display: flex;
+        justify-content: space-evenly;
         margin-bottom: 1rem;
-        justify-items:center;
-
-    & * >{
-        width:100%;
-    }
-
-       
 
         &__sem{
             border-radius: 5px;
@@ -94,21 +31,6 @@
     &__details{
         width: 90vw;
         position: relative;
-        &__addbtn{
-            padding: 0.8rem 3rem;
-            background-color: #55ce63;
-            border-radius: 100px;
-            border:none;
-            text-transform: uppercase;
-            color: #fff;
-            font-weight:500;
-            letter-spacing: 2px;
-            margin-bottom: 1rem;
-
-            &:focus{
-                outline:none;
-            }
-        }
     }
     &__table{
        position: absolute;
@@ -126,15 +48,6 @@
        }
       
     }
-}
-.student{
-    &__submit{
-        margin-top: 2rem;
-    }
-}
-#attendance__hour{
-    border: 1px solid rgb(207, 207, 207);
-    padding: 0.3rem;
 }
 td{
     padding: 5px;
