@@ -153,10 +153,6 @@
           justify-content: center;
 }
 
-.add__assessment__common {
-  width: 33%;
-}
-
 .add__assessment__test__flex1 {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -164,6 +160,7 @@
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
+  margin-bottom: 1rem;
 }
 
 .add__assessment__descriptive__grid {
@@ -173,7 +170,9 @@
       grid-template-columns: 1fr 1fr;
   grid-gap: 30px;
   width: 60%;
-  margin: 0 auto;
+  margin: 1rem auto 1rem auto;
+  border: 1px solid #cfcfcf;
+  padding: 2rem;
 }
 
 .add__assessment__descriptive__grid2 {
@@ -270,5 +269,57 @@
 
 .add__new__assessment__button:focus {
   outline: none;
+}
+
+input {
+  background-color: #eee;
+  border: 1px solid #cfcfcf;
+}
+
+@media screen and (max-width: 1200px) {
+  .add__assessment__descriptive__grid {
+    display: -ms-grid;
+    display: grid;
+    -ms-grid-columns: 1fr;
+        grid-template-columns: 1fr;
+  }
+}
+
+.add__assessment__display__none {
+  display: none;
+}
+
+.modal .modal__body {
+  width: 80%;
+  height: 80%;
+  overflow: scroll;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.max__marks {
+  color: lightgray;
+  text-align: left;
+}
+
+.changed__input__css__to__width__50 {
+  width: 43px !important;
+}
+
+.view__marks__table td, th {
+  border: 1px solid black;
+  width: 30px;
+}
+
+.view__student__marks__modal .marks-entry__td {
+  width: 100%;
+}
+
+.invalid__red__boX {
+  border: 3px solid red;
 }
 /*# sourceMappingURL=assessentry.css.map */

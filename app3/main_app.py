@@ -68,7 +68,12 @@ def all_teachers_view():
 @APP.route('/approval', methods = ['GET'])
 def approve_view():
     """This is the page to approve teachers """
-    return render_template('html/approval.html')   
+    return render_template('html/approval.html')  
+
+@APP.route('/allstudents', methods = ['GET'])
+def all_students_view():
+    """This is the page dispaly all student details """
+    return render_template('html/viewallstudents.html')  
 # Endpoints
 
 

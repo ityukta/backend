@@ -30,7 +30,7 @@
             var temp = `
             <ul class="nav__ul">
                     <li class="nav__li" onclick="window.location.href = 'home' "><i class="fa fal fa-home displaynone nav__icon"></i>&nbsp;&nbsp;Home</li>
-                    <li class="nav__li teacherli" onclick="showsublist($(this), 'show')"><i class="fa fal fa-user displaynone nav__icon"></i>&nbsp;&nbsp;Professor<span></span>
+                    <li class="nav__li teacherli" onclick="showsublist($(this), 'show')"><i class="fa fal fa-chalkboard-user displaynone nav__icon"></i>&nbsp;&nbsp;Professor<span></span>
                         <ul class="sub ">
                             <!--Add show on click of teacherli-->`;
             if(priority > 2){
@@ -43,7 +43,7 @@
             if(priority > 1){
                 temp += `
                 <li class="sub__li" onclick="window.location.href = 'assignteacher'"><i class="fa fal fa-edit displaynone nav__icon"></i>&nbsp;&nbsp;Add subjects</li>
-                `;
+                `; 
             }
             temp += `</ul>
                     </li>
@@ -74,7 +74,7 @@
                 <div class="add__assessment__test__flex1">
                     <div class="add__assessment__input__group test__type__input__group add__assessment__common">
                         <label for="test_type_1">Choose Type</label>
-                        <select name="test_type_1" id="`+randstr('test_type_')+`" class="test__type add__assessment__select" onchange="changedtype(this.id)">
+                        <select name="test_type_1" id="`+randstr('test_type_')+`" class="test__type add__assessment__select " onchange="changedtype(this.id)">
                             <option value="Select">Select an option</option>
                             <option value="Internal Assessment">Internal Test</option>
                             <option value="Quiz">Quiz</option>
@@ -782,40 +782,7 @@
         }
     </script>
     <style>
-        .add__assessment__test__set div{ 
-            margin-top: 5px;
-            margin-bottom: 5px; 
-        }
-        .add__assessment__display__none{
-            display: none;
-        }
-        .modal .modal__body{
-            width: 80%;
-            height: 80%;
-            overflow: scroll;
-        }
-        input[type=number]::-webkit-inner-spin-button, 
-        input[type=number]::-webkit-outer-spin-button { 
-            -webkit-appearance: none; 
-            margin: 0; 
-        }
-        .max__marks{
-            color: lightgray;
-            text-align: left;
-        }
-        .changed__input__css__to__width__50{
-            width: 43px !important;
-        }
-        .view__marks__table td,th{
-            border: 1px solid black;
-            width: 30px;
-        }
-        .view__student__marks__modal .marks-entry__td{
-            width: 100%;
-        }
-        .invalid__red__boX{
-            border: 3px solid red;
-        }
+      
     </style>
     <script>
         function questionmarksinput(param){
