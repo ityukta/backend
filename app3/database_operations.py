@@ -1456,7 +1456,6 @@ def approve__decline(data):
     }
     return response
 
-<<<<<<< HEAD
 
 def get_class_marks(data):
     conn = sql.connect('database.db')
@@ -1551,7 +1550,6 @@ def get_class_marks(data):
     response = {"status_code": 200,
                 "status_message": "successful", "data": final_data}
     return response
-=======
 def reset__password(data):
     conn = sql.connect('database.db')
     generate_otp_query = """
@@ -1609,4 +1607,3 @@ def submit__batch(data) :
                     "status_code": 404, "data": "Invalid Authkey provided"}
     return response
 
->>>>>>> a2cb2ebf89c9fc67ffe81ac65dee2700ffec16c7

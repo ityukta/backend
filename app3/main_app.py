@@ -255,14 +255,12 @@ def approve__decline__view():
     response = dbop.approve__decline(data)
     return jsonify(response)
 
-<<<<<<< HEAD
 @APP.route('/get_class_marks', methods=['POST'])
 def get_class_marks_ajax():
     """This endpoint is used to get marks classwise"""
     data = request.get_json()
     response = dbop.get_class_marks(data)
     return response
-=======
 @APP.route('/resetpassword' , methods = ['POST'])
 def reset__password__view():
     """This endpoint is reset password """
@@ -278,7 +276,6 @@ def submit__file__view():
     response = dbop.submit__batch(data)
     return jsonify(response)
 
->>>>>>> a2cb2ebf89c9fc67ffe81ac65dee2700ffec16c7
 if __name__ == '__main__':
     APP.run(debug=True, threaded=True)
     APP.run()
