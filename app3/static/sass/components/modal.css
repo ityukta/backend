@@ -4,8 +4,6 @@
   position: fixed;
   height: 100vh;
   width: 100vw;
-  z-index: 100;
-  font-family: sans-serif;
   background-color: rgba(77, 77, 77, 0.3);
 }
 
@@ -21,18 +19,12 @@
           transform: translate(-50%, -50%);
   background-color: white;
   padding: 2rem;
+  width: 60rem;
+  height: 30rem;
   -webkit-animation-name: modalpop;
           animation-name: modalpop;
   -webkit-animation-duration: 0.8s;
           animation-duration: 0.8s;
-}
-
-.modal__heading {
-  text-align: center;
-  font-weight: 400;
-  text-transform: uppercase;
-  font-size: 1.6rem;
-  padding: 1rem;
 }
 
 .addsubject {
@@ -97,33 +89,5 @@
   border: none;
   margin-top: 10px;
   border-radius: 10px;
-}
-
-.modal__content {
-  padding: 2rem;
-  width: 20rem;
-}
-
-#modal-department {
-  margin-bottom: 1rem;
-}
-
-#class-teacher {
-  margin-left: 3rem;
-}
-
-#submit-c_teacher {
-  margin-top: 1rem;
-  padding: 0.3rem;
-  width: 100%;
-  background: -webkit-gradient(linear, left top, right top, from(#00c5fb), to(#0253cc));
-  background: linear-gradient(to right, #00c5fb, #0253cc);
-  color: white;
-  border-radius: 5px;
-  border: none;
-}
-
-#submit-c_teacher:hover {
-  cursor: pointer;
 }
 /*# sourceMappingURL=modal.css.map */

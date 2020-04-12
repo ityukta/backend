@@ -1,23 +1,20 @@
 .navbar{
-    font-family: sans-serif;
+    
     width: 0;
-    flex:0% 0 0;
-    //height: max-content;
-    height: 120vh;
-  //  background:linear-gradient(top right,rgb(127, 172, 231),rgb(74, 86, 245));
-    background-color:#34444c;
+    height: max-content;
+    //background-color: orange;
     transition: 0.2s;
-    border-right: 1px solid rgb(207, 207, 207);
+    border-right: 1px solid $color-border;
 }
 .show-navbar{
-    flex:14% 0 0;
-    transition: 0.5s ease-in-out;
-    //width: 230px;
+    width: 230px;
+    
 }
- 
+
+
+
 .navbar ul{
     padding: 1rem;
-    color:#b7c0cd;
 }
 .navbar ul .nav__li{
     padding: 1rem;
@@ -35,7 +32,6 @@
         list-style: none;
         padding: 1rem 0;
         border-radius: 2px;
-        
     }
 }
 .navbar a{
@@ -48,8 +44,7 @@
         transition: 0.2s;
     }
     &__li:hover{
-        color:#fff;
-        // background-color: rgb(209, 230, 248);
+        background-color: rgb(209, 230, 248);
         /*& a{
             color: white;
         }*/

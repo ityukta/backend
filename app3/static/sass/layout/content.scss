@@ -1,9 +1,5 @@
 .content{
     flex-grow: 1;
-    font-family: sans-serif;
-    //background:linear-gradient(to right,white,$color-register);
-    background-color: #f7f7f7; 
-    & * >{
-        background-color: #fff;
-    }
+    background:linear-gradient(to right,white,$color-register);
+   // height: max-content;
 }

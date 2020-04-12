@@ -73,6 +73,40 @@
     </script>
     <script>
         function openmodal(branch, year, sem, sec) {
+            var modal = `<div class="modal__body">
+                <h1 class="modal__heading">Add subject teacher</h1>
+                <div class="close-btn" onclick="closemodal()"><i class="fa fa-times fa-2x"></i></div>
+                <div class="addsubject">
+                    <input type="hidden" id="branch">
+                    <input type="hidden" id="year">
+                    <input type="hidden" id="sec">
+                    <input type="hidden" id="sem">
+                    <div class="addsubject__subjectname">
+                        <label for="subjectname">Subjectname:</label>
+                        <input type="text" id="subjectname" placeholder="Subjectname"
+                            class="addsubject__subjectname__input">
+                    </div>
+                    <div class="addsubject__subjectcode">
+                        <label for="subjectcode">Subjectcode:</label>
+                        <input type="text" id="subjectcode" placeholder="Subjectcode"
+                            class="addsubject__subjectcode__input">
+                    </div>
+                    <div class="addsubject__subjectteacher"> 
+                        <label for="subjectteacher">Subjectteacher:</label>
+                        <select id="subjectteacher" class="addsubject__subjectteacher__input">
+                            <option value="" selected hidden>Select teacher</option>
+                        </select>
+
+                    </div>
+                    <div class="addsubject__subjectcode">
+                        <label for="Credits">Credits:</label>
+                        <input type="text" id="credits" placeholder="credits" class="addsubject__subjectcode__input">
+                    </div>
+                    <button class="submitsubject bluebtn" onclick="save_subject()">Submit</button>
+                </div>
+
+            </div>`
+            $('.modal').html(modal);
             $('.modal').toggleClass('modal__dispnone');
             $('.modal #branch').val(branch);
             $('.modal #year').val(year);
@@ -318,20 +352,61 @@
                 'year': $('#year').val(),
                 'dept': $('#branch').val()
             }
-            console.log(data);
-            $.ajax({
-                type: "POST",
-                url: "addsubject",
-                dataType: 'Json',
-                contentType: 'application/json',
-                data: JSON.stringify(data),
-                processData: false,
-                success: function (ret_obj) {
-                    console.log(ret_obj);
-                    $('.modal').addClass('modal__dispnone');
-                    // location.reload();
+            // console.log(data);
+            flag = 0 ;
+            for (var i of Object.keys(data))
+            {
+                if(data[i]=="")
+                {
+                    alert(i + " Required");
+                    flag = 1;
+                    break;
                 }
-            });
+            }
+            
+            if ( flag==0)
+            {
+                if (data['subjectteacher']=="Select Teacher")
+                {
+                    alert(data['subjectteacher']+" Required")
+                    flag = 1;
+                }
+            }
+            
+
+// <<<<<<< HEAD
+            // $.ajax({
+            //     type: "POST",
+            //     url: "addsubject",
+            //     dataType: 'Json',
+            //     contentType: 'application/json',
+            //     data: JSON.stringify(data),
+            //     processData: false,
+            //     success: function (ret_obj) {
+            //         console.log(ret_obj);
+            //         $('.modal').toggleClass('modal_dispnone');
+            //         // location.reload();
+            //     }
+            // });
+// =======
+            if(flag ==0)
+            {
+              
+                $.ajax({
+                    type: "POST",
+                    url: "addsubject",
+                    dataType: 'Json',
+                    contentType: 'application/json',
+                    data: JSON.stringify(data),
+                    processData: false,
+                    success: function (ret_obj) {
+                        console.log(ret_obj);
+                        $('.modal').addClass('modal__dispnone');
+                        submitassignteacher();
+                    }
+                });
+            }
+// >>>>>>> 3b31b7ff17ab49ed1b12b9bae9eafb003f73a346
         }
     </script>
 
@@ -340,39 +415,7 @@
 <body>
     <div class="modal modal__dispnone">
         <!--modal__dispnone is a class to hide the modal from the page-->
-        <div class="modal__body">
-            <h1 class="modal__heading">Add subject teacher</h1>
-            <div class="close-btn" onclick="closemodal()"><i class="fa fa-times fa-2x"></i></div>
-            <div class="addsubject">
-                <input type="hidden" id="branch">
-                <input type="hidden" id="year">
-                <input type="hidden" id="sec">
-                <input type="hidden" id="sem">
-                <div class="addsubject__subjectname">
-                    <label for="subjectname">Subjectname:</label>
-                    <input type="text" id="subjectname" placeholder="Subjectname"
-                        class="addsubject__subjectname__input">
-                </div>
-                <div class="addsubject__subjectcode">
-                    <label for="subjectcode">Subjectcode:</label>
-                    <input type="text" id="subjectcode" placeholder="Subjectcode"
-                        class="addsubject__subjectcode__input">
-                </div>
-                <div class="addsubject__subjectteacher"> 
-                    <label for="subjectteacher">Subjectteacher:</label>
-                    <select id="subjectteacher" class="addsubject__subjectteacher__input">
-                        <option value="" selected hidden>Select teacher</option>
-                    </select>
-
-                </div>
-                <div class="addsubject__subjectcode">
-                    <label for="Credits">Credits:</label>
-                    <input type="text" id="credits" placeholder="credits" class="addsubject__subjectcode__input">
-                </div>
-                <button class="submitsubject bluebtn" onclick="save_subject()">Submit</button>
-            </div>
-
-        </div>
+        
     </div>
 
     <!-- end of modal defination  -->
