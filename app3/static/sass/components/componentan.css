@@ -1,12 +1,7 @@
 .element {
-  -webkit-box-flex: 0;
-      -ms-flex: 0 0 20%;
-          flex: 0 0 20%;
   font-weight: 600;
-  padding: .5rem;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  width: 90%;
+  padding: .7rem .5rem;
   border-radius: 100px;
   border: none;
   background-color: #eee;
@@ -44,7 +39,9 @@
 }
 
 .element__search {
-  background-color: lightgreen;
+  background: -webkit-gradient(linear, left top, right top, from(#00c5fb), to(#0253cc));
+  background: linear-gradient(to right, #00c5fb, #0253cc);
+  color: #fff;
 }
 
 .element__search:focus {
@@ -52,8 +49,7 @@
 }
 
 .element__search:hover {
-  -webkit-transform: translateY(-0.5rem);
-          transform: translateY(-0.5rem);
+  cursor: pointer;
 }
 
 .row {

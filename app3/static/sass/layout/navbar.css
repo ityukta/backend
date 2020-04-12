@@ -1,27 +1,44 @@
 .navbar {
+  font-family: sans-serif;
   width: 0;
-  height: -webkit-max-content;
-  height: -moz-max-content;
-  height: max-content;
+  -webkit-box-flex: 0%;
+      -ms-flex: 0% 0 0px;
+          flex: 0% 0 0;
+  height: 120vh;
+  background-color: #34444c;
   -webkit-transition: 0.2s;
   transition: 0.2s;
+  border-right: 1px solid #cfcfcf;
 }
 
 .show-navbar {
-  width: 230px;
+  -webkit-box-flex: 14%;
+      -ms-flex: 14% 0 0px;
+          flex: 14% 0 0;
+  -webkit-transition: 0.5s ease-in-out;
+  transition: 0.5s ease-in-out;
 }
 
 .navbar ul {
   padding: 1rem;
+  color: #b7c0cd;
 }
 
-.navbar ul li {
+.navbar ul .nav__li {
   padding: 1rem;
   list-style: none;
+  /*border-bottom: 1px solid $color-border;
+    border-top: 1px solid $color-border;*/
 }
 
-.navbar ul li:hover {
+.navbar ul .nav__li:hover {
   cursor: pointer;
+}
+
+.sub__li {
+  list-style: none;
+  padding: 1rem 0;
+  border-radius: 2px;
 }
 
 .navbar a {
@@ -34,12 +51,15 @@
 }
 
 .sub__li {
-  -webkit-transition: 0.3s;
-  transition: 0.3s;
+  -webkit-transition: 0.2s;
+  transition: 0.2s;
 }
 
 .sub__li:hover {
-  background-color: #91e9f8;
+  color: #fff;
+  /*& a{
+            color: white;
+        }*/
 }
 
 .show {

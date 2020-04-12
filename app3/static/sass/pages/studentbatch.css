@@ -6,8 +6,14 @@
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -ms-flex-pack: distribute;
-      justify-content: space-around;
+  -webkit-box-pack: space-evenly;
+      -ms-flex-pack: space-evenly;
+          justify-content: space-evenly;
+  margin-top: 1rem;
+}
+
+.studentbatch__add__subject {
+  margin: 1rem 0;
 }
 
 .studentbatch__add__batch__btn {
@@ -28,7 +34,7 @@
 .studentbatch__add__form .inputcommon {
   border-radius: 10px;
   border: 1px solid #cfcfcf;
-  padding: 0.4rem;
+  padding: 1rem;
 }
 
 .studentbatch__details {
