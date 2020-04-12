@@ -68,12 +68,21 @@ def all_teachers_view():
 @APP.route('/approval', methods = ['GET'])
 def approve_view():
     """This is the page to approve teachers """
+<<<<<<< HEAD
     return render_template('html/approval.html')  
 
 @APP.route('/allstudents', methods = ['GET'])
 def all_students_view():
     """This is the page dispaly all student details """
     return render_template('html/viewallstudents.html')  
+=======
+    return render_template('html/approval.html')   
+
+@APP.route('/viewmarks', methods=['GET'])
+def view_marks_view():
+    """This is the page to view marks and send SMS"""
+    return render_template('html/viewmarks.html')
+>>>>>>> ae2e8426611df404f5611a31a7634d190eff56ec
 # Endpoints
 
 
@@ -253,6 +262,27 @@ def approve__decline__view():
     """This endpoint is approve or decline a faculty """
     data = request.get_json()
     response = dbop.approve__decline(data)
+    return jsonify(response)
+
+@APP.route('/get_class_marks', methods=['POST'])
+def get_class_marks_ajax():
+    """This endpoint is used to get marks classwise"""
+    data = request.get_json()
+    response = dbop.get_class_marks(data)
+    return response
+@APP.route('/resetpassword' , methods = ['POST'])
+def reset__password__view():
+    """This endpoint is reset password """
+    data = request.get_json()
+    response = dbop.reset__password(data)
+    return jsonify(response)
+
+@APP.route('/submitfile' , methods = ['POST'])
+def submit__file__view():
+    """This endpoint is add student batch """
+    data = request.files["files"]
+    # print(data)
+    response = dbop.submit__batch(data)
     return jsonify(response)
 
 if __name__ == '__main__':

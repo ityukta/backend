@@ -5,17 +5,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>loginpage</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename = 'css/login.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'sass/main.css') }}" type="text/css">
+    <!-- <link rel="stylesheet" href="{{ url_for('static', filename = 'css/login.css') }}" type="text/css"> -->
     <link href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700,900" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css"
+        integrity="sha256-+N4/V/SbAFiW1MPBCXnfnP9QSN3+Keu+NlB+0ev/YKQ=" crossorigin="anonymous" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script>
         function submit_login() {
-            var emailid = $('#email').val();
-            var password = $('#password').val();
+            var emailid = $('.email').val();
+            var password = $('.password').val();
             var data = {
                 "emailid" : emailid,
                 "password" : password
             };
+            console.log(data);
             $.ajax({
                 type: "POST",
                 url: "/login",
@@ -42,32 +46,191 @@
                 }
             })
         }
+       
+        function openmodal()
+        {
+            var modal =`<div class="modal__body login__modal">
+                <div class="close-btn"><i class="fa fa-times fa-2x" onclick="closemodal()"></i></div>
+                <div class="resetpassword">
+                    <div class="resetpassword__form">
+                        <div class="resetpassword__email">
+                            <label for="email">Enter your Email ID</label>
+                            <input type="email" placeholder="Email" class="resetpassword__email__input">
+                        </div>
+                        <div class="resetpassword__otp">
+                            <label for="otp">Enter OTP</label>
+                            <input type="number" class="resetpassword__otp__input">
+                        </div>
+                        <div class="resetpassword__otplink">
+                            <a href="#" onclick="sendotp()">Send OTP</a>
+                        </div>
+                        <div class="message">
+                            
+                        </div>
+                        <button class="resetpassword__submit" onclick="check_otp()">Submit</button>
+                    </div>
+                </div>
+            </div>`;
+            $('.modal').html(modal);
+            $('.modal').removeClass('modal__dispnone');
+        }
+        function closemodal()
+        {
+            $('.modal').addClass('modal__dispnone');     
+      }
+      function sendotp()
+      {   
+         if($('.resetpassword__email__input').val()==''){
+                alert('emaill-id required');
+         } 
+         else{
+                $('.resetpassword__otplink').toggleClass('modal__dispnone');
+                var link = `<p>otp has been sent to `+$('.resetpassword__email__input').val()+`</p>`;
+                $('.message').html(link);
+                var d = {
+                    'email': $('.resetpassword__email__input').val()
+                };
+                
+                    $.ajax(
+                    {
+                        type: "POST",
+                        url: "/resetpassword",
+                        dataType: 'Json',
+                        contentType: 'application/json',
+                        data : JSON.stringify(d),
+                        processData: false,
+                        success: function(ret_obj){
+                            console.log(ret_obj);
+                        }
+
+                    }
+                );
+            }
+      }
+      function check_otp()
+      {
+        if($('.resetpassword__email__input').val()==''){
+                alert('email-id required');
+         } 
+        else if($('.resetpassword__otp__input').val()==''){
+            alert('otyp required');
+        }
+         else{
+            localStorage.setItem('email',$('.resetpassword__email__input').val())
+                var d = {
+                    'email': $('.resetpassword__email__input').val(),
+                    'otp':$('.resetpassword__otp__input').val()
+                };
+                    $.ajax(
+                    {
+                        type: "POST",
+                        url: "/resetpassword",
+                        dataType: 'Json',
+                        contentType: 'application/json',
+                        data : JSON.stringify(d),
+                        processData: false,
+                        success: function(ret_obj){
+                            console.log(ret_obj['status_code']);
+                            if(ret_obj['status_code']=='200')
+                            {
+                                var modal =`<div class="modal__body login__modal">
+                                    <div class="close-btn"><i class="fa fa-times fa-2x" onclick="closemodal()"></i></div>
+                                    <div class="resetpassword">
+                                        <div class="new_password">
+                                            <div class="resetpassword__email">
+                                                <label for="email">New Password</label>
+                                                <input type="text" placeholder="New Password" id = "new" class="new_password">
+                                            </div>
+                                            <div class="resetpassword__otp">
+                                                <label for="otp">Confirm Password</label>
+                                                <input type="text" class="confirm_password" id ="con">
+                                            </div>
+                                            <button class="resetpassword__submit" onclick="reset_password()">Submit</button>
+                                        </div>
+                                    </div>
+                                </div>`;
+                                $('.modal').html(modal);
+                                
+                            }
+                        }
+
+                    }
+                );
+            }
+      }
+      function reset_password()
+      {
+          var pass = $('#new').val();
+          var confirm = $('#con').val();
+          console.log(pass);
+          console.log(confirm);
+          if(pass == "" || confirm =="")
+          {
+              alert("all fields required");
+          }
+          else if ( pass !=confirm)
+          {
+              alert("password dont match");
+          }
+          else{
+              d = {
+                  'email':localStorage.getItem('email'),
+                  'pass':pass,
+              }
+              $.ajax(
+                    {
+                        type: "POST",
+                        url: "/resetpassword",
+                        dataType: 'Json',
+                        contentType: 'application/json',
+                        data : JSON.stringify(d),
+                        processData: false,
+                        success: function(ret_obj){
+                            console.log(ret_obj);
+                            if(ret_obj['status_code']=='200')
+                            {
+                                localStorage.removeItem('email');
+                                window.location.href = '/';
+                            }
+                        }
+
+                    }
+                );
+          }
+      }
     </script>
 
 </head>
 
 <body>
  
-    <div class="container">
-        <div class="container__logo">
-            <img src="{{ url_for('static' , filename ='images/logo.jpg') }}" alt="logo" class="logo" />
+    <div class="maincontainer">
+        <div class="containers">
+            <div class="containers__logo">
+             <img src="{{ url_for('static' , filename = 'images/logo.jpg')}}" alt="logo" class="logo" />
+            </div>
+                <div class="containers__login">
+                 Login
+                </div>
+                <forms class="containers__info">
+                 <span class="email__text">Email Address</span><br />
+                    <input type="email" name="email"  class="email"><br />
+                 <span class="password__text"> Password</span> 
+                 <a href="#" class="forgotpassword" onclick="openmodal()">forgot password?</a><br />
+                    <input type="password" name="password"  class="password"/><br />
+                 <div class="containers__button">
+                    <input type="submit" value="Login" class="button" onclick="submit_login()">
+                 </div>
+                </forms>
+                <div class="containers__register">
+                    <span>Dont have an account?</span>
+                    <a href="register" class="containers__register__link">Register</a>
+                    <!--<span class="register__text">Dont have an account yet?</span><a href="#" class="register">Register</a>-->
+                </div>            
         </div>
 
-        <div class="container__login">
-            Login
-        </div>
-        <forms class="container__info">
-            <span class="email__text">Email Address</span><br />
-            <input type="email" name="email" class="email" id="email"><br />
-            <span class="password__text"> Password</span> <a href="forgotpassword.html" class="forgotpassword">forgot
-                password?</a><br />
-            <input type="password" name="password" class="password" id="password" /><br />
-            <div class="container__button">
-                <button type="button" value="" class="button" onclick="submit_login()">Login</button>
-            </div>
-        </forms>
-        <div class="container__register">
-            Dont have an account yet?<a href="register" class="register">Register</a>
+        <div class="modal modal__dispnone">    <!--modal__dispnone is a class to hide the modal from the page-->
+            
         </div>
 
     </div>
