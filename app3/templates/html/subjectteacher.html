@@ -319,21 +319,6 @@
                 'dept': $('#branch').val()
             }
             console.log(data);
-<<<<<<< HEAD
-            // $.ajax({
-            //     type: "POST",
-            //     url: "addsubject",
-            //     dataType: 'Json',
-            //     contentType: 'application/json',
-            //     data: JSON.stringify(data),
-            //     processData: false,
-            //     success: function (ret_obj) {
-            //         console.log(ret_obj);
-            //         $('.modal').toggleClass('modal_dispnone');
-            //         // location.reload();
-            //     }
-            // });
-=======
             $.ajax({
                 type: "POST",
                 url: "addsubject",
@@ -347,7 +332,6 @@
                     // location.reload();
                 }
             });
->>>>>>> 3b31b7ff17ab49ed1b12b9bae9eafb003f73a346
         }
     </script>
 
@@ -394,10 +378,10 @@
     <!-- end of modal defination  -->
     <div class="container">
         <header class="header">
-            <img src="{{ url_for('static' , filename = 'images/logo.jpg')}}" alt="" class="header__collegelogo">
+            <img src="{{ url_for('static' , filename = 'images/logo.png')}}" alt="" class="header__collegelogo">
             <div class="header__content1">
                 <button class="nav-btn" onclick="opennavbar()"><i class="fa fa-bars fa-2x headericon"></i></button>
-                <h3 class="header__heading">Student login</h3>
+                <h3 class="header__heading">Add Subject</h3>
             </div>
             <div class="header__content2">
                 <!-- <form action="" class="header__form search-show">
