@@ -74,17 +74,12 @@ def approve_view():
 def all_students_view():
     """This is the page dispaly all student details """
     return render_template('html/viewallstudents.html')  
-<<<<<<< HEAD
-
-    
 
 @APP.route('/viewmarks', methods=['GET'])
 def view_marks_view():
     """This is the page to view marks and send SMS"""
     return render_template('html/viewmarks.html')
 
-=======
->>>>>>> f65be0968e87be878c8a430a57f02497026d5b13
 # Endpoints
 
 
