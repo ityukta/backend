@@ -13,6 +13,7 @@
     <script>
         function opennavbar(){
             $('.navbar').toggleClass('show-navbar');
+            $('nav__icon').toggleClass('displatnone');
         }
         function showsublist(param , value){
             $('ul', param).toggleClass(value);
@@ -23,37 +24,36 @@
         }
         function loadnavbar(){
             priority = localStorage.getItem('faculty_type');
-            console.log(priority);
             var temp = `
             <ul class="nav__ul">
-                    <li class="nav__li" onclick="window.location.href = 'home' ">Home</li>
-                    <li class="nav__li teacherli" onclick="showsublist($(this), 'show')">Professor<span></span>
+                    <li class="nav__li" onclick="window.location.href = 'home' "><i class="fa fal fa-home displaynone nav__icon"></i>&nbsp;&nbsp;Home</li>
+                    <li class="nav__li teacherli" onclick="showsublist($(this), 'show')"><i class="fa fal fa-chalkboard-user displaynone nav__icon"></i>&nbsp;&nbsp;Professor<span></span>
                         <ul class="sub ">
                             <!--Add show on click of teacherli-->`;
             if(priority > 2){
                 temp += `
-                    <li class="sub__li" onclick="window.location.href = 'teachers'">View All Teachers</li>
-                    <li class="sub__li" onclick="window.location.href = 'approval'">Approve Register Request</li>
-                    <li class="sub__li" onclick="window.location.href = 'assignclass'">Assign Class teachers</li>
+                    <li class="sub__li" onclick="window.location.href = 'teachers'"><i class="fa fal fa-users displaynone nav__icon"></i>&nbsp;&nbsp;View All Teachers</li>
+                    <li class="sub__li" onclick="window.location.href = 'approval'"><i class="fa fal fa-thumbs-up displaynone nav__icon"></i>&nbsp;&nbsp;Approve Register Request</li>
+                    <li class="sub__li" onclick="window.location.href = 'assignclass'"><i class="fa fal fa-hand-point-right displaynone nav__icon"></i>&nbsp;&nbsp;Assign Class teachers</li>
                 `;
             }
             if(priority > 1){
                 temp += `
-                <li class="sub__li" onclick="window.location.href = 'assignteacher'">Add subjects</li>
-                `;
+                <li class="sub__li" onclick="window.location.href = 'assignteacher'"><i class="fa fal fa-edit displaynone nav__icon"></i>&nbsp;&nbsp;Add subjects</li>
+                `; 
             }
             temp += `</ul>
                     </li>
-                    <li class="nav__li studentli" onclick="showsublist($(this), 'show')"><div class="student">Students</div>
+                    <li class="nav__li studentli" onclick="showsublist($(this), 'show')"><div class="student"><i class="fa fal fa-user-graduate displaynone nav__icon"></i>&nbsp;&nbsp;Students</div>
                         <ul class="sub studentlist">`;
             if(priority > 1){
                 temp += `
-                    <li class="sub__li" onclick=" window.location.href = 'addstudent'"> Add students</li>
+                    <li class="sub__li" onclick=" window.location.href = 'addstudent'"><i class="fa fal fa-graduation-cap displaynone nav__icon"></i>&nbsp;&nbsp;Add students</li>
                 `;
             }
             temp += `
-                            <li class="sub__li" onclick=" window.location.href = 'addattendance'">Manage attendace</li>
-                            <li class="sub__li" onclick=" window.location.href = 'iamarks'"> Manage IA marks</li>
+                            <li class="sub__li" onclick=" window.location.href = 'addattendance'"><i class="fa fal fa-clock displaynone nav__icon"></i>&nbsp;&nbsp;Manage attendace</li>
+                            <li class="sub__li" onclick=" window.location.href = 'iamarks'"><i class="fa fal fa-book-open displaynone nav__icon"></i>&nbsp;&nbsp;Manage IA marks</li>
                         </ul>
                     </li>
                 </ul>

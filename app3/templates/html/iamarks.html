@@ -5,17 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename = 'sass/main.css') }}" type="text/css">
     <title>IA Marks</title>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css"
-      integrity="sha256-+N4/V/SbAFiW1MPBCXnfnP9QSN3+Keu+NlB+0ev/YKQ="
-      crossorigin="anonymous"
-    />
+    <link href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700,900" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css"
+        integrity="sha256-+N4/V/SbAFiW1MPBCXnfnP9QSN3+Keu+NlB+0ev/YKQ=" crossorigin="anonymous" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     
     <script>
         function opennavbar(){
             $('.navbar').toggleClass('show-navbar');
+            $('.nav__icon').toggleClass('displaynone');
         }
         function showsublist(param , value){
             $('ul', param).toggleClass(value);
@@ -26,7 +24,6 @@
         }
         function loadnavbar(){
             priority = localStorage.getItem('faculty_type');
-            console.log(priority);
             var temp = `
             <ul class="nav__ul">
                     <li class="nav__li" onclick="window.location.href = 'home' "><i class="fa fal fa-home displaynone nav__icon"></i>&nbsp;&nbsp;Home</li>

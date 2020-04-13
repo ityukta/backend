@@ -68,21 +68,20 @@ def all_teachers_view():
 @APP.route('/approval', methods = ['GET'])
 def approve_view():
     """This is the page to approve teachers """
-<<<<<<< HEAD
     return render_template('html/approval.html')  
 
 @APP.route('/allstudents', methods = ['GET'])
 def all_students_view():
     """This is the page dispaly all student details """
     return render_template('html/viewallstudents.html')  
-=======
-    return render_template('html/approval.html')   
+
+    
 
 @APP.route('/viewmarks', methods=['GET'])
 def view_marks_view():
     """This is the page to view marks and send SMS"""
     return render_template('html/viewmarks.html')
->>>>>>> ae2e8426611df404f5611a31a7634d190eff56ec
+
 # Endpoints
 
 

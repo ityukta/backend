@@ -65,7 +65,7 @@ def SendMessageInternal(service, user_id, message):
 def CreateMessageHtml(sender, to, subject, msgHtml, msgPlain):
     msg = MIMEMultipart('alternative')
     msg['Subject'] = subject
-    msg['From'] = sender
+    msg['From'] = "adithya"
     msg['To'] = to
     msg.attach(MIMEText(msgPlain, 'plain'))
     msg.attach(MIMEText(msgHtml, 'html'))
@@ -133,7 +133,7 @@ def createMessageWithAttachment(
 
 def main(to, hour):
     
-    sender = "ameyj@gmail.com"
+    sender = "RNS IT"
     subject = "Your ward was Absent"
     msgHtml = f"Your ward was absent for Hour:{hour}.<br>Please ask him/her to be regular"
     msgPlain = f"Your ward was absent for Hour:{hour}.\nPlease ask him/her to be regular"
