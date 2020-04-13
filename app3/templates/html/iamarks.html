@@ -484,7 +484,7 @@
         function openaddmarks(fcss_id, test_id){
             question_paper_pattern = qp_data[fcss_id][test_id];
             console.log(question_paper_pattern);
-            temp = `<div class="modal__body">
+            temp = `<div class="modal__body ">
                     <div class="close-btn" onclick="closeaddmarks()"><i class="fa fa-times fa-2x"></i></div>
                     <div class="marks-entry"><div class="head">`+qp_data[fcss_id]["name_"+test_id]+`
                     </div>`;
@@ -1361,7 +1361,7 @@
             </div> -->
         </section>
         <div class="modal add__assessment__add__assessment modal__dispnone">    <!--modal__dispnone is a class to hide the modal from the page-->
-            <div class="modal__body">
+            <div class="modal__body modal__ia">
                <div class="close-btn" onclick="closemodal()"><i class="fa fa-times fa-2x"></i></div>
                <div class="marks-entry">
                <div class="head">

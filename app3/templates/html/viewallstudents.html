@@ -15,6 +15,10 @@
             width: 80%;
             overflow: scroll;
         }
+
+        .margin-bottom{
+            margin-bottom:2rem;
+        }
     </style>
     <script>
         function opennavbar(){
@@ -107,9 +111,7 @@
                                 <div class="allteachers__dots">
                                     <i class="fa fa-ellipsis-v fa-1x"></i>
                                 </div>
-                                <div class="allteachers__pic">
-                                    <img src="data:image/jpg;base64, `+ ret_obj['data'][i][3] + `"  class="personal__overview__img" >
-                                </div>
+                               
                                 <div class="allteachers__name">
                                     <p>`+ret_obj['data'][i][1]+`</p>
                                     <p> Department : `+ret_obj['data'][i][2]+`</p>
@@ -135,92 +137,92 @@
                 'faculty_id': faculty_id,
                 'f_id':f_id
             };
-            $.ajax({
-                type: "POST",
-                url: "get_complete_faculty_details",
-                dataType: 'Json',
-                contentType: 'application/json',
-                data: JSON.stringify(data),
-                processData: false,
-                success: function (ret_obj){
-                    console.log(ret_obj);
-                    $('.personal__overview__name').text(ret_obj['data']['name']);
-                    $('.personal__overview__department').text(ret_obj['data']['dept']);
-                    $('.personal__overview__designation').text(ret_obj['data']['designation']);
-                    $('.personal__overview__id').text(faculty_id);
-                    $('.personal__overview__gender').text(ret_obj['data']['gender']);
-                    $('.personal__overview__dateofjoin').text(ret_obj['data']['date_of_joining']);
-                    $('.personal__overview__phonespan').text(ret_obj['data']['phone']);
-                    $('.personal__overview__emailspan').text(ret_obj['data']['email']);
-                    $('.personal__overview__dobspan').text(ret_obj['data']['dob']);
-                    $('.personal__overview__maritalspan').text(ret_obj['data']['marital_status']);
-                    $('.personal__overview__addressspan').text(ret_obj['data']['address']);
-                    $('.personal__overview__associationspan').text(ret_obj['data']['association_with_institute']);
-                    $('.personal__overview__experiencespan').text(ret_obj['data']['experience_in_years']);
-                    $('.personal__overview__areaofspecialspan').text(ret_obj['data']['area_of_spec']);
-                    var d = " ";
-                    for (i = 0 ; i<ret_obj['data']['qualification'].length;i++)
-                    {
-                        d += `<div class="personal__education__degree__institution marginbottom06 fontheavy"> Degree: `+ ret_obj['data']['qualification'][i][1]+` </div>`;
-                        d += `<div class="personal__education__degree__institution marginbottom06 fontlight"> University   : `+ ret_obj['data']['qualification'][i][6]+` </div>`;
-                        d += `<div class="personal__education__degree__institution marginbottom06 fontlight"> College : `+ ret_obj['data']['qualification'][i][3]+` </div>`;
-                        d += `<div class="personal__education__degree__branch marginbottom06 fontlight"> Branch : `+ ret_obj['data']['qualification'][i][2]+` </div>`; 
-                        d += `<div class="personal__education__degree__graduation marginbottom06 fontlight"> Percentage: `+ ret_obj['data']['qualification'][i][4]+` </div>`; 
-                        d += `<div class="personal__education__degree__graduation marginbottom06 fontlight"> Graduation year: `+ ret_obj['data']['qualification'][i][5]+` </div>`; 
+            // $.ajax({
+            //     type: "POST",
+            //     url: "get_complete_faculty_details",
+            //     dataType: 'Json',
+            //     contentType: 'application/json',
+            //     data: JSON.stringify(data),
+            //     processData: false,
+            //     success: function (ret_obj){
+            //         console.log(ret_obj);
+            //         $('.personal__overview__name').text(ret_obj['data']['name']);
+            //         $('.personal__overview__department').text(ret_obj['data']['dept']);
+            //         $('.personal__overview__designation').text(ret_obj['data']['designation']);
+            //         $('.personal__overview__id').text(faculty_id);
+            //         $('.personal__overview__gender').text(ret_obj['data']['gender']);
+            //         $('.personal__overview__dateofjoin').text(ret_obj['data']['date_of_joining']);
+            //         $('.personal__overview__phonespan').text(ret_obj['data']['phone']);
+            //         $('.personal__overview__emailspan').text(ret_obj['data']['email']);
+            //         $('.personal__overview__dobspan').text(ret_obj['data']['dob']);
+            //         $('.personal__overview__maritalspan').text(ret_obj['data']['marital_status']);
+            //         $('.personal__overview__addressspan').text(ret_obj['data']['address']);
+            //         $('.personal__overview__associationspan').text(ret_obj['data']['association_with_institute']);
+            //         $('.personal__overview__experiencespan').text(ret_obj['data']['experience_in_years']);
+            //         $('.personal__overview__areaofspecialspan').text(ret_obj['data']['area_of_spec']);
+            //         var d = " ";
+            //         for (i = 0 ; i<ret_obj['data']['qualification'].length;i++)
+            //         {
+            //             d += `<div class="personal__education__degree__institution marginbottom06 fontheavy"> Degree: `+ ret_obj['data']['qualification'][i][1]+` </div>`;
+            //             d += `<div class="personal__education__degree__institution marginbottom06 fontlight"> University   : `+ ret_obj['data']['qualification'][i][6]+` </div>`;
+            //             d += `<div class="personal__education__degree__institution marginbottom06 fontlight"> College : `+ ret_obj['data']['qualification'][i][3]+` </div>`;
+            //             d += `<div class="personal__education__degree__branch marginbottom06 fontlight"> Branch : `+ ret_obj['data']['qualification'][i][2]+` </div>`; 
+            //             d += `<div class="personal__education__degree__graduation marginbottom06 fontlight"> Percentage: `+ ret_obj['data']['qualification'][i][4]+` </div>`; 
+            //             d += `<div class="personal__education__degree__graduation marginbottom06 fontlight"> Graduation year: `+ ret_obj['data']['qualification'][i][5]+` </div>`; 
 
-                    }
-                    var y = "";
-                    for(i =0;i<ret_obj['data']['experience'].length;i++)
-                    {
-                        y+=`<div class="personal__experience__company__name-role marginbottom06 fontheavy">`+ (i+1)+`. </div>`;
-                        y+=`<div class="personal__experience__company__name-role marginbottom06 fontlight"> Organisation:`+ ret_obj['data']['experience'][i][2]+` </div>`;
-                        y+=`<div class="personal__experience__company__name-role marginbottom06 fontlight"> Designation:`+ ret_obj['data']['experience'][i][1]+` </div>`;
-                        y+=`<div class="personal__experience__company__name-role marginbottom06 fontlight"> Duration:`+ ret_obj['data']['experience'][i][3]+`years </div>`;
+            //         }
+            //         var y = "";
+            //         for(i =0;i<ret_obj['data']['experience'].length;i++)
+            //         {
+            //             y+=`<div class="personal__experience__company__name-role marginbottom06 fontheavy">`+ (i+1)+`. </div>`;
+            //             y+=`<div class="personal__experience__company__name-role marginbottom06 fontlight"> Organisation:`+ ret_obj['data']['experience'][i][2]+` </div>`;
+            //             y+=`<div class="personal__experience__company__name-role marginbottom06 fontlight"> Designation:`+ ret_obj['data']['experience'][i][1]+` </div>`;
+            //             y+=`<div class="personal__experience__company__name-role marginbottom06 fontlight"> Duration:`+ ret_obj['data']['experience'][i][3]+`years </div>`;
 
-                    }
-                    var a = `<h3 class="personal__research__papers__heading marginbottom04 fontheavy">Papers</h3>`;
-                    for (i=0;i<ret_obj['data']['paper'].length;i++)
-                    {
-                        a += ` <div class="personal__research__papers__details fontlight">`+(i+1)+'. '+ret_obj['data']['paper'][i]+`</div>`;
-                    }
-                    var b = `<h3 class="personal__research__publications__heading marginbottom04 fontheavy">Publications</h3>`;
-                    for (i=0;i<ret_obj['data']['publications'].length;i++)
-                    {
-                        b += ` <div class="personal__research__publications__details fontlight">`+(i+1)+'. '+ret_obj['data']['publications'][i]+`</div>`;
-                    }
+            //         }
+            //         var a = `<h3 class="personal__research__papers__heading marginbottom04 fontheavy">Papers</h3>`;
+            //         for (i=0;i<ret_obj['data']['paper'].length;i++)
+            //         {
+            //             a += ` <div class="personal__research__papers__details fontlight">`+(i+1)+'. '+ret_obj['data']['paper'][i]+`</div>`;
+            //         }
+            //         var b = `<h3 class="personal__research__publications__heading marginbottom04 fontheavy">Publications</h3>`;
+            //         for (i=0;i<ret_obj['data']['publications'].length;i++)
+            //         {
+            //             b += ` <div class="personal__research__publications__details fontlight">`+(i+1)+'. '+ret_obj['data']['publications'][i]+`</div>`;
+            //         }
                     
-                    var j = `<h1 class="personal__invitedtalks__heading marginbottom04 fontheavy">Invited Talks Delivered</h1>`;
-                    for (i = 0 ;i<ret_obj['data']['invitedtalks'].length;i++)
-                    {
-                        console.log(ret_obj['data']['invitedtalks'][i]);
-                        j+= `<div class="personal__invitedtalks__details fontlight"> `+ ret_obj['data']['invitedtalks'][i]+` </div>`;
-                    }
-                    var e = `<h1 class="personal__session__heading marginbottom04 fontheavy">Session chairs</h1>`;
-                    for (i=0;i<ret_obj['data']['sessions'].length;i++)
-                    {
-                        e += ` <div class="personal__session__details fontlight"> `+(i+1)+". "+ret_obj['data']['sessions'][i]+`</div>`;
-                    }
-                    var z = `<h1 class="personal__workshop__heading marginbottom04 fontheavy">Workshop</h1>`;
-                    for (i = 0;i<ret_obj['data']['workshops'].length;i++)
-                    {
-                        z+= `<div class="personal__workshop__details fontheavy">`+(i+1)+`.</div>`;
-                        z+=`<div class="personal__workshop__details fontlight"> Type:`+ret_obj['data']['workshops'][i][0]+`</div>`
-                        z+=`<div class="personal__workshop__details fontlight"> Details:`+ret_obj['data']['workshops'][i][1]+`</div>`
-                    }
-                    var img = ` <img src="data:image/jpg;base64, `+ ret_obj['data']['image'] + `" alt="" class="personal__overview__img" >`;
+            //         var j = `<h1 class="personal__invitedtalks__heading marginbottom04 fontheavy">Invited Talks Delivered</h1>`;
+            //         for (i = 0 ;i<ret_obj['data']['invitedtalks'].length;i++)
+            //         {
+            //             console.log(ret_obj['data']['invitedtalks'][i]);
+            //             j+= `<div class="personal__invitedtalks__details fontlight"> `+ ret_obj['data']['invitedtalks'][i]+` </div>`;
+            //         }
+            //         var e = `<h1 class="personal__session__heading marginbottom04 fontheavy">Session chairs</h1>`;
+            //         for (i=0;i<ret_obj['data']['sessions'].length;i++)
+            //         {
+            //             e += ` <div class="personal__session__details fontlight"> `+(i+1)+". "+ret_obj['data']['sessions'][i]+`</div>`;
+            //         }
+            //         var z = `<h1 class="personal__workshop__heading marginbottom04 fontheavy">Workshop</h1>`;
+            //         for (i = 0;i<ret_obj['data']['workshops'].length;i++)
+            //         {
+            //             z+= `<div class="personal__workshop__details fontheavy">`+(i+1)+`.</div>`;
+            //             z+=`<div class="personal__workshop__details fontlight"> Type:`+ret_obj['data']['workshops'][i][0]+`</div>`
+            //             z+=`<div class="personal__workshop__details fontlight"> Details:`+ret_obj['data']['workshops'][i][1]+`</div>`
+            //         }
+            //         var img = ` <img src="data:image/jpg;base64, `+ ret_obj['data']['image'] + `" alt="" class="personal__overview__img" >`;
 
-                    $('.personal__education__degree').html(d);
-                    $('.personal__experience__company').html(y);
-                    $('.personal__research__publications').html(b);
-                    $('.personal__research__papers').html(a);
-                    $('.personal__invitedtalks').html(j);
-                    $('.personal__session').html(e);
-                    $('.personal__workshop').html(z);
-                    $('.personal__overview__pic').html(img);
+            //         $('.personal__education__degree').html(d);
+            //         $('.personal__experience__company').html(y);
+            //         $('.personal__research__publications').html(b);
+            //         $('.personal__research__papers').html(a);
+            //         $('.personal__invitedtalks').html(j);
+            //         $('.personal__session').html(e);
+            //         $('.personal__workshop').html(z);
+            //         $('.personal__overview__pic').html(img);
 
 
-                }
-            });
+            //     }
+            // });
         })
                 $('.modal').toggleClass('modal__dispnone');
             }
@@ -232,7 +234,7 @@
             <img src="{{ url_for('static' , filename = 'images/logo.jpg')}}" alt="" class="header__collegelogo">
             <div class="header__content1">
                 <button class="nav-btn" onclick="opennavbar()"><i class="fa fa-bars fa-2x headericon"></i></button>
-                <h3 class="header__heading">Student login</h3>
+                <h3 class="header__heading">View all students</h3>
             </div>
             <div class="header__content2">
                 <!-- <form action="" class="header__form search-show">
@@ -292,6 +294,47 @@
             </div>
             <div class="content">
                 <div class="allteachers">
+
+
+                    <div class="assignclass__selectclass margin-bottom">
+                        <div class="assignclass__selectdept">
+                            <select class="dept" id="dept-id" >
+                                <option value="" selected hidden>Select branch </option>
+                                <option value="CSE">CSE</option>
+                                <option value="ISE">ISE</option>
+                                <option value="ECE">ECE</option>
+                                <option value="EEE">EEE</option>
+                            </select>
+                        </div>
+                        <div class="assignclass__selectyear">
+                            <select id="year-id" class="year" disabled>
+                                <option value="none" selected hidden>Select year</option>
+                                <!-- <option value="2020">2020</option>
+                                <option value="2021">2021</option>
+                                <option value="2022">2022</option> -->
+                            </select>
+                        </div>
+                        <div class="assignclass__selectsection">
+                            <select id="sem-id" class="section" disabled>
+                                <option value="none" selected hidden>Select sem</option>
+                                <!-- <option value="2">2</option>
+                                <option value="4">4</option>
+                                <option value="6">6</option> -->
+                            </select>
+                        </div>
+                        <div class="assignclass__selectsection">
+                            <select id="sec-id" class="section" disabled>
+                                <option value="none" selected hidden>Select section</option>
+                                <!-- <option value="a">A section</option>
+                                <option value="b">B section</option> -->
+                            </select>
+                        </div>
+                        <div class=""></div>
+                        <button class="register__btn bluebtn attendance__submit"id="submit-student-search" disabled onclick="submitassignteacher()">Submit</button>
+                    </div>
+
+
+
                     <!-- <div class="allteachers__heading"><h1>Professor</h1></div> -->
                     
                     <!-- <form action="">
@@ -339,10 +382,12 @@
                             <!-- <img src="../images/user-3.jpg" alt="" class="personal__overview__img"> -->
                         </div>
                         <div class="personal__overview__1details">
-                            <div class="personal__overview__name marginbottom04"></div>
-                            <div class="personal__overview__department fontlight marginbottom04"></div>
-                            <div class="personal__overview__designation fontlight marginbottom04"></div>
-                            <div class="personal__overview__id fontheavy marginbottom04"></div>
+                            <div class="personal__overview__name marginbottom04">Prakash S</div>
+                            <div class="personal__overview__department fontlight marginbottom04">ISE</div>
+                            <div class="personal__overview__semsec fontlight marginbottom04">
+                               4 'A'
+                            </div>
+                            <div class="personal__overview__usn fontheavy marginbottom04">1RN18IS008</div>
                             <div class="personal__overview__gender fontlight marginbottom04"></div>
                             <div class="personal__overview__dateofjoin fontlight "></div>
                         </div>
@@ -357,29 +402,37 @@
                                 Email ID:
                                 <span class="personal__overview__emailspan marginleft9 color-bluedarker"></span>
                             </div>
+                            <div class="personal__overview__parentname marginbottom06">
+                                Parent Name:
+                                <span class="personal__overview__parentnamespan marginleft9 color-bluedarker"></span>
+                            </div>
+                            <div class="personal__overview__parentemail marginbottom06">
+                                Parent Email ID:
+                                <span class="personal__overview__parentemailspan marginleft9 color-bluedarker"></span>
+                            </div>
                             <div class="personal__overview__dob marginbottom06">
                                 Date of birth:
                                 <span class="personal__overview__dobspan marginleft74"></span>
                             </div>
-                            <div class="personal__overview__marital marginbottom06">
-                                Marital status:
-                                <span class="personal__overview__maritalspan marginleft7"></span>
+                            <div class="personal__overview__currentaddress marginbottom06">
+                                Current Address:
+                                <span class="personal__overview__permanentaddressspan marginleft9"></span>
                             </div>
                             <div class="personal__overview__address marginbottom06">
-                                Address:
+                                Permanent Address:
                                 <span class="personal__overview__addressspan marginleft9"></span>
                             </div>
-                            <div class="personal__overview__areaofspecial marginbottom06">
-                                Area of specialization:
-                                <span class="personal__overview__areaofspecialspan marginleft33 color-bluedarker"></span>
+                            <div class="personal__overview__bloodgroup marginbottom06">
+                                Blood Group:
+                                <span class="personal__overview__bloodgroupspan marginleft33 color-bluedarker"></span>
                             </div>
-                            <div class="personal__overview__association marginbottom06">
-                                Association with Institution:
-                                <span class="personal__overview__associationspan marginleft1"></span>
+                            <div class="personal__overview__10thresult marginbottom06">
+                                10<sup>th</sup>&nbsp;Result:
+                                <span class="personal__overview__10thresultspan marginleft1"></span>
                             </div>
-                            <div class="personal__overview__experience">
-                                Experience in years:
-                                <span class="personal__overview__experiencespan marginleft4"></span>
+                            <div class="personal__overview__12thresult marginbottom06">
+                                12<sup>th</sup>&nbsp;Result:
+                                <span class="personal__overview__12thresultspan marginleft1"></span>
                             </div>
                         </div>
                     </div>

@@ -290,9 +290,12 @@ input {
 }
 
 .modal .modal__body {
-  width: 80%;
-  height: 80%;
   overflow: scroll;
+}
+
+.modal__ia {
+  width: 80% !important;
+  height: 80% !important;
 }
 
 input[type=number]::-webkit-inner-spin-button,
