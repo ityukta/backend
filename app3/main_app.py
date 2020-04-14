@@ -267,11 +267,19 @@ def get_class_marks_ajax():
     data = request.get_json()
     response = dbop.get_class_marks(data)
     return response
+
 @APP.route('/resetpassword' , methods = ['POST'])
 def reset__password__view():
     """This endpoint is reset password """
     data = request.get_json()
     response = dbop.reset__password(data)
+    return jsonify(response)
+
+@APP.route('/feedback' , methods = ['POST'])
+def feedback__view():
+    """This endpoint is submit feedback """
+    data = request.get_json()
+    response = dbop.submit__feedback(data)
     return jsonify(response)
 
 @APP.route('/submitfile' , methods = ['POST'])

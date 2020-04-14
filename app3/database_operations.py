@@ -9,6 +9,7 @@ import itertools
 import calendar
 import helper
 import pickle
+import pandas as pd
 
 
 def create_fresh_database():
@@ -1607,3 +1608,34 @@ def submit__batch(data) :
                     "status_code": 404, "data": "Invalid Authkey provided"}
     return response
 
+def submit__feedback(data):
+    print(data)
+    conn = sql.connect('database.db')
+    check_authkey_query = """
+        SELECT *FROM LoginAuthKey WHERE authkey = ? AND faculty_id = ? AND DELETED = 0
+    """
+    get_faculty_name_query = """
+        SELECT name FROM Faculty WHERE faculty_id = ?
+    """
+    c = conn.cursor()
+    _ = c.execute(check_authkey_query,
+                  (data['authkey'], data['faculty_id'])).fetchone()
+    if _ is None:
+        response = {"status_message": "Unauthorized access",
+                    "status_code": 404, "data": "Invalid Authkey provided"}
+        return response
+    faculty_name = c.execute(get_faculty_name_query,(data['faculty_id'],)).fetchone()
+    faculty_name=faculty_name[0]
+    feedback = data['feedback']
+    page = data['location'].split('/')[-1]
+    time = datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
+    df = pd.read_csv('feedback.csv')
+    feedback_list = [{'name':faculty_name,'feedback':feedback,'location':page,'time':time}]
+    df = df.append(feedback_list)
+    df.to_csv('feedback.csv',index = False)
+    print(page)
+    print(time)
+    print(faculty_name)
+    response = {"status_message": "Sucess",
+                    "status_code": 200 }
+    return response

@@ -240,6 +240,57 @@
             //     }
             // })
         });
+        function openfeedback()
+        {
+            var feedback__body = `<div class="modal__heading">
+                <p>Feedback</p>
+                <div class="close-btn" onclick="closefeedback()"><i class="fa fa-times fa-2x"></i></div>
+            </div>
+            <div class="feedback__input">
+                <input type="text" placeholder="enter ur feedback here" class="feedback__content">
+            </div>
+            <div class = "feedback__submit" >
+                <button class = "feedback__submit__btn" onclick="submit__feedback()"> Submit</button>
+            </div>
+            `
+            $('.modal__body').html(feedback__body);
+            $('.feedback__modal').toggleClass('modal__dispnone');
+        }
+        function closefeedback()
+        {
+            $('.feedback__modal').toggleClass('modal__dispnone');
+        }
+        function submit__feedback()
+        {
+            var faculty_id = localStorage.getItem('faculty_id');
+            var authkey = localStorage.getItem('authkey');
+            var data = {
+                'authkey': authkey,
+                'faculty_id': faculty_id,
+                'location':window.location.href,
+                'feedback': $('.feedback__content').val()
+            };
+            if($('.feedback__content').val()=='')
+            {
+                alert("feedback cannt be empty");
+            }
+            else{
+                console.log(data);
+                $.ajax(
+                    {
+                        type: "POST",
+                        url: "feedback",
+                        dataType: 'Json',
+                        contentType: 'application/json',
+                        data: JSON.stringify(data),
+                        processData: false,
+                        success :function(ret_obj){
+                            console.log(ret_obj);
+                            $('.feedback__modal').toggleClass('modal__dispnone');
+                        }
+                    });
+            }
+        }
         function submitstudentsearch() {
           var student_modal_content = `
             <div class="studentbatch__add__name formcommon">
@@ -745,7 +796,17 @@
 
                 
             </div>
+            <div class="feedback__class" onclick="openfeedback()" style="position: fixed; bottom: 30px;right: 30px;">
+                <button class="feedback__btn" style="height: 100px; width: 100px; border-radius: 50%; background-color: yellow; box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.03);">Feedback </button>
+            </div>
         </section>
+        
+    </div>
+ 
+    <div class="feedback__modal modal__dispnone" >
+        <div class = "modal__body">
+            
+        </div>
     </div>
     
 
