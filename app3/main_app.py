@@ -296,6 +296,15 @@ def get_indivisual_student_view():
     response = dbop.get_indivisual_student(data)
     return jsonify(response)
 
+# @APP.route('/get_class_details' , methods = ['POST'])
+# def get_class_details_view():
+#     """This endpoint is to get class details"""
+#     data = request.get_json()
+#     response = dbop.get_class_details(data)
+#     return jsonify(response)
+
+# FOR ALTERNATE ASSIGNCLASS PAGE <<IGNORE AS OF NOW>>
+
 @APP.route('/submitfile' , methods = ['POST'])
 def submit__file__view():
     """This endpoint is add student batch """

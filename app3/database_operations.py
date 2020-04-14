@@ -1761,3 +1761,9 @@ def get_indivisual_student(data):
                     'student_pic':student[13]}
                 }
     return response
+
+# def get_class_details(data):
+#     print(data)
+#     response = {"status_message": "Sucessfull",
+#                     "status_code": 200 }
+#     return response
