@@ -4,11 +4,13 @@ This is the main application
 from flask import Flask, render_template, url_for, redirect, jsonify, request, Response, make_response
 import database_operations as dbop
 import json
+import os
 
 APP = Flask(__name__)
+APP.config['UPLOAD_FOLDER'] = "upload"
 
 
-@APP.route('/', methods = ['GET'])
+@APP.route('/', methods=['GET'])
 def homepage_view():
     """This is the homepage """
     return render_template('html/login.html')
@@ -26,54 +28,66 @@ def initial_register_view():
     """ url for initial register"""
     return render_template('html/register1.html')
 
+
 @APP.route('/register2', methods=['GET'])
 def final_register_view():
     """ url for Complete register"""
     return render_template('html/register2.html')
+
 
 @APP.route('/assignclass', methods=['GET'])
 def add_class_view():
     """ url to add class"""
     return render_template('html/assignclass.html')
 
+
 @APP.route('/addattendance', methods=['GET'])
 def attendance_view():
     """ url to attendance"""
     return render_template('html/attendancebatch.html')
-@APP.route('/assignteacher',methods=['GET'])
+
+
+@APP.route('/assignteacher', methods=['GET'])
 def subjectteacher_view():
     "url to add subject teacher"
     return render_template('html/subjectteacher.html')
+
 
 @APP.route('/addstudent', methods=['GET'])
 def add_student_view():
     """ URL to add or view students"""
     return render_template('html/studentbatch.html')
 
-@APP.route('/iamarks',methods = ['GET'])
+
+@APP.route('/iamarks', methods=['GET'])
 def add_iamarks_view():
     """URL to add or view iamarks"""
     return render_template('html/iamarks.html')
 
-@APP.route('/home',methods = ['GET'])
+
+@APP.route('/home', methods=['GET'])
 def home_page_view():
     """URL for professor home page """
     return render_template('html/personalpage.html')
 
-@APP.route('/teachers',methods = ['GET'])
+
+@APP.route('/teachers', methods=['GET'])
 def all_teachers_view():
     """URL for all professors page """
     return render_template('html/allteachers.html')
 
-@APP.route('/approval', methods = ['GET'])
+
+@APP.route('/approval', methods=['GET'])
 def approve_view():
     """This is the page to approve teachers """
-    return render_template('html/approval.html')  
+    return render_template('html/approval.html')
 
-@APP.route('/allstudents', methods = ['GET'])
+
+@APP.route('/allstudents', methods=['GET'])
 def all_students_view():
     """This is the page dispaly all student details """
-    return render_template('html/viewallstudents.html')  
+    return render_template('html/viewallstudents.html')
+
 
 @APP.route('/viewmarks', methods=['GET'])
 def view_marks_view():
@@ -93,6 +107,7 @@ def initial_register_ajax():
     print(response)
     return jsonify(response)
 
+
 @APP.route('/finalregister', methods=['POST'])
 def final_register_ajax():
     """This endpoint is to add all the faculty details"""
@@ -103,16 +118,18 @@ def final_register_ajax():
     # response = {"msg" :"success"}
     return jsonify(response)
 
-@APP.route('/login', methods = ['POST'])
+
+@APP.route('/login', methods=['POST'])
 def login_ajax():
     """This is the ajax endpoint for login"""
     data = request.get_json()
-   
+
     response = dbop.validate_login(data)
     # print(response)
     return jsonify(response)
 
-@APP.route('/getdetails', methods = ['POST'])
+
+@APP.route('/getdetails', methods=['POST'])
 def lget_details_ajax():
     """This is the ajax endpoint for login"""
     data = request.get_json()
@@ -121,7 +138,8 @@ def lget_details_ajax():
     print(response)
     return jsonify(response)
 
-@APP.route('/getclass', methods = ['POST'])
+
+@APP.route('/getclass', methods=['POST'])
 def class_details_ajax():
     """This is the ajax endpoint for login"""
     data = request.get_json()
@@ -129,6 +147,7 @@ def class_details_ajax():
     response = dbop.get_class_details(data)
     print(response)
     return jsonify(response)
+
 
 @APP.route('/getclassdetails', methods=['POST'])
 def get_all_class_details_ajax():
@@ -139,6 +158,7 @@ def get_all_class_details_ajax():
     print(response)
     return jsonify(response)
 
+
 @APP.route('/addclass', methods=['POST'])
 def add_class_ajax():
     """This endpoint is to add new class into the database"""
@@ -147,6 +167,7 @@ def add_class_ajax():
     response = dbop.add_class(data)
     print(response)
     return jsonify(response)
+
 
 @APP.route('/getfcs', methods=['POST'])
 def get_subjectteacher_details_ajax():
@@ -157,6 +178,7 @@ def get_subjectteacher_details_ajax():
     print(response)
     return jsonify(response)
 
+
 @APP.route('/addsubject', methods=['POST'])
 def add_subject_ajax():
     """This endpoint is to add new subject into the database"""
@@ -165,6 +187,7 @@ def add_subject_ajax():
     response = dbop.add_subject(data)
     print(response)
     return jsonify(response)
+
 
 @APP.route('/get_year_sem_sec', methods=['POST'])
 def get_year_sem_sec():
@@ -175,6 +198,7 @@ def get_year_sem_sec():
     print(response)
     return jsonify(response)
 
+
 @APP.route('/get_student_details', methods=['POST'])
 def get_student_details_ajax():
     """This endpoint is to get list of student, in a particular class"""
@@ -183,6 +207,7 @@ def get_student_details_ajax():
     response = dbop.get_student_details(data)
     print(response)
     return jsonify(response)
+
 
 @APP.route('/addstudent', methods=['POST'])
 def add_student_ajax():
@@ -193,6 +218,7 @@ def add_student_ajax():
     print(response)
     return jsonify(response)
 
+
 @APP.route('/get_student_attendance_details', methods=['POST'])
 def get_student_attendance_details_ajax():
     """This endpoint get stusdents details based on subject"""
@@ -200,6 +226,7 @@ def get_student_attendance_details_ajax():
     print(data)
     response = dbop.get_student_attendance_details(data)
     return jsonify(response)
+
 
 @APP.route('/get_student_marks_details', methods=['POST'])
 def get_student_marks_details_ajax():
@@ -209,6 +236,7 @@ def get_student_marks_details_ajax():
     response = dbop.get_student_marks_details(data)
     return jsonify(response)
 
+
 @APP.route('/add_student_attendance', methods=['POST'])
 def add_student_attendance_ajax():
     """This endpoint is used to add student attendance"""
@@ -216,6 +244,7 @@ def add_student_attendance_ajax():
     print(data)
     response = dbop.add_student_attendance(data)
     return jsonify(response)
+
 
 @APP.route('/get_attendance_details', methods=['POST'])
 def get_attendance_details_ajax():
@@ -225,7 +254,8 @@ def get_attendance_details_ajax():
     response = dbop.get_attendance_details(data)
     return jsonify(response)
 
-@APP.route('/add_question_paper_pattern', methods = ['POST'])
+
+@APP.route('/add_question_paper_pattern', methods=['POST'])
 def add_question_paper_pattern_ajax():
     """This endpoint is to add qPattern"""
     data = request.get_json()
@@ -233,12 +263,14 @@ def add_question_paper_pattern_ajax():
     response = dbop.add_question_paper_pattern(data)
     return jsonify(response)
 
-@APP.route('/get_complete_faculty_details' , methods = ['POST'])
+
+@APP.route('/get_complete_faculty_details', methods=['POST'])
 def get_faculty_details_view():
     """This endpoint is used tot get faculty details"""
     data = request.get_json()
     response = dbop.get_complete_faculty_details(data)
     return jsonify(response)
+
 
 @APP.route('/add_student_res', methods=['POST'])
 def add_student_res_ajax():
@@ -247,19 +279,22 @@ def add_student_res_ajax():
     resonse = dbop.add_student_res(data)
     return jsonify(resonse)
 
-@APP.route('/get_all_faculty' , methods = ['POST'])
+
+@APP.route('/get_all_faculty', methods=['POST'])
 def get_faculty_view():
     """This endpoint is used get  all faculty """
     data = request.get_json()
     response = dbop.get_complete_faculty(data)
     return jsonify(response)
 
-@APP.route('/approve__decline' , methods = ['POST'])
+
+@APP.route('/approve__decline', methods=['POST'])
 def approve__decline__view():
     """This endpoint is approve or decline a faculty """
     data = request.get_json()
     response = dbop.approve__decline(data)
     return jsonify(response)
+
 
 @APP.route('/get_class_marks', methods=['POST'])
 def get_class_marks_ajax():
@@ -268,41 +303,52 @@ def get_class_marks_ajax():
     response = dbop.get_class_marks(data)
     return response
 
-@APP.route('/resetpassword' , methods = ['POST'])
+
+@APP.route('/resetpassword', methods=['POST'])
 def reset__password__view():
     """This endpoint is reset password """
     data = request.get_json()
     response = dbop.reset__password(data)
     return jsonify(response)
 
-@APP.route('/feedback' , methods = ['POST'])
+
+@APP.route('/feedback', methods=['POST'])
 def feedback__view():
     """This endpoint is submit feedback """
     data = request.get_json()
     response = dbop.submit__feedback(data)
     return jsonify(response)
 
-@APP.route('/get_all_students_name' , methods = ['POST'])
+
+@APP.route('/get_all_students_name', methods=['POST'])
 def get_all_students_name_view():
     """This endpoint is to get all student details"""
     data = request.get_json()
     response = dbop.get_all_students(data)
     return jsonify(response)
 
-@APP.route('/get_indivisual_student' , methods = ['POST'])
+
+@APP.route('/get_indivisual_student', methods=['POST'])
 def get_indivisual_student_view():
     """This endpoint is to get indivisual studetn details"""
     data = request.get_json()
     response = dbop.get_indivisual_student(data)
     return jsonify(response)
 
-@APP.route('/submitfile' , methods = ['POST'])
+
+@APP.route('/submitfile', methods=['POST'])
 def submit__file__view():
     """This endpoint is add student batch """
-    data = request.files["files"]
+    data1 = request.files.get('batchdetails')
+    data2 = request.files.get('batchpics')
+    # print(data1.filename)
+    # print(data2.filename)
     # print(data)
+    data2.save(os.path.join(APP.config['UPLOAD_FOLDER'], data2.filename))
+    data = {'file1': data1, 'file2': data2.filename}
     response = dbop.submit__batch(data)
     return jsonify(response)
+
 
 if __name__ == '__main__':
     APP.run(debug=True, threaded=True)

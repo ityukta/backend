@@ -1,6 +1,9 @@
 """
 contains functions to perform all database operations
 """
+import os
+from zipfile import ZipFile
+import pandas as pd
 import sqlite3 as sql
 import string
 import random
@@ -10,9 +13,10 @@ import calendar
 import helper
 import pickle
 import pprint
-
+import csv
+from io import BytesIO
+from addbatch import writestudentdata
 p = pprint.PrettyPrinter(1)
-import pandas as pd
 
 
 def create_fresh_database():
@@ -1610,7 +1614,8 @@ def get_class_marks(data):
         subject_dict[sub_id]['name'] = sub_name
     p.pprint(final_student_data)
     p.pprint(subject_dict)
-    viewia_data = {"student_data": final_student_data, "subject_data": subject_dict}
+    viewia_data = {"student_data": final_student_data,
+                   "subject_data": subject_dict}
     # print(unserialised_pattern)
     response = {"status_code": 200,
                 "status_message": "successful", "data": viewia_data}
@@ -1670,10 +1675,18 @@ def reset__password(data):
 
 
 def submit__batch(data):
-    print(data)
+    df = pd.read_csv(data['file1'].stream)
+    print(df.to_dict('records'))
+    print(data['file2'])
+    with ZipFile(os.path.join('upload', data['file2']), 'r') as obj:
+        obj.extractall()
+        path_name = obj.namelist()[0].split("/")[0]
+    writestudentdata(os.path.join(path_name), df.to_dict('records'))
+    # print(extract_zip(data['file2'].stream))
     response = {"status_message": "Unauthorized access",
                 "status_code": 404, "data": "Invalid Authkey provided"}
     return response
+
 
 def submit__feedback(data):
     print(data)
@@ -1691,21 +1704,24 @@ def submit__feedback(data):
         response = {"status_message": "Unauthorized access",
                     "status_code": 404, "data": "Invalid Authkey provided"}
         return response
-    faculty_name = c.execute(get_faculty_name_query,(data['faculty_id'],)).fetchone()
-    faculty_name=faculty_name[0]
+    faculty_name = c.execute(get_faculty_name_query,
+                             (data['faculty_id'],)).fetchone()
+    faculty_name = faculty_name[0]
     feedback = data['feedback']
     page = data['location'].split('/')[-1]
     time = datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
     df = pd.read_csv('feedback.csv')
-    feedback_list = [{'name':faculty_name,'feedback':feedback,'location':page,'time':time}]
+    feedback_list = [{'name': faculty_name,
+                      'feedback': feedback, 'location': page, 'time': time}]
     df = df.append(feedback_list)
-    df.to_csv('feedback.csv',index = False)
+    df.to_csv('feedback.csv', index=False)
     print(page)
     print(time)
     print(faculty_name)
     response = {"status_message": "Sucess",
-                    "status_code": 200 }
+                "status_code": 200}
     return response
+
 
 def get_all_students(data):
     print(data)
@@ -1713,7 +1729,7 @@ def get_all_students(data):
     check_authkey_query = """
         SELECT *FROM LoginAuthKey WHERE authkey = ? AND faculty_id = ? AND DELETED = 0
     """
-    get_student_name_query ="""
+    get_student_name_query = """
         SELECT student_id,name,usn FROM Student S,Class C WHERE S.class_id = C.class_id AND C.class_id  = (SELECT class_id FROM Class WHERE sem = ? AND sec = ? AND graduation_year = ? AND department = ?) 
     """
     c = conn.cursor()
@@ -1723,17 +1739,19 @@ def get_all_students(data):
         response = {"status_message": "Unauthorized access",
                     "status_code": 404, "data": "Invalid Authkey provided"}
         return response
-   
-    students = c.execute(get_student_name_query,(data['sem'],data['sec'],data['year'],data['department'])).fetchall()
+
+    students = c.execute(get_student_name_query,
+                         (data['sem'], data['sec'], data['year'], data['department'])).fetchall()
     print(students)
-    if len(students)== 0 :
+    if len(students) == 0:
         response = {"status_message": "Ivalid class id",
                     "status_code": 404, "data": "Invalid class details provided"}
         return response
-    else :
+    else:
         response = {"status_message": "Sucessfull",
-                    "status_code": 200 ,'data':students}
+                    "status_code": 200, 'data': students}
         return response
+
 
 def get_indivisual_student(data):
     print(data)
@@ -1751,13 +1769,14 @@ def get_indivisual_student(data):
         response = {"status_message": "Unauthorized access",
                     "status_code": 404, "data": "Invalid Authkey provided"}
         return response
-    student = c.execute(get_student_details_query,(data['student_id'],)).fetchone()
+    student = c.execute(get_student_details_query,
+                        (data['student_id'],)).fetchone()
     print(student)
     response = {"status_message": "sucess",
-                    "status_code": 200, 
-                    "data": {'name':student[1],'usn':student[2],'bloodgroup':student[5],
-                    'parent_name':student[6],'phone':student[7],'email':student[8],'p_address':student[9],
-                    'c_address':student[10],'10':student[11],'12':student[12],
-                    'student_pic':student[13]}
+                "status_code": 200,
+                "data": {'name': student[1], 'usn': student[2], 'bloodgroup': student[5],
+                         'parent_name': student[6], 'phone': student[7], 'email': student[8], 'p_address': student[9],
+                         'c_address': student[10], '10': student[11], '12': student[12],
+                         'student_pic': student[13]}
                 }
     return response
