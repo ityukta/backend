@@ -9,13 +9,10 @@ import itertools
 import calendar
 import helper
 import pickle
-<<<<<<< HEAD
 import pprint
 
 p = pprint.PrettyPrinter(1)
-=======
 import pandas as pd
->>>>>>> a5731aa2970f2dabf6e6e7d42a95587ee79dc1b1
 
 
 def create_fresh_database():
@@ -1677,8 +1674,6 @@ def submit__batch(data):
     response = {"status_message": "Unauthorized access",
                 "status_code": 404, "data": "Invalid Authkey provided"}
     return response
-<<<<<<< HEAD
-=======
 
 def submit__feedback(data):
     print(data)
@@ -1766,4 +1761,3 @@ def get_indivisual_student(data):
                     'student_pic':student[13]}
                 }
     return response
->>>>>>> a5731aa2970f2dabf6e6e7d42a95587ee79dc1b1
