@@ -15,9 +15,6 @@
         "authkey": localStorage.getItem("authkey"),
         "faculty_id": localStorage.getItem("faculty_id")
       };
-      if(data['authkey'] == null || data['faculty_id'] == null){
-        window.location.href = "/";
-      }
       $.ajax({
         type: "POST",
         url: "getdetails",
@@ -27,8 +24,8 @@
         processData: false,
         success: function (ret_obj) {
           if (ret_obj['status_code'] == 200) {
-            $('#email').val(ret_obj['data']['email_id']);
-            $('#name').val(ret_obj['data']['name']);
+            $('#email').val(ret_obj['data']['name']);
+            $('#name').val(ret_obj['data']['email_id']);
             $('#department').val(ret_obj['data']['department']);
             $('#email').attr('disabled', true);
             $('#name').attr('disabled', true);
@@ -332,10 +329,9 @@
         'date_of_birth': dob,
         'gender': gender,
         'address': address,
-        'marital_status': marital_status,
-        'first_login' : 0
+        'marital_status': marital_status//,
+        // 'first_login' : 0
       };
-      localStorage.setItem("teacher_picture",b64) ;
       console.log(JSON.stringify(final_data));
       $.ajax({
         type: "POST",
@@ -346,7 +342,6 @@
         processData: false,
         success: function (ret_obj) {
           console.log(ret_obj);
-          window.location.href = 'home';
         }
       });
     }
@@ -386,10 +381,10 @@
             <option value="Assistant Professor">Assistant Professor</option>
           </select>
         </div>
-        <!--<div class="register2__specialize marginbottom06">
+        <div class="register2__specialize marginbottom06">
           <label for="specialize">Area of specialization</label>
           <textarea id="specialize" class="register2__specialize__input" cols="30" rows="3"></textarea>
-        </div>-->
+        </div>
         <div class="register2__date marginbottom06">
           <label for="date">Date of joining</label>
           <input type="date" class="register2__date__input" id="date" />
@@ -420,9 +415,9 @@
           <label for="address">Enter address</label>
           <input type="text" id="address" class="register2__address__input">
         </div>
-        <div class="register2__education marginbottom08">
+        <div class="register2__education marginbottom06">
           <div class="register2__education__container">
-            <h3 class="register2__education__title">Add Education</h3>
+            <h3 class="register2__education__title">Add education</h3>
             <button class="register2__education__button plus-button" onclick="addneweducation()">
               <i class="fa fa-plus fa-2x"></i>
             </button>
@@ -432,7 +427,7 @@
           </div>
 
         </div>
-        <div class="register2__area_of_specialisation marginbottom08">
+        <div class="register2__area_of_specialisation marginbottom06">
           <div class="register2__area_of_specialisation__cont">
             <h3 class="register2__area_of_specialisation__title">Add Specialisation</h3>
             <button class="register2__area_of_specialisation__button plus-button" onclick="addspecialisation()">
@@ -443,9 +438,9 @@
 
           </div>
         </div>
-        <div class="register2__workexp marginbottom08">
+        <div class="register2__workexp marginbottom06">
           <div class="register2__workexp__cont">
-            <h3 class="register2__workexp__title">Add Work Experience</h3>
+            <h3 class="register2__workexp__title">Add workexperience</h3>
           <button class="register2__workexp__button plus-button" onclick="addworkexperience()">
             <i class="fa fa-plus fa-2x"></i>
           </button>
@@ -453,10 +448,10 @@
           <div class="register2__workexp__container">
           </div>
         </div>
-        <div class="register2__research marginbottom08">
+        <div class="register2__research marginbottom06">
           <div class="register2__research__publications marginbottom06">
             <div class="register2__research__publications__cont">
-              <h3 class="register2__research__pubhead">Add Publications</h3>
+              <h3 class="register2__research__pubhead">Add publications</h3>
               <button class="register2__research__pubbutton plus-button marginbottom04" onclick="addpublications()">
                 <i class="fa fa-plus fa-2x"></i>
               </button>
@@ -468,7 +463,7 @@
           </div>
           <div class="register2__research__papers">
             <div class="register2__research__papers__cont">
-              <h3 class="register2__research__paperhead">Add Papers</h3>
+              <h4 class="register2__research__paperhead">Add papers</h4>
               <button class="register2__research__paperbutton plus-button marginbottom04" onclick="addpaper()">
                 <i class="fa fa-plus fa-2x"></i>
               </button>
@@ -478,9 +473,9 @@
             </div>
           </div>
         </div>
-        <div class="register2__talks marginbottom08">
+        <div class="register2__talks marginbottom06">
           <div class="register2__talks__cont">
-            <h3 class="register2__talks__talkhead">Add Invited Talks</h3>
+            <h3 class="register2__talks__talkhead">Add invited talks</h3>
             <button class="register2__talks__talkbutton plus-button marginbottom04" onclick="addinvitedtalks()">
               <i class="fa fa-plus fa-2x"></i>
             </button>
@@ -489,9 +484,9 @@
 
           </div>
         </div>
-        <div class="register2__session marginbottom08">
+        <div class="register2__session marginbottom06">
           <div class="register2__session__cont">
-            <h3 class="register2__session__sessionhead">Add Session Chairs</h3>
+            <h3 class="register2__session__sessionhead">Add session chairs</h3>
             <button class="register2__session__sessionbutton plus-button marginbottom04" onclick="addsession()">
               <i class="fa fa-plus fa-2x"></i>
             </button>
@@ -500,10 +495,10 @@
 
           </div>
         </div>
-        <div class="register2__workshop marginbottom08">
+        <div class="register2__workshop marginbottom06">
           <div class="register2__workshop__cont">
             <h3 class="register2__workshop__workshophead">
-              Add Workshop/Seminar/FDP
+              Add workshop/Seminar/Fdp
             </h3>
             <button class="register2__workshop__workshopbutton plus-button marginbottom04" onclick="addworkshop()">
               <i class="fa fa-plus fa-2x"></i>
@@ -520,9 +515,9 @@
           </div>
           <div class="register2__personal__gender marginbottom06">
             <label for="gender" class="fontheavy">Gender</label>
-            <input type="radio" value="male" name="gend" class="register2__personal__gender__input marginleft6" />Male
-            <input type="radio" value="female" name="gend" class="register2__personal__gender__input" />Demale
-            <input type="radio" value="transgender" name="gend" class="register2__personal__gender__input" />Transgender
+            <input type="radio" value="male" name="gend" class="register2__personal__gender__input marginleft6" />male
+            <input type="radio" value="female" name="gend" class="register2__personal__gender__input" />female
+            <input type="radio" value="transgender" name="gend" class="register2__personal__gender__input" />transgender
           </div>
           <div class="register2__personal__marital marginbottom06">
             <label for="marital" class="fontheavy ">Marital Status</label>
