@@ -101,6 +101,7 @@
         b64 = null;
         var subject_id_list = [], b64;
         $(document).ready(function () {
+            $('.attendance__details__addbtn').addClass('displaynone');
             var faculty_id = localStorage.getItem('faculty_id');
             var authkey = localStorage.getItem('authkey');
             if (faculty_id == null || authkey == null) {
@@ -403,6 +404,7 @@
                 data: JSON.stringify(d),
                 processData: false,
                 success: function (ret_obj) {
+                    $('.attendance__details__addbtn').removeClass('displaynone');
                     subject_id_list = [];
                     console.log(ret_obj);
                     if (ret_obj['status_code'] == 200) {
@@ -666,9 +668,11 @@
                             <div class="modal__body">
                                 <div class="close-btn"><i class="fa fa-times fa-2x" onclick="closemodal()"></i></div>
                                 <div>
+                                    <label for="batchdetails">Upload CSV File</label>
                                     <input type="file" id="batchdetails">
                                 </div>
                                 <div>
+                                    <label for="batchpics">Upload zip file of images</label>
                                     <input type="file" id="batchpics">
                                 </div>
                                 <button type="button" class="btn btn-primary register__btn bluebtn"

@@ -277,7 +277,9 @@
         })
                 $('.modal').toggleClass('modal__dispnone');
             }
-
+        function closepersonalmodal(){
+            $('.modal').addClass('modal__dispnone');
+        }
     </script>
 </head>
 <body> 
@@ -390,10 +392,10 @@
         </div>
     </div>
 
-    <div class="modal modal__dispnone ">
+    <div class="modal modal__dispnone">
         <!--modal__dispnone is a class to hide the modal from the page-->
         <div class="modal__body">
-            <div class="close-btn"><i class="fa fa-times fa-2x"></i></div>
+            <div class="close-btn" onclick="closepersonalmodal()"><i class="fa fa-times fa-2x"></i></div>
             <div class="personal">
                 <div class="personal__heading marginbottom06">
                     <h1>Profile</h1>

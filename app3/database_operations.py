@@ -1364,7 +1364,7 @@ def get_complete_faculty_details(data):
     if 'f_id' in data.keys():
         data['faculty_id'] = data['f_id']
     get_complete_faculty_details_query = """
-        SELECT * FROM Faculty WHERE faculty_id = ? 
+        SELECT * FROM Faculty WHERE faculty_id = ?  AND approved = 1 AND deleted = 0
     """
     get_area_of_specialisation_query = """
         SELECT specialisation_details FROM AreaOfSpecialisation Where faculty_id = ?
@@ -1466,7 +1466,7 @@ def get_complete_faculty(data):
         faculty_details = c.execute(faculty_details_query).fetchall()
     else:
         faculty_details_query = """
-            SELECT faculty_id , name , department, teacher_picture FROM Faculty 
+            SELECT faculty_id , name , department, teacher_picture FROM Faculty WHERE approved = 1 AND deleted = 0
         """
         faculty_details = c.execute(faculty_details_query).fetchall()
     print(faculty_details)
