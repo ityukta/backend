@@ -282,6 +282,20 @@ def feedback__view():
     response = dbop.submit__feedback(data)
     return jsonify(response)
 
+@APP.route('/get_all_students_name' , methods = ['POST'])
+def get_all_students_name_view():
+    """This endpoint is to get all student details"""
+    data = request.get_json()
+    response = dbop.get_all_students(data)
+    return jsonify(response)
+
+@APP.route('/get_indivisual_student' , methods = ['POST'])
+def get_indivisual_student_view():
+    """This endpoint is to get indivisual studetn details"""
+    data = request.get_json()
+    response = dbop.get_indivisual_student(data)
+    return jsonify(response)
+
 @APP.route('/submitfile' , methods = ['POST'])
 def submit__file__view():
     """This endpoint is add student batch """

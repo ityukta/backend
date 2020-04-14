@@ -113,6 +113,7 @@
                 `;
             }
             temp += `
+                            <li class="sub__li" onclick=" window.location.href = 'allstudents'"><i class="fa fal fa-user-graduate displaynone nav__icon"></i>&nbsp;&nbsp;View all students</li>
                             <li class="sub__li" onclick=" window.location.href = 'addattendance'"><i class="fa fal fa-clock displaynone nav__icon"></i>&nbsp;&nbsp;Manage attendace</li>
                             <li class="sub__li" onclick=" window.location.href = 'iamarks'"><i class="fa fal fa-book-open displaynone nav__icon"></i>&nbsp;&nbsp;Manage IA marks</li>
                         </ul>
@@ -124,7 +125,7 @@
     </script>
     <script>
         $(document).ready(function()
-            {
+        {
             var faculty_id = localStorage.getItem('faculty_id');
             var authkey = localStorage.getItem('authkey');
             var data = {
@@ -144,140 +145,267 @@
             var pic=localStorage.getItem("teacher_picture");
             var img=`<img src="data:image/jpg;base64, `+ pic + `"alt="" class="header__logout__img">`;
             $('.header__logout__pic').html(img);
-                $.ajax(
-                {
+                
+            var faculty_id = localStorage.getItem('faculty_id');
+            var authkey = localStorage.getItem('authkey');
+            if (faculty_id == null || authkey == null) {
+                window.location.href = "/";
+            }
+            if (localStorage.getItem('faculty_type') < 2) {
+                window.location.href = 'home'
+            }
+            loadnavbar();
+            var pic = localStorage.getItem("teacher_picture");
+            console.log(pic);
+            var img = ` <img src="data:image/jpg;base64, ` + pic + `" alt="" class="header__logout__img" >`
+            $('.header__logout__pic').html(img);
+            $('#dept-id').change(function () {
+                if ($('#dept-id').val() != "Select branch") {
+                    $('#year-id').removeAttr('disabled');
+                }
+                else {
+                    $('#year-id').attr('disabled', true);
+                    $('#sem-id').attr('disabled', true);
+                    $('#sec-id').attr('disabled', true);
+                    $('#submit-student-search').attr('disabled', true);
+                }
+                var d = {
+                    'authkey': localStorage.getItem('authkey'),
+                    'faculty_id': localStorage.getItem('faculty_id'),
+                    'department': $('#dept-id').val()
+                };
+                $.ajax({
                     type: "POST",
-                    url: "get_all_faculty",
+                    url: "get_year_sem_sec",
                     dataType: 'Json',
                     contentType: 'application/json',
-                    data: JSON.stringify(data),
+
+                    data: JSON.stringify(d),
                     processData: false,
-                    success :function(ret_obj){
-                        console.log("tsting");
-                        console.log(ret_obj['data']);
-                        var d = ""; 
-                        for(i=0;i<ret_obj['data'].length;i++)
-                        {
-                         d += `<div class="allteachers__person" onclick= 'openmodal(`+ret_obj['data'][i][0]+`)'>      
-                                <div class="allteachers__dots">
-                                    <i class="fa fa-ellipsis-v fa-1x"></i>
-                                </div>
-                               
-                                <div class="allteachers__name">
-                                    <p>`+ret_obj['data'][i][1]+`</p>
-                                    <p> Department : `+ret_obj['data'][i][2]+`</p>
-                                </div>
-                            </div>`;
+                    success: function (ret_obj) {
+                        console.log(ret_obj);
+                        var d = "<option selected>Select year</option>";
+                        for (i = 0; i < (ret_obj['data']).length; i++) {
+                            d += `'<option value="` + ret_obj['data'][i]['0'] + `">` + ret_obj['data'][i]['0'] + `</option>'`;
                         }
-                        $('.allteachers__details').html(d);
+                        $('#year-id').html(d);
                     }
-                   
                 });
+
+            });
+
+            $('#year-id').change(function () {
+                if ($('#year-id').val() != "Select year") {
+                    $('#sem-id').removeAttr('disabled');
+                }
+                else {
+                    $('#sem-id').attr('disabled', true);
+                    $('#sem-id').attr('disabled', true);
+                    $('#sec-id').attr('disabled', true);
+                    $('#submit-student-search').attr('disabled', true);
+                }
+                var d = {
+                    'authkey': localStorage.getItem('authkey'),
+                    'faculty_id': localStorage.getItem('faculty_id'),
+                    'department': $('#dept-id').val(),
+                    'year': $('#year-id').val()
+                };
+                $.ajax({
+                    type: "POST",
+                    url: "get_year_sem_sec",
+                    dataType: 'Json',
+                    contentType: 'application/json',
+
+                    data: JSON.stringify(d),
+                    processData: false,
+                    success: function (ret_obj) {
+                        console.log(ret_obj);
+                        var d = "<option selected>Select sem</option>";
+                        for (i = 0; i < (ret_obj['data']).length; i++) {
+                            d += `'<option value="` + ret_obj['data'][i]['0'] + `">` + ret_obj['data'][i]['0'] + `</option>'`;
+                        }
+                        $('#sem-id').html(d);
+                    }
+                });
+
+            });
+
+            $('#sem-id').change(function () {
+                if ($('#sem-id').val() != "Select sem") {
+                    $('#sec-id').removeAttr('disabled');
+                }
+                else {
+                    $('#sec-id').attr('disabled', true);
+                    $('#submit-student-search').attr('disabled', true);
+                }
+                var d = {
+                    'authkey': localStorage.getItem('authkey'),
+                    'faculty_id': localStorage.getItem('faculty_id'),
+                    'department': $('#dept-id').val(),
+                    'year': $('#year-id').val(),
+                    'sem': $('#sem-id').val()
+                };
+                $.ajax({
+                    type: "POST",
+                    url: "get_year_sem_sec",
+                    dataType: 'Json',
+                    contentType: 'application/json',
+
+                    data: JSON.stringify(d),
+                    processData: false,
+                    success: function (ret_obj) {
+                        console.log(ret_obj);
+
+                        var d = "<option selected>Select sem</option>";
+                        for (i = 0; i < (ret_obj['data']).length; i++) {
+                            d += `'<option value="` + ret_obj['data'][i]['0'] + `">` + ret_obj['data'][i]['0'] + ` - Section </option>'`;
+                        }
+                        $('#sec-id').html(d);
+                    }
+                });
+
+            });
+            $('#sec-id').change(function () {
+                if ($('#dept-id').val() != "Select branch" && $('#year-id').val() != "Select year" && $('#sem-id').val() != "Select sem" && $('#sec-id').val() != "Select section") {
+                    $('#submit-student-search').removeAttr("disabled");
+                }
+                else {
+                    $('#submit-student-search').attr('disabled', true);
+                }
+            });  
                
-               
-            })
-            function openmodal(f_id)
-            {
-                console.log(f_id);
-            $(document).ready(function(){
+        });
+        function openmodal(student_id)
+        {
+            console.log(student_id);
+           
   
             var faculty_id = localStorage.getItem('faculty_id');
             var authkey = localStorage.getItem('authkey');
             var data = {
                 'authkey': authkey,
                 'faculty_id': faculty_id,
-                'f_id':f_id
+                'student_id':student_id
             };
-            // $.ajax({
-            //     type: "POST",
-            //     url: "get_complete_faculty_details",
-            //     dataType: 'Json',
-            //     contentType: 'application/json',
-            //     data: JSON.stringify(data),
-            //     processData: false,
-            //     success: function (ret_obj){
-            //         console.log(ret_obj);
-            //         $('.personal__overview__name').text(ret_obj['data']['name']);
-            //         $('.personal__overview__department').text(ret_obj['data']['dept']);
-            //         $('.personal__overview__designation').text(ret_obj['data']['designation']);
-            //         $('.personal__overview__id').text(faculty_id);
-            //         $('.personal__overview__gender').text(ret_obj['data']['gender']);
-            //         $('.personal__overview__dateofjoin').text(ret_obj['data']['date_of_joining']);
-            //         $('.personal__overview__phonespan').text(ret_obj['data']['phone']);
-            //         $('.personal__overview__emailspan').text(ret_obj['data']['email']);
-            //         $('.personal__overview__dobspan').text(ret_obj['data']['dob']);
-            //         $('.personal__overview__maritalspan').text(ret_obj['data']['marital_status']);
-            //         $('.personal__overview__addressspan').text(ret_obj['data']['address']);
-            //         $('.personal__overview__associationspan').text(ret_obj['data']['association_with_institute']);
-            //         $('.personal__overview__experiencespan').text(ret_obj['data']['experience_in_years']);
-            //         $('.personal__overview__areaofspecialspan').text(ret_obj['data']['area_of_spec']);
-            //         var d = " ";
-            //         for (i = 0 ; i<ret_obj['data']['qualification'].length;i++)
-            //         {
-            //             d += `<div class="personal__education__degree__institution marginbottom06 fontheavy"> Degree: `+ ret_obj['data']['qualification'][i][1]+` </div>`;
-            //             d += `<div class="personal__education__degree__institution marginbottom06 fontlight"> University   : `+ ret_obj['data']['qualification'][i][6]+` </div>`;
-            //             d += `<div class="personal__education__degree__institution marginbottom06 fontlight"> College : `+ ret_obj['data']['qualification'][i][3]+` </div>`;
-            //             d += `<div class="personal__education__degree__branch marginbottom06 fontlight"> Branch : `+ ret_obj['data']['qualification'][i][2]+` </div>`; 
-            //             d += `<div class="personal__education__degree__graduation marginbottom06 fontlight"> Percentage: `+ ret_obj['data']['qualification'][i][4]+` </div>`; 
-            //             d += `<div class="personal__education__degree__graduation marginbottom06 fontlight"> Graduation year: `+ ret_obj['data']['qualification'][i][5]+` </div>`; 
+            
+            $.ajax({
+                type: "POST",
+                    url: "get_indivisual_student",
+                    dataType: 'Json',
+                    contentType: 'application/json',
 
-            //         }
-            //         var y = "";
-            //         for(i =0;i<ret_obj['data']['experience'].length;i++)
-            //         {
-            //             y+=`<div class="personal__experience__company__name-role marginbottom06 fontheavy">`+ (i+1)+`. </div>`;
-            //             y+=`<div class="personal__experience__company__name-role marginbottom06 fontlight"> Organisation:`+ ret_obj['data']['experience'][i][2]+` </div>`;
-            //             y+=`<div class="personal__experience__company__name-role marginbottom06 fontlight"> Designation:`+ ret_obj['data']['experience'][i][1]+` </div>`;
-            //             y+=`<div class="personal__experience__company__name-role marginbottom06 fontlight"> Duration:`+ ret_obj['data']['experience'][i][3]+`years </div>`;
-
-            //         }
-            //         var a = `<h3 class="personal__research__papers__heading marginbottom04 fontheavy">Papers</h3>`;
-            //         for (i=0;i<ret_obj['data']['paper'].length;i++)
-            //         {
-            //             a += ` <div class="personal__research__papers__details fontlight">`+(i+1)+'. '+ret_obj['data']['paper'][i]+`</div>`;
-            //         }
-            //         var b = `<h3 class="personal__research__publications__heading marginbottom04 fontheavy">Publications</h3>`;
-            //         for (i=0;i<ret_obj['data']['publications'].length;i++)
-            //         {
-            //             b += ` <div class="personal__research__publications__details fontlight">`+(i+1)+'. '+ret_obj['data']['publications'][i]+`</div>`;
-            //         }
+                    data: JSON.stringify(data),
+                    processData: false,
                     
-            //         var j = `<h1 class="personal__invitedtalks__heading marginbottom04 fontheavy">Invited Talks Delivered</h1>`;
-            //         for (i = 0 ;i<ret_obj['data']['invitedtalks'].length;i++)
-            //         {
-            //             console.log(ret_obj['data']['invitedtalks'][i]);
-            //             j+= `<div class="personal__invitedtalks__details fontlight"> `+ ret_obj['data']['invitedtalks'][i]+` </div>`;
-            //         }
-            //         var e = `<h1 class="personal__session__heading marginbottom04 fontheavy">Session chairs</h1>`;
-            //         for (i=0;i<ret_obj['data']['sessions'].length;i++)
-            //         {
-            //             e += ` <div class="personal__session__details fontlight"> `+(i+1)+". "+ret_obj['data']['sessions'][i]+`</div>`;
-            //         }
-            //         var z = `<h1 class="personal__workshop__heading marginbottom04 fontheavy">Workshop</h1>`;
-            //         for (i = 0;i<ret_obj['data']['workshops'].length;i++)
-            //         {
-            //             z+= `<div class="personal__workshop__details fontheavy">`+(i+1)+`.</div>`;
-            //             z+=`<div class="personal__workshop__details fontlight"> Type:`+ret_obj['data']['workshops'][i][0]+`</div>`
-            //             z+=`<div class="personal__workshop__details fontlight"> Details:`+ret_obj['data']['workshops'][i][1]+`</div>`
-            //         }
-            //         var img = ` <img src="data:image/jpg;base64, `+ ret_obj['data']['image'] + `" alt="" class="personal__overview__img" >`;
+                    success: function (ret_obj) {
+                        var p = '';
+                        var d = '';
+                        var pic = '';
+                        console.log(ret_obj);
+                        p += `<div class="personal__overview__name marginbottom04">`+ret_obj['data']['name'] +`</div>
+                            <div class="personal__overview__usn fontheavy marginbottom04">`+ret_obj['data']['usn']+`</div>`
+                        
+                        d+=`<div class="personal__overview__phone marginbottom06">
+                                Phone:
+                                <span class="personal__overview__phonespan marginleft10 color-bluedarker">`+ret_obj['data']['phone']+` </span>
+                            </div>
+                            
+                            <div class="personal__overview__parentname marginbottom06">
+                                Parent Name:
+                                <span class="personal__overview__parentnamespan marginleft9 color-bluedarker">`+ret_obj['data']['parent_name']+`</span>
+                            </div>
+                            <div class="personal__overview__parentemail marginbottom06">
+                                Parent Email ID:
+                                <span class="personal__overview__parentemailspan marginleft9 color-bluedarker">`+ret_obj['data']['email']+`</span>
+                            </div>
+                            
+                            <div class="personal__overview__currentaddress marginbottom06">
+                                Current Address:
+                                <span class="personal__overview__permanentaddressspan marginleft9">`+ret_obj['data']['c_address']+`</span>
+                            </div>
+                            <div class="personal__overview__address marginbottom06">
+                                Permanent Address:
+                                <span class="personal__overview__addressspan marginleft9">`+ret_obj['data']['p_address']+`</span>
+                            </div>
+                            <div class="personal__overview__bloodgroup marginbottom06">
+                                Blood Group:
+                                <span class="personal__overview__bloodgroupspan marginleft33 color-bluedarker">`+ret_obj['data']['bloodgroup']+`</span>
+                            </div>
+                            <div class="personal__overview__10thresult marginbottom06">
+                                10<sup>th</sup>&nbsp;Result:
+                                <span class="personal__overview__10thresultspan marginleft1">`+ret_obj['data']['10']+`</span>
+                            </div>
+                            <div class="personal__overview__12thresult marginbottom06">
+                                12<sup>th</sup>&nbsp;Result:
+                                <span class="personal__overview__12thresultspan marginleft1">`+ret_obj['data']['12']+`</span>
+                            </div>`
+                        pic += ` <img src="data:image/jpg;base64, `+ ret_obj['data']['student_pic'] + `" alt="" class="personal__overview__img" >`;
 
-            //         $('.personal__education__degree').html(d);
-            //         $('.personal__experience__company').html(y);
-            //         $('.personal__research__publications').html(b);
-            //         $('.personal__research__papers').html(a);
-            //         $('.personal__invitedtalks').html(j);
-            //         $('.personal__session').html(e);
-            //         $('.personal__workshop').html(z);
-            //         $('.personal__overview__pic').html(img);
-
-
-            //     }
-            // });
-        })
-                $('.modal').toggleClass('modal__dispnone');
+                        $('.personal__overview__pic').html(pic);        
+                        $('.personal__overview__2details').html(d);
+                        $('.personal__overview__1details').html(p); 
+                    }
+                    
+            });
+            
+            
+            $('.modal').toggleClass('modal__dispnone');
+        }
+        function closemodal()
+        {
+            $('.modal').toggleClass('modal__dispnone');
+        }
+        function getallstudents()
+            {
+            var department = $('#dept-id').val();
+            var year = $('#year-id').val();
+            var sem = $('#sem-id').val();
+            var sec = $('#sec-id').val();
+            var faculty_id = localStorage.getItem('faculty_id');
+            var authkey = localStorage.getItem('authkey');
+            var data = {
+                'authkey': authkey,
+                'faculty_id': faculty_id,
+                'department': department,
+                'year': year,
+                'sem': sem,
+                'sec': sec
+            };
+                $.ajax(
+                {
+                    type: "POST",
+                    url: "get_all_students_name",
+                    dataType: 'Json',
+                    contentType: 'application/json',
+                    data: JSON.stringify(data),
+                    processData: false,
+                    success :function(ret_obj){
+                        console.log("tsting");
+                        console.log(ret_obj);
+                        if(ret_obj['status_code']==200)
+                        {
+                            var d = ""; 
+                            for(i=0;i<ret_obj['data'].length;i++)
+                            {
+                            d += `<div class="allteachers__person" onclick= 'openmodal(`+ret_obj['data'][i][0]+`)'>      
+                                    <div class="allteachers__dots">
+                                        <i class="fa fa-ellipsis-v fa-1x"></i>
+                                    </div>
+                                
+                                    <div class="allteachers__name">
+                                        <p> NAME : `+ret_obj['data'][i][1]+`</p>
+                                        <p> USN : `+ret_obj['data'][i][2]+`</p>
+                                    </div>
+                                </div>`;
+                            }
+                            $('.allteachers__details').html(d);
+                        }
+                    }
+                   
+                });
             }
     </script>
+ 
 </head>
 <body> 
     <div class="container">
@@ -381,7 +509,7 @@
                             </select>
                         </div>
                         <div class=""></div>
-                        <button class="register__btn bluebtn attendance__submit"id="submit-student-search" disabled onclick="submitassignteacher()">Submit</button>
+                        <button class="register__btn bluebtn attendance__submit"id="submit-student-search" disabled onclick="getallstudents()">Submit</button>
                     </div>
 
 
@@ -432,7 +560,7 @@
     <div class="modal modal__dispnone ">
         <!--modal__dispnone is a class to hide the modal from the page-->
         <div class="modal__body">
-            <div class="close-btn"><i class="fa fa-times fa-2x"></i></div>
+            <div class="close-btn"><i class="fa fa-times fa-2x" onclick="closemodal()"></i></div>
             <div class="personal">
                 <div class="personal__heading marginbottom06">
                     <h1>Profile</h1>
@@ -443,113 +571,17 @@
                             <!-- <img src="../images/user-3.jpg" alt="" class="personal__overview__img"> -->
                         </div>
                         <div class="personal__overview__1details">
-                            <div class="personal__overview__name marginbottom04">Prakash S</div>
-                            <div class="personal__overview__department fontlight marginbottom04">ISE</div>
-                            <div class="personal__overview__semsec fontlight marginbottom04">
-                               4 'A'
-                            </div>
-                            <div class="personal__overview__usn fontheavy marginbottom04">1RN18IS008</div>
-                            <div class="personal__overview__gender fontlight marginbottom04"></div>
-                            <div class="personal__overview__dateofjoin fontlight "></div>
+                            
                         </div>
                     </div>
                     <div class="personal__overview__2">
                         <div class="personal__overview__2details">
-                            <div class="personal__overview__phone marginbottom06">
-                                Phone:
-                                <span class="personal__overview__phonespan marginleft10 color-bluedarker">  </span>
-                            </div>
-                            <div class="personal__overview__email marginbottom06">
-                                Email ID:
-                                <span class="personal__overview__emailspan marginleft9 color-bluedarker"></span>
-                            </div>
-                            <div class="personal__overview__parentname marginbottom06">
-                                Parent Name:
-                                <span class="personal__overview__parentnamespan marginleft9 color-bluedarker"></span>
-                            </div>
-                            <div class="personal__overview__parentemail marginbottom06">
-                                Parent Email ID:
-                                <span class="personal__overview__parentemailspan marginleft9 color-bluedarker"></span>
-                            </div>
-                            <div class="personal__overview__dob marginbottom06">
-                                Date of birth:
-                                <span class="personal__overview__dobspan marginleft74"></span>
-                            </div>
-                            <div class="personal__overview__currentaddress marginbottom06">
-                                Current Address:
-                                <span class="personal__overview__permanentaddressspan marginleft9"></span>
-                            </div>
-                            <div class="personal__overview__address marginbottom06">
-                                Permanent Address:
-                                <span class="personal__overview__addressspan marginleft9"></span>
-                            </div>
-                            <div class="personal__overview__bloodgroup marginbottom06">
-                                Blood Group:
-                                <span class="personal__overview__bloodgroupspan marginleft33 color-bluedarker"></span>
-                            </div>
-                            <div class="personal__overview__10thresult marginbottom06">
-                                10<sup>th</sup>&nbsp;Result:
-                                <span class="personal__overview__10thresultspan marginleft1"></span>
-                            </div>
-                            <div class="personal__overview__12thresult marginbottom06">
-                                12<sup>th</sup>&nbsp;Result:
-                                <span class="personal__overview__12thresultspan marginleft1"></span>
-                            </div>
+                            
                         </div>
                     </div>
                 </div>
-                <div class="personal__grid">
-                    <div class="personal__education border padding1">
-                        <h1 class="personal__education__heading marginbottom08">Educational Qualifications</h1>
-                        <div class="personal__education__degree">
-                            <!-- <div class="personal__education__degree__institution marginbottom06 fontheavy">
-                                College of arts and science(UG)
-                            </div>
-                            <div class="personal__education__degree__branch marginbottom06 fontlight">
-                                Computer science(95%)
-                            </div>
-                            <div class="personal__education__degree__graduation marginbottom06 fontlight">
-                                2000-2004
-                            </div> -->
-                        </div>
-                    </div>
-                    <div class="personal__experience border padding1">
-                        <h1 class="personal__experience__heading marginbottom08">Experience</h1>
-                        <div class="personal__experience__company">
-                            <!-- <div class="personal__experience__company__name-role marginbottom06 fontheavy">Professor at SJBIT</div>
-                            <div class="personal__experience__company__duration marginbottom06 fontlight">
-                                Jan 2013-Jan 2015 (2years)
-                            </div> -->
-                        </div>
-                    </div>
-                    <div class="personal__research border padding1">
-                        <h1 class="personal__research__heading marginbottom08">Research work</h1>
-                        <div class="personal__research__publications marginbottom08">
-                            <!-- <h3 class="personal__research__publications__heading marginbottom04 fontheavy">Publications</h3> -->
-                            <div class="personal__research__publications__details fontlight"> </div>         
-                        </div>
-                            <div class="personal__research__papers">
-                            <h3 class="personal__research__papers__heading marginbottom04 fontheavy">Papers</h3>
-                            <div class="personal__research__papers__details fontlight">
-                                
-                            </div>
-                        </div>
-                    </div>
-                    <div class="personal__invitedtalks border padding1">
-                        <!-- <h1 class="personal__invitedtalks__heading marginbottom04 fontheavy">Invited Talks Delivered</h1>
-                        <div class="personal__invitedtalks__details fontlight">Talk on digital india </div> -->
-                    </div>
-                    <div class="personal__session border padding1">
-                        <!-- <h1 class="personal__session__heading marginbottom04 fontheavy">Session chairs</h1>
-                        <div class="personal__session__details fontlight">Session chair example 1 </div> -->
-                    </div>
-                    <div class="personal__workshop border padding1">
-                        <!-- <h1 class="personal__workshop__heading marginbottom04 fontheavy">Workshop</h1>
-                        <div class="personal__workshop__details fontlight">
-                            Talk on AI
-                        </div> -->
-                    </div>
-                </div>
+                
+                    
             </div>
 
         </div>

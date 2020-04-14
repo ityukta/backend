@@ -1639,3 +1639,58 @@ def submit__feedback(data):
     response = {"status_message": "Sucess",
                     "status_code": 200 }
     return response
+
+def get_all_students(data):
+    print(data)
+    conn = sql.connect('database.db')
+    check_authkey_query = """
+        SELECT *FROM LoginAuthKey WHERE authkey = ? AND faculty_id = ? AND DELETED = 0
+    """
+    get_student_name_query ="""
+        SELECT student_id,name,usn FROM Student S,Class C WHERE S.class_id = C.class_id AND C.class_id  = (SELECT class_id FROM Class WHERE sem = ? AND sec = ? AND graduation_year = ? AND department = ?) 
+    """
+    c = conn.cursor()
+    _ = c.execute(check_authkey_query,
+                  (data['authkey'], data['faculty_id'])).fetchone()
+    if _ is None:
+        response = {"status_message": "Unauthorized access",
+                    "status_code": 404, "data": "Invalid Authkey provided"}
+        return response
+   
+    students = c.execute(get_student_name_query,(data['sem'],data['sec'],data['year'],data['department'])).fetchall()
+    print(students)
+    if len(students)== 0 :
+        response = {"status_message": "Ivalid class id",
+                    "status_code": 404, "data": "Invalid class details provided"}
+        return response
+    else :
+        response = {"status_message": "Sucessfull",
+                    "status_code": 200 ,'data':students}
+        return response
+
+def get_indivisual_student(data):
+    print(data)
+    conn = sql.connect('database.db')
+    check_authkey_query = """
+        SELECT *FROM LoginAuthKey WHERE authkey = ? AND faculty_id = ? AND DELETED = 0
+    """
+    get_student_details_query = """
+        SELECT * FROM Student WHERE student_id = ?
+    """
+    c = conn.cursor()
+    _ = c.execute(check_authkey_query,
+                  (data['authkey'], data['faculty_id'])).fetchone()
+    if _ is None:
+        response = {"status_message": "Unauthorized access",
+                    "status_code": 404, "data": "Invalid Authkey provided"}
+        return response
+    student = c.execute(get_student_details_query,(data['student_id'],)).fetchone()
+    print(student)
+    response = {"status_message": "sucess",
+                    "status_code": 200, 
+                    "data": {'name':student[1],'usn':student[2],'bloodgroup':student[5],
+                    'parent_name':student[6],'phone':student[7],'email':student[8],'p_address':student[9],
+                    'c_address':student[10],'10':student[11],'12':student[12],
+                    'student_pic':student[13]}
+                }
+    return response
