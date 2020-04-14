@@ -272,6 +272,7 @@ def create_fresh_database():
     conn.execute(create_attendance_table)
     conn.execute(create_tests_table)
     conn.execute(create_test_res_table)
+    conn.execute(create_otp_table)
     print("tables created successfully")
     conn.close()
 
@@ -1780,3 +1781,9 @@ def get_indivisual_student(data):
                          'student_pic': student[13]}
                 }
     return response
+
+# def get_class_details(data):
+#     print(data)
+#     response = {"status_message": "Sucessfull",
+#                     "status_code": 200 }
+#     return response
