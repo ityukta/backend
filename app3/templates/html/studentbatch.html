@@ -462,8 +462,11 @@
                 });
             }
         }
-    function addbatch()
-    {   var d = $('#batchdetails').val();
+    function addbatch(){
+        var form_data = new FormData();
+        form_data.append('batchdetails', $('#batchdetails').prop('files')[0]);
+        
+        var d = $('#batchdetails').val();
         $.ajax({
             type:"POST",
             url : "submitfile",

@@ -9,6 +9,9 @@ import itertools
 import calendar
 import helper
 import pickle
+import pprint
+
+p = pprint.PrettyPrinter(1)
 
 
 def create_fresh_database():
@@ -796,7 +799,8 @@ def get_year_sem_sec(data):
             SELECT Fcs.subject_id, subject_name FROM Fcs, Subject WHERE Fcs.subject_id = Subject.subject_id AND class_id = ?
             AND Fcs.faculty_id = ?
         """
-        subjects_data = c.execute(get_subjects_query, (class_id,data['faculty_id'] )).fetchall()
+        subjects_data = c.execute(
+            get_subjects_query, (class_id, data['faculty_id'])).fetchall()
         print(subjects_data)
         for i in range(len(subjects_data)):
             subjects_data[i] = dict(
@@ -1156,15 +1160,27 @@ def add_question_paper_pattern(data):
                     "status_code": 501, "data": "fcs not found"}
         return response
     fcs_id = fcs_details[0]
+    all_counter = 0
+    get_no_of_tests = "SELECT COUNT(*) AS num FROM Tests WHERE fcs_id = ? AND test_no <> -1"
+    current_test_data = c.execute(get_no_of_tests, (fcs_id, )).fetchone()
+    all_counter = current_test_data[0]
+    if data['for'] == 'all':
+        test_no_updated = int(all_counter) + 1
+        test_name = f"Assessment {test_no_updated}"
+    else:
+        test_no_updated = -1
+        test_name = f"Assessment n"
     add_test_details_query = """
-        INSERT INTO Tests(fcs_id, test_no, qp_pattern) VALUES(?, 0, ?)
+        INSERT INTO Tests(fcs_id, test_no, qp_pattern) VALUES(?, ?, ?)
     """
     test_data = {
         "for_whom": data['for'],
+        "name": test_name,
         "details": data['q_pattern_data']
     }
     binary_test_set_obj = pickle.dumps(test_data)
-    c.execute(add_test_details_query, (fcs_id, binary_test_set_obj))
+    c.execute(add_test_details_query,
+              (fcs_id, test_no_updated, binary_test_set_obj))
     conn.commit()
     response = {"status_message": "success", "status_code": 200}
     return response
@@ -1224,27 +1240,46 @@ def get_student_marks_details(data):
     for i in range(len(tests_data)):
         tests_data[i] = dict(
             zip([cur[0] for cur in c.description], tests_data[i]))
+    count_of_for_all = sum(
+        [1 for i in range(len(tests_data)) if int(tests_data[i]['test_no']) != -1])
     assessment_counter = 1
+    temp2 = dict()
     for each_test_details in tests_data:
         q_pattern = each_test_details['qp_pattern']
         q_pattern = pickle.loads(q_pattern)
         for_whom = q_pattern['for_whom']
+        print(for_whom)
+        print()
         for each_student in student_data:
+            temp = temp2.get(each_student['student_id'], [])
             fcss_id = each_student['fcss_id']
             student_marks = c.execute(
                 get_student_results_query, (fcss_id, each_test_details['test_id'])).fetchone()
             if for_whom == 'all' or for_whom == each_student['student_id']:
+                if for_whom == 'all':
+                    assessment_name = q_pattern['name']
+                else:
+                    assessment_name = f"Assessment {count_of_for_all + 1}"
                 if student_marks is None:
                     each_student['assessments'] = each_student.get(
                         'assessments', [])
                     # each_student['assessments'][q_pattern['details']['assessment_name']] = None
-                    each_student['assessments'].append({
-                        "fcss_id": fcss_id,
-                        "data_found": False,
-                        "name": f'Assessment {assessment_counter}',
-                        "test_id": each_test_details['test_id'],
-                        "q_pattern": q_pattern['details']
-                    })
+                    if for_whom == "all":
+                        each_student['assessments'].append({
+                            "fcss_id": fcss_id,
+                            "data_found": False,
+                            "name": assessment_name,
+                            "test_id": each_test_details['test_id'],
+                            "q_pattern": q_pattern['details']
+                        })
+                    else:
+                        temp.append({
+                            "fcss_id": fcss_id,
+                            "data_found": False,
+                            "name": assessment_name,
+                            "test_id": each_test_details['test_id'],
+                            "q_pattern": q_pattern['details']
+                        })
 
                 else:
                     student_marks = dict(
@@ -1253,15 +1288,29 @@ def get_student_marks_details(data):
                         student_marks['marks'])
                     each_student['assessments'] = each_student.get(
                         'assessments', [])
-                    each_student['assessments'].append({
-                        "fcss_id": fcss_id,
-                        "data_found": True,
-                        "name": f'Assessment {assessment_counter}',
-                        "test_id": each_test_details['test_id'],
-                        "marks": student_marks['marks']
-                    })
+                    if for_whom == "all":
+                        each_student['assessments'].append({
+                            "fcss_id": fcss_id,
+                            "data_found": True,
+                            "name": assessment_name,
+                            "test_id": each_test_details['test_id'],
+                            "marks": student_marks['marks']
+                        })
+                    else:
+                        temp.append({
+                            "fcss_id": fcss_id,
+                            "data_found": True,
+                            "name": assessment_name,
+                            "test_id": each_test_details['test_id'],
+                            "marks": student_marks['marks']
+                        })
+            temp2[each_student['student_id']] = temp
         assessment_counter += 1
-
+    print(temp2)
+    for i in range(len(student_data)):
+        student_data[i]['assessments'].extend(
+            temp2.get(student_data[i]['student_id'], []))
+    print(student_data)
     final_data = dict()
     final_data['student_data'] = student_data
     response = {"status_code": 200,
@@ -1480,76 +1529,93 @@ def get_class_marks(data):
                     "status_code": 501, "data": "class not found"}
         return response
     class_id = class_data[0]
-    get_fcs_ids_query = """
-        SELECT Fcs.fcs_id, Fcs.subject_id, Subject.subject_name FROM Fcs, Subject WHERE Fcs.subject_id = Subject.subject_id AND class_id = ? ORDER BY 2
+    get_all_subjects_query = """
+        SELECT Fcs.fcs_id, Subject.subject_id, subject_name FROM Subject, Fcs WHERE Fcs.subject_id = Subject.subject_id AND class_id = ? ORDER BY 2
     """
-    subject_data = c.execute(get_fcs_ids_query, (class_id, )).fetchall()
-    for i in range(len(subject_data)):
-        subject_data[i] = dict(
-            zip([cur[0] for cur in c.description], subject_data[i]))
-    get_marks_data_query = """
-        SELECT Student.student_id, Student.name, student.usn, Fcs.fcs_id, Fcss.fcss_id, Subject.subject_id, Subject.subject_name, Test_res.marks, Test_res.test_id, Tests.qp_pattern FROM Student, Fcs, Fcss, Subject, Test_res, Tests WHERE Student.student_id = Fcss.student_Id AND Fcs.fcs_id = Fcss.fcs_id AND Fcs.subject_id = Subject.subject_id AND Test_res.fcss_id = Fcss.fcss_id AND Tests.test_id = Test_res.test_id AND Fcs.class_id = ? ORDER BY 3, 4, 9
+    get_test_details_query = """
+        SELECT Tests.test_id, qp_pattern FROM Tests WHERE fcs_id = ? AND test_no <> -1 ORDER BY 1
     """
-    marks_data = c.execute(get_marks_data_query, (class_id, )).fetchall()
-    groupby_data = []
-    for s_id, each_data_iter in itertools.groupby(marks_data, lambda x: x[0]):
-        each_data = list(each_data_iter)
-        # print(each_data)
-        print()
-        student_dict = dict()
-        student_dict['student_id'] = s_id
-        student_dict['name'] = each_data[0][1]
-        student_dict['usn'] = each_data[0][2]
-        marks = []
-        for f_id, each_fcs_iter in itertools.groupby(each_data, lambda r: r[3]):
-            each_fcs_data = list(each_fcs_iter)
-            subject_name = each_fcs_data[0][6]
-            sub_marks = []
-            # qp_pattern = pickle.loads(each_fcs_data[0][9])
-            ass_marks = pickle.loads(each_fcs_data[0][7])
-            dummy = []
-            for k in range(len(ass_marks)):
-                # print(ass_marks[k].keys())
-                test_name = ass_marks[k]['test_set_name']
-                test_type = ass_marks[k]['test_res_type']
-                if test_type == "Descriptive":
-                    marks_obtained = ass_marks[k]['total_marks_obtained']
+    get_students_from_fcs_id = """
+        SELECT fcss_id, Student.student_id, Student.name, Student.usn FROM Fcss, Student WHERE Fcss.student_id = Student.student_id AND fcs_id = ? ORDER BY 4 ASC
+    """
+    get_student_marks_query = """ 
+        SELECT marks FROM Test_res WHERE test_id = ? AND fcss_id = ?
+    """
+    final_student_data = dict()
+    subject_dict = dict()
+    get_all_subjects_data = c.execute(
+        get_all_subjects_query, (class_id, )).fetchall()
+    print(get_all_subjects_data)
+    for fcs_id, sub_id, sub_name in get_all_subjects_data:
+        co = 0
+        student_data = c.execute(
+            get_students_from_fcs_id, (fcs_id, )).fetchall()
+        assessments_data = c.execute(
+            get_test_details_query, (fcs_id, )).fetchall()
+        for test_id, qp_pattern in assessments_data:
+            unserialised_pattern = pickle.loads(qp_pattern)
+            test_name = unserialised_pattern['name']
+            sub_tests_data = []
+            max_marks_dict = dict()
+            for each_sub_test in unserialised_pattern['details']:
+                sub_test_type = each_sub_test['test_set_type']
+                if each_sub_test['test_set_eval_type'] == 'Descriptive':
+                    max_marks = (int(each_sub_test['questions_details']['no_of_questions'])//2) * int(
+                        each_sub_test['questions_details']['max_marks_per_question'])
                 else:
-                    continue
-                d2 = {
-                    "test_name": test_name,
-                    "marks_obtained": marks_obtained
-                }
-                dummy.append(d2)
-                break
-            if len(dummy) == 0:
-                dummy.append({
-                    "test_name": None,
-                    "marks_obtained": "-1"
-                })
-            ass_id = each_fcs_data[0][8]
-            sub_marks.append(dummy[0]['marks_obtained'])
-            # print(qp_pattern)
-            # if qp_pattern['for_whom'] == "all":
-            #     for x in range(len(qp_pattern['details'])):
-            #         if qp_pattern['details'][x]['test_set_type'] == "Internal Assessment":
-            marks.append({
-                "subject_name": subject_name,
-                "sub_marks": sub_marks[0]
-            })
-        student_dict['marks'] = marks
-        groupby_data.append(student_dict)
-    # print(groupby_data)
-    for i in range(len(marks_data)):
-        marks_data[i] = dict(
-            zip([cur[0] for cur in c.description], marks_data[i]))
-        marks_data[i]['marks'] = pickle.loads(marks_data[i]['marks'])
-    # print(marks_data)
-    # print(len(marks_data))
-    final_data = {"subject_data": subject_data, "marks_data": groupby_data}
+                    max_marks = int(
+                        each_sub_test['questions_details']['max_marks'])
+                max_marks_dict[each_sub_test['test_set_name']] = max_marks
+                sub_tests_data.append(
+                    {"test_type": sub_test_type, "max_marks": max_marks, "test_name": each_sub_test['test_set_name']})
+            test_marks_dict = {"name": test_name, "sub_marks": sub_tests_data}
+            co += len(sub_tests_data)
+            subject_dict[sub_id] = subject_dict.get(sub_id, dict())
+            append_to_subjects = subject_dict[sub_id].get("marks", [])
+            append_to_subjects.append(test_marks_dict)
+            subject_dict[sub_id]['marks'] = append_to_subjects
+            for fcss_id, stud_id, stud_name, stud_usn in student_data:
+                print(stud_name)
+                print()
+                get_student_marks = c.execute(
+                    get_student_marks_query, (test_id, fcss_id)).fetchone()
+                if get_student_marks is not None:
+                    marks = pickle.loads(get_student_marks[0])
+                    print(marks)
+                    marks_data = []
+                    for each_marks_set in marks:
+                        if each_marks_set['test_res_type'] == 'Descriptive':
+                            marks_secured = each_marks_set['total_marks_obtained']
+                            max_possible_marks = max_marks_dict[each_marks_set['test_set_name']]
+                        elif each_marks_set['test_res_type'] == 'Consolidated':
+                            marks_secured = each_marks_set['marks_secured']
+                            max_possible_marks = each_marks_set['max_marks']
+                        marks_data.append(
+                            {"name": each_marks_set['test_set_name'], "marks_secured": int(marks_secured), 'max_marks': int(max_possible_marks)})
+                else:
+                    marks_data = []
+                    for each_test_set in sub_tests_data:
+                        marks_data.append(
+                            {"name": each_test_set['test_name'], "marks_secured": 0, 'max_marks': each_test_set['max_marks']})
+                final_student_data[stud_id] = final_student_data.get(
+                    stud_id, {"student_name": stud_name, "student_usn": stud_usn, "student_id": stud_id, "marks": dict()})
+                final_student_data[stud_id]['marks'][sub_id] = final_student_data[stud_id]['marks'].get(
+                    sub_id, {"subject_id": sub_id, "subject_name": sub_name, "assessment": []})
+                final_student_data[stud_id]['marks'][sub_id]['assessment'].append(
+                    {"test_id": test_id, "test_name": test_name, "details": marks_data})
+        subject_dict[sub_id] = subject_dict.get(sub_id, dict())
+        subject_dict[sub_id]['marks'] = subject_dict[sub_id].get("marks", [])
+        subject_dict[sub_id]['count'] = co
+        subject_dict[sub_id]['name'] = sub_name
+    p.pprint(final_student_data)
+    p.pprint(subject_dict)
+    viewia_data = {"student_data": final_student_data, "subject_data": subject_dict}
+    # print(unserialised_pattern)
     response = {"status_code": 200,
-                "status_message": "successful", "data": final_data}
+                "status_message": "successful", "data": viewia_data}
     return response
+
+
 def reset__password(data):
     conn = sql.connect('database.db')
     generate_otp_query = """
@@ -1568,42 +1634,42 @@ def reset__password(data):
     params = data.keys()
     print(params)
     if 'email' in params and 'otp' not in params and 'pass' not in params:
-        otp = "".join(["{}".format(random.randint(0,9)) for i in range(0,6)])
+        otp = "".join(["{}".format(random.randint(0, 9)) for i in range(0, 6)])
         print(otp)
-        c.execute(delete_query,(data['email'],))
+        c.execute(delete_query, (data['email'],))
         conn.commit()
-        c.execute(generate_otp_query,(data['email'],otp))
+        c.execute(generate_otp_query, (data['email'], otp))
         conn.commit()
-        helper.sendotp(data['email'],otp)
+        helper.sendotp(data['email'], otp)
         response = {"status_message": "Sucess",
-                        "status_code": 200}
+                    "status_code": 200}
     elif 'email' in params and 'otp' in params:
         print('reset')
-        value = c.execute(get_otp_query,(data['email'],)).fetchone()
+        value = c.execute(get_otp_query, (data['email'],)).fetchone()
         print(value)
-        if data['otp']==value[0] :
-            c.execute(delete_query,(data['email'],))
+        if data['otp'] == value[0]:
+            c.execute(delete_query, (data['email'],))
             conn.commit()
             response = {"status_message": "Authorization Suceess",
-                            "status_code":200,}
+                        "status_code": 200, }
         else:
             response = {"status_message": "Unauthorized access",
-                            "status_code": 404, "data": "Invalid Authkey provided"}
-    elif 'pass' in params and 'email'  in params and 'otp' not in params :
+                        "status_code": 404, "data": "Invalid Authkey provided"}
+    elif 'pass' in params and 'email' in params and 'otp' not in params:
         print(data)
-        c.execute(update_query,(data['pass'],data['email']))
+        c.execute(update_query, (data['pass'], data['email']))
         conn.commit()
         print("updated")
         response = {"status_message": "Authorization Suceess",
-                            "status_code":200,}
+                    "status_code": 200, }
     else:
-            response = {"status_message": "Unauthorized access",
-                            "status_code": 404, "data": "Invalid Authkey provided"}
-    return response
-
-def submit__batch(data) :
-    print(data)
-    response = {"status_message": "Unauthorized access",
+        response = {"status_message": "Unauthorized access",
                     "status_code": 404, "data": "Invalid Authkey provided"}
     return response
 
+
+def submit__batch(data):
+    print(data)
+    response = {"status_message": "Unauthorized access",
+                "status_code": 404, "data": "Invalid Authkey provided"}
+    return response

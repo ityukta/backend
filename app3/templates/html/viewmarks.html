@@ -9,6 +9,17 @@
         integrity="sha256-+N4/V/SbAFiW1MPBCXnfnP9QSN3+Keu+NlB+0ev/YKQ=" crossorigin="anonymous" />
     <link rel="stylesheet" href="{{ url_for('static', filename = 'sass/main.css') }}" type="text/css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <style>
+        table,
+        tr,
+        th {
+            border: 1px solid black;
+        }
+
+        th {
+            padding: 10px;
+        }
+    </style>
     <script>
         function openmodal() {
             $('.modal').removeClass('modal__dispnone');
@@ -218,60 +229,98 @@
                     console.log(ret_obj);
                     student_data = [];
                     if (ret_obj['status_code'] == 200) {
-                        temp = `
-                            <th>Name</th>
-                            <th>USN</th>
+                        temp = `<tr>
+                            <th rowspan="3">Name</th>
+                            <th rowspan="3">USN</th>
                         `;
-                        subject_data = Array();
-                        for (i = 0; i < ret_obj['data']['subject_data'].length; i++){
-                            temp += `<th>`+ret_obj['data']['subject_data'][i]['subject_name']+`</th>`;
-                            subject_data.push(ret_obj['data']['subject_data'][i]['subject_name']);
+                        for (subject in ret_obj['data']['subject_data']) {
+                            if (ret_obj['data']['subject_data'][subject]['marks'].length == 0) {
+                                temp += `<th rowspan="3" colspan="` + ret_obj['data']['subject_data'][subject]['count'] + `">` + ret_obj['data']['subject_data'][subject]['name'] + `</th>`;
+                            }
+                            else {
+                                temp += `<th colspan="` + ret_obj['data']['subject_data'][subject]['count'] + `">` + ret_obj['data']['subject_data'][subject]['name'] + `</th>`;
+                            }
                         }
-                        localStorage.setItem('subject_data',subject_data);
-                        $('.marks_table_head').html(temp);
-                        temp = "";
-                        for(i=0;i<ret_obj['data']['marks_data'].length; i++){
-                            temp += '<tr id="'+ret_obj['data']['marks_data'][i]['student_id']+'">';
-                            temp += '<td>'+ ret_obj['data']['marks_data'][i]['name'] +'</td>';
-                            temp += '<td>'+ ret_obj['data']['marks_data'][i]['usn'] +'</td>';
-                            for(j=0;j<ret_obj['data']['subject_data'].length; j++){
-                                sub_name = ret_obj['data']['subject_data'][j]['subject_name'];
-                                flag = 0;
-                                for(k=0;k<ret_obj['data']['marks_data'][i]['marks'].length; k++){
-                                    if(sub_name == ret_obj['data']['marks_data'][i]['marks'][k]['subject_name']){
-                                        flag = 1;
-                                        temp += '<td>'+ ret_obj['data']['marks_data'][i]['marks'][k]['sub_marks'] +'</td>';
-                                        break;
+                        temp += '</tr><tr>';
+                        for (subject in ret_obj['data']['subject_data']) {
+                            for (i = 0; i < ret_obj['data']['subject_data'][subject]['marks'].length; i++) {
+                                name = ret_obj['data']['subject_data'][subject]['marks'][i]['name'];
+                                temp += `
+                                    <th colspan="`+ ret_obj['data']['subject_data'][subject]['marks'][i]['sub_marks'].length + `">` + (name[0] + name[name.length - 1]) + `</th>
+                                `;
+                            }
+                        }
+                        temp += `</tr><tr>`;
+                        for (subject in ret_obj['data']['subject_data']) {
+                            for (i = 0; i < ret_obj['data']['subject_data'][subject]['marks'].length; i++) {
+                                for (k = 0; k < ret_obj['data']['subject_data'][subject]['marks'][i]['sub_marks'].length; k++) {
+                                    t_type = ret_obj['data']['subject_data'][subject]['marks'][i]['sub_marks'][k]['test_type'];
+                                    if (t_type == "Internal Assessment") {
+                                        temp += `<th>IA</th>`;
+                                    }
+                                    else if (t_type == "Assignments") {
+                                        temp += `<th>AS</th>`;
+                                    }
+                                    else if (t_type == "Quiz") {
+                                        temp += `<th>QZ</th>`;
+                                    }
+                                    else if (t_type == "Projects") {
+                                        temp += `<th>PJ</th>`;
                                     }
                                 }
-                                if(flag == 0){
-                                    temp += '<td>-</td>';
+                            }
+                        }
+                        temp += `</tr>`;
+                        $('.marks_table_head').html(temp);
+                        temp = ``;
+                        for (student in ret_obj['data']['student_data']) {
+                            temp += `<tr id="` + ret_obj['data']['student_data'][student]['student_id'] + `">`;
+                            temp += `<td>` + ret_obj['data']['student_data'][student]['student_name'] + `</td>`;
+                            temp += `<td>` + ret_obj['data']['student_data'][student]['student_usn'] + `</td>`;
+                            for (subject in ret_obj['data']['subject_data']) {
+                                if ((subject in ret_obj['data']['student_data'][student]['marks'])) {
+                                    for (i = 0; i < ret_obj['data']['student_data'][student]['marks'][subject]['assessment'].length; i++) {
+                                        for (j = 0; j < ret_obj['data']['student_data'][student]['marks'][subject]['assessment'][i]['details'].length; j++) {
+                                            sub_temp = ret_obj['data']['student_data'][student]['marks'][subject]['assessment'][i]['details'][j];
+                                            temp += `<td>` + sub_temp['marks_secured'] + ` / ` + sub_temp['max_marks'] + `</td>`;
+                                        }
+                                    }
+                                }
+                                else {
+                                    if (ret_obj['data']['subject_data'][subject]['count'] == 0) {
+                                        temp += `<td>-</td>`;
+                                    }
+                                    else {
+                                        for (i = 0; i < ret_obj['data']['subject_data'][subject]['count']; i++) {
+                                            temp += `<td>-</td>`;
+                                        }
+                                    }
                                 }
                             }
-                            temp += '</tr>';
+                            temp += `</tr>`;
                         }
                         $('.marks_table_body').html(temp);
                     }
                 }
             });
         }
-        function sendsms(){
+        function sendsms() {
             var faculty_id = localStorage.getItem('faculty_id');
             var authkey = localStorage.getItem('authkey');
             var subject_data = localStorage.getItem('subject_data');
             subject_data = subject_data.split(",");
             console.log(subject_data);
             final_data = [];
-            $('.marks_table_body').find('tr').each(function(){
+            $('.marks_table_body').find('tr').each(function () {
                 student_id = $(this).attr('id');
                 marks = [];
                 k = 0;
                 name = name = $('td:nth-child(1)', this).text();
                 usn = $('td:nth-child(2)', this).text();
                 console.log(name);
-                for(i =0;i<subject_data.length;i++){
-                    m = $('td:nth-child('+(i+3)+')', this).text();
-                    if(m != "-"){
+                for (i = 0; i < subject_data.length; i++) {
+                    m = $('td:nth-child(' + (i + 3) + ')', this).text();
+                    if (m != "-") {
                         dum = {
                             "subject": subject_data[i],
                             "marks": m
@@ -279,7 +328,7 @@
                         marks.push(dum);
                     }
                 }
-                final_data.push({"student_id": student_id, "marks": marks});
+                final_data.push({ "student_id": student_id, "marks": marks });
             });
             console.log(final_data);
             var d = {
@@ -413,8 +462,8 @@
                     <div class="marks_table">
                         <table>
                             <thead class="marks_table_head">
-                                <th>Name</th>
-                                <th>USN</th>
+                                <!-- <th>Name</th>
+                                <th>USN</th> -->
                             </thead>
                             <tbody class="marks_table_body">
 
