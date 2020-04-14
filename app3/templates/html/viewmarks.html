@@ -29,6 +29,7 @@
         }
         function opennavbar() {
             $('.navbar').toggleClass('show-navbar');
+            $('nav__icon').toggleClass('displaynone');
         }
         function showsublist(param, value) {
             $('ul', param).toggleClass(value);
@@ -39,42 +40,94 @@
         }
         function loadnavbar() {
             priority = localStorage.getItem('faculty_type');
-            console.log(priority);
             var temp = `
             <ul class="nav__ul">
-                    <li class="nav__li" onclick="window.location.href = 'home' ">home</li>
-                    <li class="nav__li teacherli" onclick="showsublist($(this), 'show')">Professor<span></span>
+                    <li class="nav__li" onclick="window.location.href = 'home' "><i class="fa fal fa-home displaynone nav__icon"></i>&nbsp;&nbsp;Home</li>
+                    <li class="nav__li teacherli" onclick="showsublist($(this), 'show')"><i class="fa fal fa-chalkboard-user displaynone nav__icon"></i>&nbsp;&nbsp;Professor<span></span>
                         <ul class="sub ">
                             <!--Add show on click of teacherli-->`;
-            if (priority > 2) {
+            if(priority > 2){
                 temp += `
-                    <li class="sub__li" onclick="window.location.href = 'teachers'">View All Teachers</li>
-                    <li class="sub__li" onclick="window.location.href = 'approval'">Approve Register Request</li>
-                    <li class="sub__li" onclick="window.location.href = 'assignclass'">Assign Class teachers</li>
+                    <li class="sub__li" onclick="window.location.href = 'teachers'"><i class="fa fal fa-users displaynone nav__icon"></i>&nbsp;&nbsp;View All Teachers</li>
+                    <li class="sub__li" onclick="window.location.href = 'approval'"><i class="fa fal fa-thumbs-up displaynone nav__icon"></i>&nbsp;&nbsp;Approve Register Request</li>
+                    <li class="sub__li" onclick="window.location.href = 'assignclass'"><i class="fa fal fa-hand-point-right displaynone nav__icon"></i>&nbsp;&nbsp;Assign Class teachers</li>
                 `;
             }
-            if (priority > 1) {
+            if(priority > 1){
                 temp += `
-                <li class="sub__li" onclick="window.location.href = 'assignteacher'">Add subjects</li>
-                `;
+                <li class="sub__li" onclick="window.location.href = 'assignteacher'"><i class="fa fal fa-edit displaynone nav__icon"></i>&nbsp;&nbsp;Add subjects</li>
+                `; 
             }
             temp += `</ul>
                     </li>
-                    <li class="nav__li studentli" onclick="showsublist($(this), 'show')"><div class="student">Students</div>
+                    <li class="nav__li studentli" onclick="showsublist($(this), 'show')"><div class="student"><i class="fa fal fa-user-graduate displaynone nav__icon"></i>&nbsp;&nbsp;Students</div>
                         <ul class="sub studentlist">`;
-            if (priority > 1) {
+            if(priority > 1){
                 temp += `
-                    <li class="sub__li" onclick=" window.location.href = 'addstudent'"> Add students</li>
+                    <li class="sub__li" onclick=" window.location.href = 'addstudent'"><i class="fa fal fa-graduation-cap displaynone nav__icon"></i>&nbsp;&nbsp;Add students</li>
                 `;
             }
             temp += `
-                            <li class="sub__li" onclick=" window.location.href = 'addattendance'">Manage attendace</li>
-                            <li class="sub__li" onclick=" window.location.href = 'iamarks'"> Manage IA marks</li>
+                            <li class="sub__li" onclick=" window.location.href = 'allstudents'"><i class="fa fal fa-user-graduate displaynone nav__icon"></i>&nbsp;&nbsp;View all students</li>
+                            <li class="sub__li" onclick=" window.location.href = 'addattendance'"><i class="fa fal fa-clock displaynone nav__icon"></i>&nbsp;&nbsp;Manage attendace</li>
+                            <li class="sub__li" onclick=" window.location.href = 'iamarks'"><i class="fa fal fa-book-open displaynone nav__icon"></i>&nbsp;&nbsp;Manage IA marks</li>
+                            
                         </ul>
                     </li>
                 </ul>
             `;
             $('.navbar').html(temp);
+        }
+        function openfeedback()
+        {
+            var feedback__body = `<div class="modal__heading">
+                <p>Feedback</p>
+                <div class="close-btn" onclick="closefeedback()"><i class="fa fa-times fa-2x"></i></div>
+            </div>
+            <div class="feedback__input">
+                <input type="text" placeholder="enter ur feedback here" class="feedback__content">
+            </div>
+            <div class = "feedback__submit" >
+                <button class = "feedback__submit__btn" onclick="submit__feedback()"> Submit</button>
+            </div>
+            `
+            $('.modal__body').html(feedback__body);
+            $('.feedback__modal').toggleClass('modal__dispnone');
+        }
+        function closefeedback()
+        {
+            $('.feedback__modal').toggleClass('modal__dispnone');
+        }
+        function submit__feedback()
+        {
+            var faculty_id = localStorage.getItem('faculty_id');
+            var authkey = localStorage.getItem('authkey');
+            var data = {
+                'authkey': authkey,
+                'faculty_id': faculty_id,
+                'location':window.location.href,
+                'feedback': $('.feedback__content').val()
+            };
+            if($('.feedback__content').val()=='')
+            {
+                alert("feedback cannt be empty");
+            }
+            else{
+                console.log(data);
+                $.ajax(
+                    {
+                        type: "POST",
+                        url: "feedback",
+                        dataType: 'Json',
+                        contentType: 'application/json',
+                        data: JSON.stringify(data),
+                        processData: false,
+                        success :function(ret_obj){
+                            console.log(ret_obj);
+                            $('.feedback__modal').toggleClass('modal__dispnone');
+                        }
+                    });
+            }
         }
     </script>
     <script>
@@ -473,7 +526,17 @@
                     <button onclick="sendsms()">Send SMS</button>
                 </div>
             </div>
+            <div class="feedback__class" onclick="openfeedback()" style="position: fixed; bottom: 30px;right: 30px;">
+                <button class="feedback__btn" style="height: 100px; width: 100px; border-radius: 50%; background-color: yellow; box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.03);">Feedback </button>
+            </div>
         </section>
+        
+    </div>
+ 
+    <div class="feedback__modal modal__dispnone" >
+        <div class = "modal__body">
+            
+        </div>
     </div>
 
 </body>

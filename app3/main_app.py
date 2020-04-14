@@ -68,12 +68,18 @@ def all_teachers_view():
 @APP.route('/approval', methods = ['GET'])
 def approve_view():
     """This is the page to approve teachers """
-    return render_template('html/approval.html')   
+    return render_template('html/approval.html')  
+
+@APP.route('/allstudents', methods = ['GET'])
+def all_students_view():
+    """This is the page dispaly all student details """
+    return render_template('html/viewallstudents.html')  
 
 @APP.route('/viewmarks', methods=['GET'])
 def view_marks_view():
     """This is the page to view marks and send SMS"""
     return render_template('html/viewmarks.html')
+
 # Endpoints
 
 
@@ -261,11 +267,33 @@ def get_class_marks_ajax():
     data = request.get_json()
     response = dbop.get_class_marks(data)
     return response
+
 @APP.route('/resetpassword' , methods = ['POST'])
 def reset__password__view():
     """This endpoint is reset password """
     data = request.get_json()
     response = dbop.reset__password(data)
+    return jsonify(response)
+
+@APP.route('/feedback' , methods = ['POST'])
+def feedback__view():
+    """This endpoint is submit feedback """
+    data = request.get_json()
+    response = dbop.submit__feedback(data)
+    return jsonify(response)
+
+@APP.route('/get_all_students_name' , methods = ['POST'])
+def get_all_students_name_view():
+    """This endpoint is to get all student details"""
+    data = request.get_json()
+    response = dbop.get_all_students(data)
+    return jsonify(response)
+
+@APP.route('/get_indivisual_student' , methods = ['POST'])
+def get_indivisual_student_view():
+    """This endpoint is to get indivisual studetn details"""
+    data = request.get_json()
+    response = dbop.get_indivisual_student(data)
     return jsonify(response)
 
 @APP.route('/submitfile' , methods = ['POST'])

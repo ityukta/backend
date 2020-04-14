@@ -348,6 +348,17 @@ body {
           animation-duration: 0.8s;
 }
 
+.feedback__modal {
+  top: 0;
+  left: 0;
+  position: fixed;
+  height: 100vh;
+  width: 100vw;
+  z-index: 100;
+  font-family: sans-serif;
+  background-color: rgba(77, 77, 77, 0.3);
+  }
+
 .modal__heading {
   text-align: center;
   font-weight: 400;
@@ -446,6 +457,64 @@ body {
 
 #submit-c_teacher:hover {
   cursor: pointer;
+}
+
+.displaynone {
+  display: none !important;
+}
+
+/* The Modal (background) */
+.modal {
+  /* Stay in place */
+  z-index: 1;
+  /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%;
+  /* Full width */
+  height: 100%;
+  /* Full height */
+  overflow: auto;
+  /* Enable scroll if needed */
+  background-color: black;
+  /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4);
+  /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  /* 15% from the top and centered */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 60%;
+  /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button */
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+#student__names__table {
+  width: 100%;
+  margin-top: 20px;
+}
+
+#student__names__table td {
+  text-align: center;
 }
 
 .element {
@@ -2449,10 +2518,6 @@ td {
           justify-content: center;
 }
 
-.add__assessment__common {
-  width: 33%;
-}
-
 .add__assessment__test__flex1 {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -2460,6 +2525,7 @@ td {
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
+  margin-bottom: 1rem;
 }
 
 .add__assessment__descriptive__grid {
@@ -2469,7 +2535,9 @@ td {
       grid-template-columns: 1fr 1fr;
   grid-gap: 30px;
   width: 60%;
-  margin: 0 auto;
+  margin: 1rem auto 1rem auto;
+  border: 1px solid #cfcfcf;
+  padding: 2rem;
 }
 
 .add__assessment__descriptive__grid2 {
@@ -2566,5 +2634,60 @@ td {
 
 .add__new__assessment__button:focus {
   outline: none;
+}
+
+input {
+  background-color: #eee;
+  border: 1px solid #cfcfcf;
+}
+
+@media screen and (max-width: 1200px) {
+  .add__assessment__descriptive__grid {
+    display: -ms-grid;
+    display: grid;
+    -ms-grid-columns: 1fr;
+        grid-template-columns: 1fr;
+  }
+}
+
+.add__assessment__display__none {
+  display: none;
+}
+
+.modal .modal__body {
+  overflow: scroll;
+}
+
+.modal__ia {
+  width: 80% !important;
+  height: 80% !important;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.max__marks {
+  color: lightgray;
+  text-align: left;
+}
+
+.changed__input__css__to__width__50 {
+  width: 43px !important;
+}
+
+.view__marks__table td, th {
+  border: 1px solid black;
+  width: 30px;
+}
+
+.view__student__marks__modal .marks-entry__td {
+  width: 100%;
+}
+
+.invalid__red__boX {
+  border: 3px solid red;
 }
 /*# sourceMappingURL=main.css.map */
