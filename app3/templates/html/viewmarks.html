@@ -9,6 +9,10 @@
         integrity="sha256-+N4/V/SbAFiW1MPBCXnfnP9QSN3+Keu+NlB+0ev/YKQ=" crossorigin="anonymous" />
     <link rel="stylesheet" href="{{ url_for('static', filename = 'sass/main.css') }}" type="text/css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <!-- <script src="//cdn.rawgit.com/rainabba/jquery-table2excel/1.1.0/dist/jquery.table2excel.min.js"></script> -->
+    <script src="{{ url_for('static', filename = 'js/table-to-excel/dist/tableToExcel.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.3/jspdf.plugin.autotable.min.js"></script>
     <style>
         table,
         tr,
@@ -18,6 +22,51 @@
 
         th {
             padding: 10px;
+        }
+
+        #button_container {
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-evenly;
+            width: 100%;
+            margin-top: 40px;
+        }
+
+        #button_container button {
+            width: 30%;
+        }
+
+        .display_none {
+            display: none !important;
+        }
+        .display_ass_none{
+            display: none;
+        }
+        .display_type_none{
+            display: none;
+        }
+        #marks-table {
+            margin: 0 auto;
+            width: 80%;
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        #marks-table td {
+            padding: 12px;
+        }
+
+        .filter_box {
+            display: flex;
+            justify-content: space-evenly;
+            margin-top: 20px;
+        }
+
+        .mega_filter_container {
+            text-align: center;
+            margin-top: 30px;
+            background-color: #E5E5E5;
+            padding: 20px;
         }
     </style>
     <script>
@@ -46,23 +95,23 @@
                     <li class="nav__li teacherli" onclick="showsublist($(this), 'show')"><i class="fa fal fa-chalkboard-user displaynone nav__icon"></i>&nbsp;&nbsp;Professor<span></span>
                         <ul class="sub ">
                             <!--Add show on click of teacherli-->`;
-            if(priority > 2){
+            if (priority > 2) {
                 temp += `
                     <li class="sub__li" onclick="window.location.href = 'teachers'"><i class="fa fal fa-users displaynone nav__icon"></i>&nbsp;&nbsp;View All Teachers</li>
                     <li class="sub__li" onclick="window.location.href = 'approval'"><i class="fa fal fa-thumbs-up displaynone nav__icon"></i>&nbsp;&nbsp;Approve Register Request</li>
                     <li class="sub__li" onclick="window.location.href = 'assignclass'"><i class="fa fal fa-hand-point-right displaynone nav__icon"></i>&nbsp;&nbsp;Assign Class teachers</li>
                 `;
             }
-            if(priority > 1){
+            if (priority > 1) {
                 temp += `
                 <li class="sub__li" onclick="window.location.href = 'assignteacher'"><i class="fa fal fa-edit displaynone nav__icon"></i>&nbsp;&nbsp;Add subjects</li>
-                `; 
+                `;
             }
             temp += `</ul>
                     </li>
                     <li class="nav__li studentli" onclick="showsublist($(this), 'show')"><div class="student"><i class="fa fal fa-user-graduate displaynone nav__icon"></i>&nbsp;&nbsp;Students</div>
                         <ul class="sub studentlist">`;
-            if(priority > 1){
+            if (priority > 1) {
                 temp += `
                     <li class="sub__li" onclick=" window.location.href = 'addstudent'"><i class="fa fal fa-graduation-cap displaynone nav__icon"></i>&nbsp;&nbsp;Add students</li>
                 `;
@@ -78,8 +127,7 @@
             `;
             $('.navbar').html(temp);
         }
-        function openfeedback()
-        {
+        function openfeedback() {
             var feedback__body = `<div class="modal__heading">
                 <p>Feedback</p>
                 <div class="close-btn" onclick="closefeedback()"><i class="fa fa-times fa-2x"></i></div>
@@ -94,25 +142,22 @@
             $('.modal__body').html(feedback__body);
             $('.feedback__modal').toggleClass('modal__dispnone');
         }
-        function closefeedback()
-        {
+        function closefeedback() {
             $('.feedback__modal').toggleClass('modal__dispnone');
         }
-        function submit__feedback()
-        {
+        function submit__feedback() {
             var faculty_id = localStorage.getItem('faculty_id');
             var authkey = localStorage.getItem('authkey');
             var data = {
                 'authkey': authkey,
                 'faculty_id': faculty_id,
-                'location':window.location.href,
+                'location': window.location.href,
                 'feedback': $('.feedback__content').val()
             };
-            if($('.feedback__content').val()=='')
-            {
+            if ($('.feedback__content').val() == '') {
                 alert("feedback cannt be empty");
             }
-            else{
+            else {
                 console.log(data);
                 $.ajax(
                     {
@@ -122,7 +167,7 @@
                         contentType: 'application/json',
                         data: JSON.stringify(data),
                         processData: false,
-                        success :function(ret_obj){
+                        success: function (ret_obj) {
                             console.log(ret_obj);
                             $('.feedback__modal').toggleClass('modal__dispnone');
                         }
@@ -131,6 +176,7 @@
         }
     </script>
     <script>
+        var main_subject_data = null;
         $(document).ready(function () {
             var faculty_id = localStorage.getItem('faculty_id');
             var authkey = localStorage.getItem('authkey');
@@ -179,7 +225,9 @@
                 });
 
             });
-
+            $('#button_container').addClass('display_none');
+            $('#marks-table').addClass('display_none');
+            $('.mega_filter_container').addClass('display_none');
             $('#year-id').change(function () {
                 if ($('#year-id').val() != "Select year") {
                     $('#sem-id').removeAttr('disabled');
@@ -286,20 +334,80 @@
                             <th rowspan="3">Name</th>
                             <th rowspan="3">USN</th>
                         `;
+                        filter_load_data = `<div class="filter_box">`;
+                        main_subject_data = [];
                         for (subject in ret_obj['data']['subject_data']) {
+                            filter_load_data += `
+                                <div class="filter_select_group">
+                                    <label for="subject_`+ ret_obj['data']['subject_data'][subject]['name'] + `">` + ret_obj['data']['subject_data'][subject]['name'] + `</label>
+                                    <input type="checkbox" id="subject_`+ ret_obj['data']['subject_data'][subject]['name'] + `" onchange="changed_filter($(this))" checked>
+                                </div>
+                            `;
+                            main_subject_data.push(ret_obj['data']['subject_data'][subject]['name']);
                             if (ret_obj['data']['subject_data'][subject]['marks'].length == 0) {
-                                temp += `<th rowspan="3" colspan="` + ret_obj['data']['subject_data'][subject]['count'] + `">` + ret_obj['data']['subject_data'][subject]['name'] + `</th>`;
+                                temp += `<th rowspan="3" colspan="` + ret_obj['data']['subject_data'][subject]['count'] + `" class="` + ret_obj['data']['subject_data'][subject]['name'] + `">` + ret_obj['data']['subject_data'][subject]['name'] + `</th>`;
                             }
                             else {
-                                temp += `<th colspan="` + ret_obj['data']['subject_data'][subject]['count'] + `">` + ret_obj['data']['subject_data'][subject]['name'] + `</th>`;
+                                temp += `<th colspan="` + ret_obj['data']['subject_data'][subject]['count'] + `" class="` + ret_obj['data']['subject_data'][subject]['name'] + `">` + ret_obj['data']['subject_data'][subject]['name'] + `</th>`;
                             }
                         }
+                        filter_load_data += `</div>`;
+                        filter_load_data += `
+                        <div class="filter_box">
+                            <div class="filter_select_group">
+                                <label for="type_AS">Assignments</label>
+                                <input type="checkbox" checked onchange="changed_type_filter($(this))" id="type_AS">
+                            </div>
+
+                            <div class="filter_select_group">
+                                <label for="type_QZ">Quiz</label>
+                                <input type="checkbox" checked onchange="changed_type_filter($(this))" id="type_QZ">
+                            </div>
+
+                            <div class="filter_select_group">
+                                <label for="type_IA">IA Marks</label>
+                                <input type="checkbox" checked onchange="changed_type_filter($(this))" id="type_IA">
+                            </div>
+
+                            <div class="filter_select_group">
+                                <label for="type_PJ">Projects</label>
+                                <input type="checkbox" checked onchange="changed_type_filter($(this))" id="type_PJ">
+                            </div>
+                            
+                        </div>
+                        `;
+
+                        filter_load_data += `
+                        <div class="filter_box">
+                            <div class="filter_select_group">
+                                <label for="ass_A1">Assessment 1</label>
+                                <input type="checkbox" checked onchange="changed_ass_filter($(this))" id="ass_A1">
+                            </div>
+
+                            <div class="filter_select_group">
+                                <label for="ass_A2">Assessment 2</label>
+                                <input type="checkbox" checked onchange="changed_ass_filter($(this))" id="ass_A2">
+                            </div>
+
+                            <div class="filter_select_group">
+                                <label for="ass_A3">Assessment 3</label>
+                                <input type="checkbox" checked onchange="changed_ass_filter($(this))" id="ass_A3">
+                            </div>
+                            <div class="filter_select_group">
+                                <label for="ass_A4">Assessment 4</label>
+                                <input type="checkbox" checked onchange="changed_ass_filter($(this))" id="ass_A4">
+                            </div>
+                            
+                        </div>
+                        `;
+                        main_subject_data = main_subject_data.join();
+                        $('.mega_filter_container').html(filter_load_data);
                         temp += '</tr><tr>';
                         for (subject in ret_obj['data']['subject_data']) {
                             for (i = 0; i < ret_obj['data']['subject_data'][subject]['marks'].length; i++) {
                                 name = ret_obj['data']['subject_data'][subject]['marks'][i]['name'];
                                 temp += `
-                                    <th colspan="`+ ret_obj['data']['subject_data'][subject]['marks'][i]['sub_marks'].length + `">` + (name[0] + name[name.length - 1]) + `</th>
+                                    <th colspan="`+ ret_obj['data']['subject_data'][subject]['marks'][i]['sub_marks'].length + `" class="` + ret_obj['data']['subject_data'][subject]['name'] + ` `+(name[0] + name[name.length - 1])+`">` + (name[0] + name[name.length - 1]) + `</th>
                                 `;
                             }
                         }
@@ -309,16 +417,16 @@
                                 for (k = 0; k < ret_obj['data']['subject_data'][subject]['marks'][i]['sub_marks'].length; k++) {
                                     t_type = ret_obj['data']['subject_data'][subject]['marks'][i]['sub_marks'][k]['test_type'];
                                     if (t_type == "Internal Assessment") {
-                                        temp += `<th>IA</th>`;
+                                        temp += `<th class="` + ret_obj['data']['subject_data'][subject]['name'] + ` IA">IA</th>`;
                                     }
                                     else if (t_type == "Assignments") {
-                                        temp += `<th>AS</th>`;
+                                        temp += `<th class="` + ret_obj['data']['subject_data'][subject]['name'] + ` AS">AS</th>`;
                                     }
                                     else if (t_type == "Quiz") {
-                                        temp += `<th>QZ</th>`;
+                                        temp += `<th class="` + ret_obj['data']['subject_data'][subject]['name'] + ` QZ">QZ</th>`;
                                     }
                                     else if (t_type == "Projects") {
-                                        temp += `<th>PJ</th>`;
+                                        temp += `<th class="` + ret_obj['data']['subject_data'][subject]['name'] + ` PJ">PJ</th>`;
                                     }
                                 }
                             }
@@ -335,17 +443,32 @@
                                     for (i = 0; i < ret_obj['data']['student_data'][student]['marks'][subject]['assessment'].length; i++) {
                                         for (j = 0; j < ret_obj['data']['student_data'][student]['marks'][subject]['assessment'][i]['details'].length; j++) {
                                             sub_temp = ret_obj['data']['student_data'][student]['marks'][subject]['assessment'][i]['details'][j];
-                                            temp += `<td>` + sub_temp['marks_secured'] + ` / ` + sub_temp['max_marks'] + `</td>`;
+                                            test_name = ret_obj['data']['student_data'][student]['marks'][subject]['assessment'][i]['test_name'];
+                                            test_type_option = sub_temp['test_type'];
+                                            test_type_class = "";
+                                            if(test_type_option == "Internal Assessment"){
+                                                test_type_class = "IA";
+                                            }
+                                            else if(test_type_option == "Assignments"){
+                                                test_type_class = "AS";
+                                            }
+                                            else if(test_type_option == "Quiz"){
+                                                test_type_class = "QZ";
+                                            }
+                                            else if(test_type_option == "Projects"){
+                                                test_type_class = "PJ";
+                                            }
+                                            temp += `<td class="` + ret_obj['data']['subject_data'][subject]['name'] + ` `+test_name[0] + test_name[test_name.length - 1]+` `+test_type_class+`">` + sub_temp['marks_secured'] + ` / ` + sub_temp['max_marks'] + `</td>`;
                                         }
                                     }
                                 }
                                 else {
                                     if (ret_obj['data']['subject_data'][subject]['count'] == 0) {
-                                        temp += `<td>-</td>`;
+                                        temp += `<td class="` + ret_obj['data']['subject_data'][subject]['name'] + `">-</td>`;
                                     }
                                     else {
                                         for (i = 0; i < ret_obj['data']['subject_data'][subject]['count']; i++) {
-                                            temp += `<td>-</td>`;
+                                            temp += `<td class="` + ret_obj['data']['subject_data'][subject]['name'] + `">-</td>`;
                                         }
                                     }
                                 }
@@ -353,6 +476,9 @@
                             temp += `</tr>`;
                         }
                         $('.marks_table_body').html(temp);
+                        $('#button_container').removeClass('display_none');
+                        $('#marks-table').removeClass('display_none');
+                        $('.mega_filter_container').removeClass('display_none');
                     }
                 }
             });
@@ -360,7 +486,7 @@
         function sendsms() {
             var faculty_id = localStorage.getItem('faculty_id');
             var authkey = localStorage.getItem('authkey');
-            var subject_data = localStorage.getItem('subject_data');
+            var subject_data = main_subject_data;
             subject_data = subject_data.split(",");
             console.log(subject_data);
             final_data = [];
@@ -374,6 +500,7 @@
                 for (i = 0; i < subject_data.length; i++) {
                     m = $('td:nth-child(' + (i + 3) + ')', this).text();
                     if (m != "-") {
+                        console.log(subject_data[i]);
                         dum = {
                             "subject": subject_data[i],
                             "marks": m
@@ -402,6 +529,116 @@
                 }
             });
         }
+        function download_excel() {
+            TableToExcel.convert(document.getElementById("marks-table"));
+        }
+        function hideDaa() {
+            $('.DAA').attr({ 'data-exclude': "true" });
+            $('.DAA').addClass('display_none');
+        }
+        function showDaa() {
+            $('.DAA').removeAttr('data-exclude');
+            $('.DAA').removeClass('display_none');
+        }
+        function changed_filter(param) {
+            console.log("came in");
+            checkbox_id = $(param).attr('id');
+            if ($('#' + checkbox_id).is(":checked")) {
+                class_name = checkbox_id.split("_")[1];
+                $('.' + class_name).removeClass('display_none');
+                if($('.' + class_name).hasClass('display_ass_none') == false && $('.' + class_name).hasClass('display_type_none') == false){
+                    $('.' + class_name).removeAttr('data-exclude');
+                }
+                console.log("checked");
+            }
+            else {
+                class_name = checkbox_id.split("_")[1];
+                $('.' + class_name).addClass('display_none');
+                $('.' + class_name).attr({ 'data-exclude': "true" });
+                console.log('unchecked');
+            }
+        }
+        function changed_type_filter(param){
+            checkbox_id = $(param).attr('id');
+            if ($('#' + checkbox_id).is(":checked")) {
+                class_name = checkbox_id.split("_")[1];
+                $('.' + class_name).removeClass('display_type_none');
+                if($('.' + class_name).hasClass('display_ass_none') == false && $('.' + class_name).hasClass('display_none') == false){
+                    $('.' + class_name).removeAttr('data-exclude');
+                }
+                console.log("checked");
+            }
+            else {
+                class_name = checkbox_id.split("_")[1];
+                $('.' + class_name).addClass('display_type_none');
+                $('.' + class_name).attr({ 'data-exclude': "true" });
+                console.log('unchecked');
+            }
+        }
+        function changed_ass_filter(param){
+            checkbox_id = $(param).attr('id');
+            if ($('#' + checkbox_id).is(":checked")) {
+                class_name = checkbox_id.split("_")[1];
+                $('.' + class_name).removeClass('display_ass_none');
+                if($('.' + class_name).hasClass('display_none') == false && $('.' + class_name).hasClass('display_type_none') == false){
+                    $('.' + class_name).removeAttr('data-exclude');
+                }
+                console.log("checked");
+            }
+            else {
+                class_name = checkbox_id.split("_")[1];
+                $('.' + class_name).addClass('display_ass_none');
+                $('.' + class_name).attr({ 'data-exclude': "true" });
+                console.log('unchecked');
+            }
+        }
+        var specialElementHandlers = {
+            // element with id of "bypass" - jQuery style selector
+            '.no-export': function (element, renderer) {
+                // true = "handled elsewhere, bypass text extraction"
+                return true;
+            }
+        };
+
+        function download_pdf() {
+
+            var doc = new jsPDF();
+            //A4 - 595x842 pts
+            //https://www.gnu.org/software/gv/manual/html_node/Paper-Keywords-and-paper-size-in-points.html
+            doc.autoTable({theme: 'grid', html: '#marks-table' });
+            doc.save('table.pdf');
+        }
+            //Html source 
+        //     var source = document.getElementById('marks-table').innerHTML;
+
+        //     var margins = {
+        //         top: 10,
+        //         bottom: 10,
+        //         left: 10,
+        //         width: 595
+        //     };
+
+        //     doc.fromHTML(
+        //         source, // HTML string or DOM elem ref.
+        //         margins.left,
+        //         margins.top, {
+        //         'width': margins.width,
+        //         'elementHandlers': specialElementHandlers
+        //     },
+
+        //         function (dispose) {
+        //             // dispose: object with X, Y of the last line add to the PDF 
+        //             //          this allow the insertion of new lines after html
+        //             doc.save('Test.pdf');
+        //         }, margins);
+        // }
+        // function download_pdf() {
+        //     $("#marks-table").tableHTMLExport({
+        //         type: 'pdf',
+        //         orientation: 'p'
+        //     });
+
+        // }
     </script>
 </head>
 
@@ -476,7 +713,7 @@
             </div>
             <div class="content">
                 <div class="viewmarks">
-                    <div class="viewmarks__selectclass">
+                    <!-- <div class="viewmarks__selectclass">
                         <div class="viewmarks__selectdept">
                             <select class="dept" id="dept-id">
                                 <option value="" selected hidden>Select branch </option>
@@ -489,12 +726,50 @@
                         <div class="viewmarks__selectyear">
                             <select id="year-id" class="year" disabled>
                                 <option value="none" selected hidden>Select year</option>
+                            -->
+                    <!-- <option value="2020">2020</option>
+                                <option value="2021">2021</option>
+                                <option value="2022">2022</option> -->
+                    <!--</select>
+                        </div>
+                        <div class="viewmarks__selectsection">
+                            <select id="sem-id" class="section" disabled>
+                                <option value="none" selected hidden>Select sem</option>
+                            -->
+                    <!-- <option value="2">2</option>
+                                <option value="4">4</option>
+                                <option value="6">6</option> -->
+                    <!--</select>
+                        </div>
+                        <div class="viewmarks__selectsection">
+                            <select id="sec-id" class="section" disabled>
+                                <option value="none" selected hidden>Select section</option>
+                            -->
+                    <!-- <option value="a">A section</option>
+                                <option value="b">B section</option> -->
+                    <!--</select>
+                        </div>
+                        <button id="submit-student-search" disabled onclick="submitgetmarks()">Submit</button>
+                    </div> -->
+                    <div class="assignclass__selectclass">
+                        <div class="assignclass__selectdept">
+                            <select class="dept" id="dept-id">
+                                <option value="" selected hidden>Select branch </option>
+                                <option value="CSE">CSE</option>
+                                <option value="ISE">ISE</option>
+                                <option value="ECE">ECE</option>
+                                <option value="EEE">EEE</option>
+                            </select>
+                        </div>
+                        <div class="assignclass__selectyear">
+                            <select id="year-id" class="year" disabled>
+                                <option value="none" selected hidden>Select year</option>
                                 <!-- <option value="2020">2020</option>
                                 <option value="2021">2021</option>
                                 <option value="2022">2022</option> -->
                             </select>
                         </div>
-                        <div class="viewmarks__selectsection">
+                        <div class="assignclass__selectsection">
                             <select id="sem-id" class="section" disabled>
                                 <option value="none" selected hidden>Select sem</option>
                                 <!-- <option value="2">2</option>
@@ -502,18 +777,33 @@
                                 <option value="6">6</option> -->
                             </select>
                         </div>
-                        <div class="viewmarks__selectsection">
+                        <div class="assignclass__selectsection">
                             <select id="sec-id" class="section" disabled>
                                 <option value="none" selected hidden>Select section</option>
                                 <!-- <option value="a">A section</option>
                                 <option value="b">B section</option> -->
                             </select>
                         </div>
-                        <button id="submit-student-search" disabled onclick="submitgetmarks()">Submit</button>
+                        <div class=""></div>
+                        <button class="register__btn bluebtn attendance__submit" id="submit-student-search" disabled
+                            onclick="submitgetmarks()">Submit</button>
                     </div>
+                    <div class="mega_filter_container">
+                        <h2 style="">FILTER</h2>
+                        <div class="filter_box">
+                            <div class="filter_select_group">
+                                <label for="DAA">DAA</label>
+                                <input type="checkbox" checked onchange="changed_filter($(this))">
+                            </div>
+                            <div class="filter_select_group">
+                                <label for="DAA">DAA</label>
+                                <input type="checkbox" checked onchange="changed_filter($(this))">
+                            </div>
+                        </div>
 
+                    </div>
                     <div class="marks_table">
-                        <table>
+                        <table id="marks-table">
                             <thead class="marks_table_head">
                                 <!-- <th>Name</th>
                                 <th>USN</th> -->
@@ -523,19 +813,28 @@
                             </tbody>
                         </table>
                     </div>
-                    <button onclick="sendsms()">Send SMS</button>
+                    <div id="button_container">
+                        <button onclick="sendsms()" class="register__btn bluebtn attendance__submit">Send SMS</button>
+                        <button onclick="download_excel()" class="register__btn bluebtn attendance__submit">Download
+                            Excel</button>
+                        <button onclick="download_pdf()" class="register__btn bluebtn attendance__submit">Download
+                            PDF</button>
+                    </div>
+
                 </div>
             </div>
             <div class="feedback__class" onclick="openfeedback()" style="position: fixed; bottom: 30px;right: 30px;">
-                <button class="feedback__btn" style="height: 100px; width: 100px; border-radius: 50%; background-color: yellow; box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.03);">Feedback </button>
+                <button class="feedback__btn"
+                    style="height: 100px; width: 100px; border-radius: 50%; background-color: yellow; box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.03);">Feedback
+                </button>
             </div>
         </section>
-        
+
     </div>
- 
-    <div class="feedback__modal modal__dispnone" >
-        <div class = "modal__body">
-            
+
+    <div class="feedback__modal modal__dispnone">
+        <div class="modal__body">
+
         </div>
     </div>
 

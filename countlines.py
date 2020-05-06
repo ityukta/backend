@@ -5,7 +5,7 @@ final_count = 0
 def count_lines(file_path):
 	print(f"Counting lines in file: {file_path}")
 	count = 0
-	if(file_path.endswith(".html") or file_path.endswith(".py") or file_path.endswith(".css") or file_path.endswith(".js")):
+	if(file_path.endswith(".html") or file_path.endswith(".py") or file_path.endswith(".css")):
 		with open(file_path, "r") as f:
 			for line in f:
 				count += 1
@@ -13,6 +13,8 @@ def count_lines(file_path):
 
 def count_folder_lines(dir_name):
 	count = 0
+	if(dir_name.endswith('js')):
+		return 0
 	if(os.path.isfile(dir_name)):
 		return count_lines(dir_name)
 	else:

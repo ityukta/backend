@@ -801,12 +801,32 @@ def get_year_sem_sec(data):
                         "status_code": 501, "data": "class not found"}
             return response
         class_id = class_id[0]
-        get_subjects_query = """
-            SELECT Fcs.subject_id, subject_name FROM Fcs, Subject WHERE Fcs.subject_id = Subject.subject_id AND class_id = ?
-            AND Fcs.faculty_id = ?
-        """
-        subjects_data = c.execute(
-            get_subjects_query, (class_id, data['faculty_id'])).fetchall()
+        get_faculty_type_query = """
+            SELECT type_description FROM Type, Faculty WHERE Type.faculty_id = Faculty.faculty_id AND Faculty.faculty_id = ?"""
+        type_data = c.execute(get_faculty_type_query,
+                              (data['faculty_id'], )).fetchall()
+        if len(type_data) == 0:
+            response = {"statusmessage": "Error",
+                        "status_code": 501, "data": "class not found"}
+            return response
+        is_HOD = False
+        for data in type_data:
+            if data[0] == "H":
+                is_HOD = True
+                break
+        if is_HOD:
+            get_subjects_query = """
+                SELECT Fcs.subject_id, subject_name FROM Fcs, Subject WHERE Fcs.subject_id = Subject.subject_id AND class_id = ?
+            """
+            subjects_data = c.execute(
+                get_subjects_query, (class_id, )).fetchall()
+        else:
+            get_subjects_query = """
+                SELECT Fcs.subject_id, subject_name FROM Fcs, Subject WHERE Fcs.subject_id = Subject.subject_id AND class_id = ?
+                AND Fcs.faculty_id = ?
+            """
+            subjects_data = c.execute(
+                get_subjects_query, (class_id, data['faculty_id'])).fetchall()
         print(subjects_data)
         for i in range(len(subjects_data)):
             subjects_data[i] = dict(
@@ -1574,6 +1594,8 @@ def get_class_marks(data):
                 max_marks_dict[each_sub_test['test_set_name']] = max_marks
                 sub_tests_data.append(
                     {"test_type": sub_test_type, "max_marks": max_marks, "test_name": each_sub_test['test_set_name']})
+            print("sub test data", len(sub_tests_data))
+            print(sub_tests_data)
             test_marks_dict = {"name": test_name, "sub_marks": sub_tests_data}
             co += len(sub_tests_data)
             subject_dict[sub_id] = subject_dict.get(sub_id, dict())
@@ -1587,9 +1609,12 @@ def get_class_marks(data):
                     get_student_marks_query, (test_id, fcss_id)).fetchone()
                 if get_student_marks is not None:
                     marks = pickle.loads(get_student_marks[0])
+                    print("marks", len(marks))
                     print(marks)
                     marks_data = []
+                    test_name_counter = 0
                     for each_marks_set in marks:
+                        print("wtf", sub_tests_data[test_name_counter]['test_type'])
                         if each_marks_set['test_res_type'] == 'Descriptive':
                             marks_secured = each_marks_set['total_marks_obtained']
                             max_possible_marks = max_marks_dict[each_marks_set['test_set_name']]
@@ -1597,12 +1622,13 @@ def get_class_marks(data):
                             marks_secured = each_marks_set['marks_secured']
                             max_possible_marks = each_marks_set['max_marks']
                         marks_data.append(
-                            {"name": each_marks_set['test_set_name'], "marks_secured": int(marks_secured), 'max_marks': int(max_possible_marks)})
+                            {"name": each_marks_set['test_set_name'], "marks_secured": int(marks_secured), 'max_marks': int(max_possible_marks), "test_type": sub_tests_data[test_name_counter]['test_type']})
+                        test_name_counter += 1
                 else:
                     marks_data = []
                     for each_test_set in sub_tests_data:
                         marks_data.append(
-                            {"name": each_test_set['test_name'], "marks_secured": 0, 'max_marks': each_test_set['max_marks']})
+                            {"name": each_test_set['test_name'], "marks_secured": 0, 'max_marks': each_test_set['max_marks'],"test_type": each_test_set['test_type']})
                 final_student_data[stud_id] = final_student_data.get(
                     stud_id, {"student_name": stud_name, "student_usn": stud_usn, "student_id": stud_id, "marks": dict()})
                 final_student_data[stud_id]['marks'][sub_id] = final_student_data[stud_id]['marks'].get(
@@ -1781,7 +1807,24 @@ def get_indivisual_student(data):
                          'student_pic': student[13]}
                 }
     return response
-
+def send_marks_sms(data):
+    print("SMS DATA")
+    print(data)
+    conn = sql.connect('database.db')
+    check_authkey_query = """
+        SELECT *FROM LoginAuthKey WHERE authkey = ? AND faculty_id = ? AND DELETED = 0
+    """
+    get_student_details_query = """
+        SELECT * FROM Student WHERE student_id = ?
+    """
+    c = conn.cursor()
+    _ = c.execute(check_authkey_query,
+                  (data['authkey'], data['faculty_id'])).fetchone()
+    if _ is None:
+        response = {"status_message": "Unauthorized access",
+                    "status_code": 404, "data": "Invalid Authkey provided"}
+        return response
+    return {"status_code": 200, "status_message": "Successful"}
 # def get_class_details(data):
 #     print(data)
 #     response = {"status_message": "Sucessfull",

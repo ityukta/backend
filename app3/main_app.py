@@ -335,6 +335,12 @@ def get_indivisual_student_view():
     response = dbop.get_indivisual_student(data)
     return jsonify(response)
 
+@APP.route('/send_marks_sms', methods=['POST'])
+def send_student_marks_ajax():
+    """This endpoint is used to send marks SMS"""
+    data = request.get_json()
+    response = dbop.send_marks_sms(data)
+    return jsonify(response)
 
 # @APP.route('/get_class_details' , methods = ['POST'])
 # def get_class_details_view():
