@@ -94,6 +94,11 @@ def view_marks_view():
     """This is the page to view marks and send SMS"""
     return render_template('html/viewmarks.html')
 
+@APP.route('/viewattendance', methods= ['GET'])
+def view_attendance_view():
+    """This is the page to get consolidated attendance"""
+    return render_template('html/viewattendance.html')
+
 # Endpoints
 
 
@@ -342,6 +347,12 @@ def send_student_marks_ajax():
     response = dbop.send_marks_sms(data)
     return jsonify(response)
 
+@APP.route('/get_attendance_summary', methods={'POST'})
+def get_attendance_summary_ajax():
+    """This is used to get attendance summary data"""
+    data = request.get_json()
+    response = dbop.get_attendance_summary(data)
+    return jsonify(response)
 # @APP.route('/get_class_details' , methods = ['POST'])
 # def get_class_details_view():
 #     """This endpoint is to get class details"""
@@ -363,6 +374,7 @@ def submit__file__view():
     data = {'file1': data1, 'file2': data2.filename}
     response = dbop.submit__batch(data)
     return jsonify(response)
+
 
 
 if __name__ == '__main__':

@@ -563,7 +563,7 @@ def get_all_class_details(data):
         return response
     current_year = datetime.datetime.now().year
     get_class_details_query = """
-        SELECT *FROM Class WHERE graduation_year IN (? , ? , ?)
+        SELECT *FROM Class WHERE graduation_year IN (? , ? , ?) ORDER BY sem, sec
     """
     c_data = c.execute(get_class_details_query, (current_year+1,
                                                  current_year+2, current_year+3)).fetchall()
@@ -598,6 +598,7 @@ def add_class(data):
         response = {"status_message": "Unauthorized access",
                     "status_code": 404, "data": "Invalid Authkey provided"}
         return response
+    
     current_year = datetime.datetime.now().year
     if data['sem'] in ['2', '1']:
         current_year += 3
@@ -613,6 +614,14 @@ def add_class(data):
     if f_data is None:
         response = {"status_message": "Incorrect data",
                     "status_code": 501, "data": "Invalid faculty for class teacher"}
+        return response
+    check_class_exists = """
+        SELECT *FROM Class WHERE sem = ? AND sec = ? AND graduation_year = ? AND department = ?
+    """
+    check_class_exists_result = c.execute(check_class_exists, (data['sem'], data['sec'], current_year, data['department'])).fetchone()
+    if check_class_exists_result is not None:
+        response = {"status_message": "Incorrect data",
+                    "status_code": 601, "data": "Section already assigned a chass teacher"}
         return response
     create_new_class_query = """
         INSERT INTO Class(sem, sec, graduation_year, department, classteacher_id) VALUES(
@@ -1614,7 +1623,8 @@ def get_class_marks(data):
                     marks_data = []
                     test_name_counter = 0
                     for each_marks_set in marks:
-                        print("wtf", sub_tests_data[test_name_counter]['test_type'])
+                        print(
+                            "wtf", sub_tests_data[test_name_counter]['test_type'])
                         if each_marks_set['test_res_type'] == 'Descriptive':
                             marks_secured = each_marks_set['total_marks_obtained']
                             max_possible_marks = max_marks_dict[each_marks_set['test_set_name']]
@@ -1628,7 +1638,7 @@ def get_class_marks(data):
                     marks_data = []
                     for each_test_set in sub_tests_data:
                         marks_data.append(
-                            {"name": each_test_set['test_name'], "marks_secured": 0, 'max_marks': each_test_set['max_marks'],"test_type": each_test_set['test_type']})
+                            {"name": each_test_set['test_name'], "marks_secured": 0, 'max_marks': each_test_set['max_marks'], "test_type": each_test_set['test_type']})
                 final_student_data[stud_id] = final_student_data.get(
                     stud_id, {"student_name": stud_name, "student_usn": stud_usn, "student_id": stud_id, "marks": dict()})
                 final_student_data[stud_id]['marks'][sub_id] = final_student_data[stud_id]['marks'].get(
@@ -1807,6 +1817,16 @@ def get_indivisual_student(data):
                          'student_pic': student[13]}
                 }
     return response
+
+
+def check_wanted(dictionary_list, subject_name):
+    for each_subject in dictionary_list:
+        if each_subject['name'] == subject_name:
+            if each_subject['checked']:
+                return True
+    return False
+
+
 def send_marks_sms(data):
     print("SMS DATA")
     print(data)
@@ -1824,7 +1844,110 @@ def send_marks_sms(data):
         response = {"status_message": "Unauthorized access",
                     "status_code": 404, "data": "Invalid Authkey provided"}
         return response
+    get_student_phone_no_query = """
+        SELECT phone_no, parent_mail FROM Student WHERE student_id = ?
+    """
+    ret_obj = get_class_marks(data)
+    p.pprint(ret_obj)
+    student_marks_data = ret_obj['data']['student_data']
+    for each_student in student_marks_data:
+        text_string = ""
+        stud_name = student_marks_data[each_student]['student_name']
+        stud_id = student_marks_data[each_student]['student_id']
+        stud_usn = student_marks_data[each_student]['student_usn']
+        for each_marks in student_marks_data[each_student]['marks']:
+            if check_wanted(data['checklist_data'], student_marks_data[each_student]['marks'][each_marks]['subject_name']):
+                subject_name = student_marks_data[each_student]['marks'][each_marks]['subject_name']
+                for assessment in student_marks_data[each_student]['marks'][each_marks]['assessment']:
+                    for details in assessment['details']:
+                        text_string += subject_name + "-"
+                        text_string += assessment['test_name'] + "-"
+                        text_string += details['name'] + "-"
+                        text_string += str(details['marks_secured']) + \
+                            "/"+str(details['max_marks'])
+                        text_string += "\n"
+        print(text_string)
+        message_string = f"Your ward {stud_name} has secured the following marks\n\n" + text_string
+        student_contact_details = c.execute(
+            get_student_phone_no_query, (stud_id, )).fetchone()
+        if student_contact_details is None:
+            continue
+        phone_no = student_contact_details[0]
+        email_id = student_contact_details[1]
+        helper.send_marks(phone_no, message_string)
+        helper.mail_marks(email_id, message_string)
     return {"status_code": 200, "status_message": "Successful"}
+
+
+def get_attendance_summary(data):
+    print(data)
+    conn = sql.connect('database.db')
+    check_authkey_query = """
+        SELECT *FROM LoginAuthKey WHERE authkey = ? AND faculty_id = ? AND DELETED = 0
+    """
+    get_student_details_query = """
+        SELECT * FROM Student WHERE student_id = ?
+    """
+    c = conn.cursor()
+    _ = c.execute(check_authkey_query,
+                  (data['authkey'], data['faculty_id'])).fetchone()
+    if _ is None:
+        response = {"status_message": "Unauthorized access",
+                    "status_code": 404, "data": "Invalid Authkey provided"}
+        return response
+    get_class_id_query = """
+            SELECT class_id FROM Class WHERE sem = ? and sec = ? and graduation_year=? and department = ?
+        """
+    class_data = c.execute(
+        get_class_id_query, (data['sem'], data['sec'], data['graduation_year'], data['dept'])).fetchone()
+
+    if class_data is None:
+        response = {"statusmessage": "Error",
+                    "status_code": 501, "data": "class not found"}
+        return response
+    class_id = class_data[0]
+    get_all_subjects_query = """
+        SELECT Fcs.fcs_id, Subject.subject_id, subject_name FROM Subject, Fcs WHERE Fcs.subject_id = Subject.subject_id AND class_id = ? ORDER BY 2
+    """
+    get_attendance_data = """
+        SELECT Student.student_id, Student.name, Student.usn, Fcss.fcss_id, Attendance.status, Attendance.hour, Attendance.date FROM Fcss, Student, Attendance WHERE Fcss.fcss_id = Attendance.fcss_id AND Student.student_id = Fcss.student_id AND Fcss.fcs_id = ? ORDER BY 3
+    """
+    all_subjects_data = c.execute(
+        get_all_subjects_query, (class_id, )).fetchall()
+    student_attendance = dict()
+    fcs_data = dict()
+    for fcs_id, subject_id, subject_name in all_subjects_data:
+        temp = c.execute(get_attendance_data, (fcs_id, )).fetchall()
+        temp = list(set(temp))
+        temp = sorted(temp, key=lambda x: x[2])
+        print("temp", temp)
+        max_class_count = 0
+        for usn, group_by_data in itertools.groupby(temp, lambda x: x[2]):
+            group_by_data = list(group_by_data)
+            sample_length = len(group_by_data)
+            if sample_length > max_class_count:
+                max_class_count = sample_length
+            total_present = sum(
+                [1 for result in group_by_data if result[4] == 1])
+            student_attendance[str(group_by_data[0][2])] = student_attendance.get(
+                str(group_by_data[0][2]), {"student_name": group_by_data[0][1], "student_usn": group_by_data[0][2]})
+            student_attendance[str(group_by_data[0][2])
+                               ][str(fcs_id)] = total_present
+        fcs_data[str(fcs_id)] = {"subject_id": subject_id, "subject_name": subject_name,
+                                 "fcs_id": fcs_id, "class_count": max_class_count}
+    for fcs_ids in fcs_data:
+        for student_usn in student_attendance:
+            count = student_attendance[student_usn].get(fcs_ids, None)
+            if count is not None:
+                student_attendance[student_usn][fcs_ids] = round(
+                    count * 100 / fcs_data[fcs_ids]['class_count'], 2)
+            else:
+                student_attendance[student_usn][fcs_ids] = None
+    final_data = {"attendance_data": student_attendance,
+                  "subject_data": fcs_data}
+    p.pprint(final_data)
+    return {"status_code": 200, "status_message": "Successful", "data": final_data}
+
 # def get_class_details(data):
 #     print(data)
 #     response = {"status_message": "Sucessfull",

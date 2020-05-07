@@ -81,7 +81,7 @@ def createMessageWithAttachment(
       to: Email address of the receiver.
       subject: The subject of the email message.
       msgHtml: Html message to be sent
-      msgPlain: Alternative plain text message for older email clients          
+      msgPlain: Alternative plain text message for older email clients
       attachmentFile: The path to the file to be attached.
 
     Returns:
@@ -132,7 +132,7 @@ def createMessageWithAttachment(
 
 
 def main(to, hour):
-    
+
     sender = "RNS IT"
     subject = "Your ward was Absent"
     msgHtml = f"Your ward was absent for Hour:{hour}.<br>Please ask him/her to be regular"
@@ -158,6 +158,35 @@ def sendsms(number, hour):
     URL = URL.replace(" ", "%20")
     _ = urllib.request.urlopen(URL[:len(URL)-1])
     print(f"SMS sent to {number}")
+
+
+def send_marks(number, text_string):
+    text_string = text_string.replace('\n', ",")
+    URL = 'https://www.sms4india.com/api/v1/sendCampaign?'
+    req_params = {
+        'apikey': '0NMMIKICZ7G4F3IJ4GVAT00UF6KV8DZV',
+        'secret': '8W7851BZTSOBZ5XW',
+        'usetype': 'stage',
+        'phone': number,
+        'message': text_string,
+        'senderid': 'RNSISE'
+    }
+    for key, value in req_params.items():
+        URL += str(key)+"="+str(value)+'&'
+    URL = URL.replace(" ", "%20")
+    _ = urllib.request.urlopen(URL[:len(URL)-1])
+    print(f"SMS sent to {number}")
+
+def mail_marks(to,message):
+    sender = ""
+    # sender = "ameyj@gmail.com"
+    subject = "Your ward's marks"
+    msgHtml = message
+    msgPlain = message
+    SendMessage(sender, to, subject, msgHtml, msgPlain)
+    print(f"Mail Sent to {to}")
+    # Send message with attachment:
+    # SendMessage(sender, to, subject, msgHtml, msgPlain, '/path/to/file.pdf')
 
 def sendotp(to,otp):
     sender = ""
